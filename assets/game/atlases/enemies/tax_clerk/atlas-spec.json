@@ -1,0 +1,16 @@
+{
+  "source": "assets/game/sprites/enemies/enemy_tax_clerk_runtime_sheet_alpha.png",
+  "outputImage": "assets/game/atlases/enemies/tax_clerk/tax_clerk_atlas.png",
+  "outputJson": "assets/game/atlases/enemies/tax_clerk/tax_clerk_atlas.json",
+  "maxWidth": 1024,
+  "padding": 8,
+  "quantizeColors": 256,
+  "frames": {
+    "idle": { "x": 199, "y": 29, "width": 233, "height": 393 },
+    "patrol": { "x": 674, "y": 82, "width": 340, "height": 339 },
+    "alert": { "x": 1166, "y": 81, "width": 476, "height": 340 },
+    "attack": { "x": 40, "y": 502, "width": 568, "height": 331 },
+    "hurt": { "x": 687, "y": 469, "width": 318, "height": 367 },
+    "dead": { "x": 1105, "y": 698, "width": 512, "height": 142 }
+  }
+}

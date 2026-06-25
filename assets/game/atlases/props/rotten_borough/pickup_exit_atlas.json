@@ -1,0 +1,171 @@
+{
+  "frames": {
+    "lockedGate": {
+      "frame": {
+        "x": 8,
+        "y": 8,
+        "w": 428,
+        "h": 560
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 428,
+        "h": 560
+      },
+      "sourceSize": {
+        "w": 428,
+        "h": 560
+      },
+      "sourceCrop": {
+        "x": 596,
+        "y": 135,
+        "w": 428,
+        "h": 560
+      }
+    },
+    "unlockedGate": {
+      "frame": {
+        "x": 444,
+        "y": 8,
+        "w": 430,
+        "h": 565
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 430,
+        "h": 565
+      },
+      "sourceSize": {
+        "w": 430,
+        "h": 565
+      },
+      "sourceCrop": {
+        "x": 1045,
+        "y": 135,
+        "w": 430,
+        "h": 565
+      }
+    },
+    "butcherSaber": {
+      "frame": {
+        "x": 8,
+        "y": 581,
+        "w": 260,
+        "h": 370
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 260,
+        "h": 370
+      },
+      "sourceSize": {
+        "w": 260,
+        "h": 370
+      },
+      "sourceCrop": {
+        "x": 35,
+        "y": 292,
+        "w": 260,
+        "h": 370
+      }
+    },
+    "pickupRing": {
+      "frame": {
+        "x": 276,
+        "y": 581,
+        "w": 183,
+        "h": 354
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 183,
+        "h": 354
+      },
+      "sourceSize": {
+        "w": 183,
+        "h": 354
+      },
+      "sourceCrop": {
+        "x": 357,
+        "y": 321,
+        "w": 183,
+        "h": 354
+      }
+    },
+    "lockIcon": {
+      "frame": {
+        "x": 467,
+        "y": 581,
+        "w": 104,
+        "h": 164
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 104,
+        "h": 164
+      },
+      "sourceSize": {
+        "w": 104,
+        "h": 164
+      },
+      "sourceCrop": {
+        "x": 1497,
+        "y": 408,
+        "w": 104,
+        "h": 164
+      }
+    },
+    "exitArrow": {
+      "frame": {
+        "x": 579,
+        "y": 581,
+        "w": 115,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 115,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 115,
+        "h": 121
+      },
+      "sourceCrop": {
+        "x": 1622,
+        "y": 427,
+        "w": 115,
+        "h": 121
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-frame-atlas.py",
+    "version": "1",
+    "image": "pickup_exit_atlas.png",
+    "source": "assets/game/props/rotten_borough/prop_pickup_exit_runtime_sheet_alpha.png",
+    "size": {
+      "w": 882,
+      "h": 959
+    },
+    "scale": "1"
+  }
+}

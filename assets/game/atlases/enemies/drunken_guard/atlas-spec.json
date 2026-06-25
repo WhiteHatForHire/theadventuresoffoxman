@@ -1,0 +1,16 @@
+{
+  "source": "assets/game/sprites/enemies/enemy_guard_drunken_runtime_sheet_alpha.png",
+  "outputImage": "assets/game/atlases/enemies/drunken_guard/drunken_guard_atlas.png",
+  "outputJson": "assets/game/atlases/enemies/drunken_guard/drunken_guard_atlas.json",
+  "maxWidth": 1024,
+  "padding": 8,
+  "quantizeColors": 256,
+  "frames": {
+    "attack": { "x": 1093, "y": 94, "width": 318, "height": 513 },
+    "idle": { "x": 33, "y": 159, "width": 315, "height": 454 },
+    "patrol": { "x": 380, "y": 176, "width": 338, "height": 434 },
+    "alert": { "x": 744, "y": 180, "width": 299, "height": 430 },
+    "hurt": { "x": 1459, "y": 222, "width": 271, "height": 394 },
+    "dead": { "x": 1759, "y": 386, "width": 402, "height": 283 }
+  }
+}

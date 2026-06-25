@@ -1,0 +1,171 @@
+{
+  "frames": {
+    "attack": {
+      "frame": {
+        "x": 8,
+        "y": 8,
+        "w": 318,
+        "h": 513
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 318,
+        "h": 513
+      },
+      "sourceSize": {
+        "w": 318,
+        "h": 513
+      },
+      "sourceCrop": {
+        "x": 1093,
+        "y": 94,
+        "w": 318,
+        "h": 513
+      }
+    },
+    "idle": {
+      "frame": {
+        "x": 334,
+        "y": 8,
+        "w": 315,
+        "h": 454
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 315,
+        "h": 454
+      },
+      "sourceSize": {
+        "w": 315,
+        "h": 454
+      },
+      "sourceCrop": {
+        "x": 33,
+        "y": 159,
+        "w": 315,
+        "h": 454
+      }
+    },
+    "patrol": {
+      "frame": {
+        "x": 657,
+        "y": 8,
+        "w": 338,
+        "h": 434
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 338,
+        "h": 434
+      },
+      "sourceSize": {
+        "w": 338,
+        "h": 434
+      },
+      "sourceCrop": {
+        "x": 380,
+        "y": 176,
+        "w": 338,
+        "h": 434
+      }
+    },
+    "alert": {
+      "frame": {
+        "x": 8,
+        "y": 529,
+        "w": 299,
+        "h": 430
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 299,
+        "h": 430
+      },
+      "sourceSize": {
+        "w": 299,
+        "h": 430
+      },
+      "sourceCrop": {
+        "x": 744,
+        "y": 180,
+        "w": 299,
+        "h": 430
+      }
+    },
+    "hurt": {
+      "frame": {
+        "x": 315,
+        "y": 529,
+        "w": 271,
+        "h": 394
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 271,
+        "h": 394
+      },
+      "sourceSize": {
+        "w": 271,
+        "h": 394
+      },
+      "sourceCrop": {
+        "x": 1459,
+        "y": 222,
+        "w": 271,
+        "h": 394
+      }
+    },
+    "dead": {
+      "frame": {
+        "x": 594,
+        "y": 529,
+        "w": 402,
+        "h": 283
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 402,
+        "h": 283
+      },
+      "sourceSize": {
+        "w": 402,
+        "h": 283
+      },
+      "sourceCrop": {
+        "x": 1759,
+        "y": 386,
+        "w": 402,
+        "h": 283
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-frame-atlas.py",
+    "version": "1",
+    "image": "drunken_guard_atlas.png",
+    "source": "assets/game/sprites/enemies/enemy_guard_drunken_runtime_sheet_alpha.png",
+    "size": {
+      "w": 1004,
+      "h": 967
+    },
+    "scale": "1"
+  }
+}

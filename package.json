@@ -1,0 +1,31 @@
+{
+  "name": "foxman-merciless-bastard",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "smoke": "node tests/smoke/check-dist.mjs",
+    "smoke:browser": "node tests/smoke/check-browser-routes.mjs",
+    "smoke:all": "npm run build && npm run smoke && npm run smoke:browser",
+    "assets:atlas:drunken-guard": "python3 scripts/export-frame-atlas.py assets/game/atlases/enemies/drunken_guard/atlas-spec.json",
+    "assets:atlas:foxman": "python3 scripts/export-frame-atlas.py assets/game/atlases/characters/foxman/atlas-spec.json",
+    "assets:atlas:pickup-exit": "python3 scripts/export-frame-atlas.py assets/game/atlases/props/rotten_borough/atlas-spec.json",
+    "assets:atlas:reward-shop-icons": "python3 scripts/export-frame-atlas.py assets/game/atlases/ui/reward_shop_icons/atlas-spec.json",
+    "assets:atlas:toll-baron": "python3 scripts/export-frame-atlas.py assets/game/atlases/enemies/toll_baron/atlas-spec.json",
+    "assets:atlas:tax-clerk": "python3 scripts/export-frame-atlas.py assets/game/atlases/enemies/tax_clerk/atlas-spec.json",
+    "assets:bg:rotten-borough": "python3 scripts/export-runtime-background.py"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.4"
+  }
+}

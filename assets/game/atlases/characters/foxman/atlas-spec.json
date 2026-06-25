@@ -1,0 +1,16 @@
+{
+  "source": "assets/game/sprites/characters/foxman/char_foxman_candidate_b_prototype_sheet_alpha.png",
+  "outputImage": "assets/game/atlases/characters/foxman/foxman_atlas.png",
+  "outputJson": "assets/game/atlases/characters/foxman/foxman_atlas.json",
+  "maxWidth": 1536,
+  "padding": 8,
+  "quantizeColors": 256,
+  "frames": {
+    "idle": { "x": 192, "y": 23, "width": 245, "height": 394 },
+    "run": { "x": 565, "y": 103, "width": 489, "height": 304 },
+    "jump": { "x": 1124, "y": 31, "width": 397, "height": 358 },
+    "attack": { "x": 70, "y": 460, "width": 452, "height": 361 },
+    "hurt": { "x": 667, "y": 466, "width": 347, "height": 362 },
+    "dash": { "x": 1120, "y": 578, "width": 443, "height": 209 }
+  }
+}

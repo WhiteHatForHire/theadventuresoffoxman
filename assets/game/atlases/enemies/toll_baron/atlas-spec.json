@@ -1,0 +1,16 @@
+{
+  "source": "assets/game/sprites/enemies/enemy_toll_baron_runtime_sheet_alpha.png",
+  "outputImage": "assets/game/atlases/enemies/toll_baron/toll_baron_atlas.png",
+  "outputJson": "assets/game/atlases/enemies/toll_baron/toll_baron_atlas.json",
+  "maxWidth": 1024,
+  "padding": 8,
+  "quantizeColors": 256,
+  "frames": {
+    "idle": { "x": 32, "y": 56, "width": 438, "height": 426 },
+    "patrol": { "x": 511, "y": 80, "width": 448, "height": 408 },
+    "alert": { "x": 995, "y": 73, "width": 506, "height": 415 },
+    "attack": { "x": 46, "y": 535, "width": 452, "height": 430 },
+    "hurt": { "x": 531, "y": 551, "width": 410, "height": 381 },
+    "dead": { "x": 954, "y": 715, "width": 569, "height": 237 }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "source": "assets/source/ai_raw/reward_shop_icon_board_raw.png",
+  "outputImage": "assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.png",
+  "outputJson": "assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.json",
+  "maxWidth": 1280,
+  "padding": 8,
+  "quantizeColors": 192,
+  "frames": {
+    "weapon": { "x": 0, "y": 0, "width": 627, "height": 627 },
+    "survival": { "x": 627, "y": 0, "width": 627, "height": 627 },
+    "skill": { "x": 0, "y": 627, "width": 627, "height": 627 },
+    "mutation": { "x": 627, "y": 627, "width": 627, "height": 627 }
+  }
+}

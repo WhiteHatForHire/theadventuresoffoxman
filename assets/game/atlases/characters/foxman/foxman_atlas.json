@@ -1,0 +1,171 @@
+{
+  "frames": {
+    "idle": {
+      "frame": {
+        "x": 8,
+        "y": 8,
+        "w": 245,
+        "h": 394
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 245,
+        "h": 394
+      },
+      "sourceSize": {
+        "w": 245,
+        "h": 394
+      },
+      "sourceCrop": {
+        "x": 192,
+        "y": 23,
+        "w": 245,
+        "h": 394
+      }
+    },
+    "run": {
+      "frame": {
+        "x": 261,
+        "y": 8,
+        "w": 489,
+        "h": 304
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 489,
+        "h": 304
+      },
+      "sourceSize": {
+        "w": 489,
+        "h": 304
+      },
+      "sourceCrop": {
+        "x": 565,
+        "y": 103,
+        "w": 489,
+        "h": 304
+      }
+    },
+    "jump": {
+      "frame": {
+        "x": 758,
+        "y": 8,
+        "w": 397,
+        "h": 358
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 397,
+        "h": 358
+      },
+      "sourceSize": {
+        "w": 397,
+        "h": 358
+      },
+      "sourceCrop": {
+        "x": 1124,
+        "y": 31,
+        "w": 397,
+        "h": 358
+      }
+    },
+    "attack": {
+      "frame": {
+        "x": 8,
+        "y": 410,
+        "w": 452,
+        "h": 361
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 452,
+        "h": 361
+      },
+      "sourceSize": {
+        "w": 452,
+        "h": 361
+      },
+      "sourceCrop": {
+        "x": 70,
+        "y": 460,
+        "w": 452,
+        "h": 361
+      }
+    },
+    "hurt": {
+      "frame": {
+        "x": 468,
+        "y": 410,
+        "w": 347,
+        "h": 362
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 347,
+        "h": 362
+      },
+      "sourceSize": {
+        "w": 347,
+        "h": 362
+      },
+      "sourceCrop": {
+        "x": 667,
+        "y": 466,
+        "w": 347,
+        "h": 362
+      }
+    },
+    "dash": {
+      "frame": {
+        "x": 823,
+        "y": 410,
+        "w": 443,
+        "h": 209
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 443,
+        "h": 209
+      },
+      "sourceSize": {
+        "w": 443,
+        "h": 209
+      },
+      "sourceCrop": {
+        "x": 1120,
+        "y": 578,
+        "w": 443,
+        "h": 209
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-frame-atlas.py",
+    "version": "1",
+    "image": "foxman_atlas.png",
+    "source": "assets/game/sprites/characters/foxman/char_foxman_candidate_b_prototype_sheet_alpha.png",
+    "size": {
+      "w": 1274,
+      "h": 780
+    },
+    "scale": "1"
+  }
+}

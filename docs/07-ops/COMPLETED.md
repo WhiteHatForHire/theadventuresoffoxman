@@ -1,0 +1,1037 @@
+# COMPLETED.md - Completed Work Log
+
+This document tracks completed work for the project.
+
+Use it as the project memory of what has already been created, decided, shipped, or moved out of the hopper.
+
+Newest entries should go at the top.
+
+---
+
+# Format
+
+Use this format for each completed item:
+
+    ## YYYY-MM-DD - Title
+
+    **Type:** Docs | Design | App | Backend | AI | Ops | Decision
+    **Source:** Human | Codex | ChatGPT | Other
+    **Related Files:**
+
+    - `path/to/file.md`
+
+    **Summary:**
+
+    Briefly describe what was completed.
+
+    **Follow-Ups:**
+
+    - [ ] Optional follow-up task
+
+---
+
+# Completed Work
+
+## 2026-06-26 - Foxman Case Study Structure, Asset Gallery, And Code Map Created
+
+**Type:** Docs / Ops / Design  
+**Source:** Codex  
+**Related Files:**
+
+- `docs/case-study/FOXMAN_CASE_STUDY.md`
+- `docs/case-study/ASSET_GALLERY.md`
+- `docs/case-study/CODE_MAP.md`
+- `PROJECT.md`
+- `docs/07-ops/COMPLETED.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Created the case-study documentation package for the one-shot generation postmortem and business story. The package includes a full case-study structure, a visual asset gallery covering source concepts, raw AI generations, runtime sheets, atlases, backgrounds, props, UI, prompts, and capture targets, plus a code map of project files, scene flow, gameplay systems, test harnesses, asset scripts, docs, and risk areas.
+
+**Follow-Ups:**
+
+- [ ] Capture live gameplay screenshots for the case-study visual slots.
+- [ ] Expand the case-study structure into the full essay narrative.
+- [ ] Add annotated before/after failure screenshots.
+
+## 2026-06-26 - Manual Play Link And Smoke Autorun Split Completed
+
+**Type:** App / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/smoke.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/07-ops/COMPLETED.md`
+
+**Summary:**
+
+Split smoke scene routing from smoke-test autorun. Direct URLs such as `/?smoke=room` now load the requested scene for manual play with normal keyboard controls, while automated browser tests must opt into bot control with `smokeAuto=1`. Manual playtest verified Foxman stays still without input and responds to `D`; full smoke still passes with explicit `smokeAuto=1` routes.
+
+**Follow-Ups:**
+
+- [ ] Prefer the root URL or non-autorun smoke URLs when sharing playable links.
+
+## 2026-06-26 - First-Room Presentation And Visual Smoke Guard Completed
+
+**Type:** App / Polish / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/RunScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/07-ops/COMPLETED.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Reworked the first-room presentation so collision platforms no longer render as bare debug blocks, the generated Rotten Borough background and character atlases remain readable during the smoke route, the exit gate is less visually overpowering, and the visible debug-state strip is hidden. Added a browser smoke canvas check that fails if the first room regresses into large neon missing-texture green artifacts.
+
+**Follow-Ups:**
+
+- [ ] Continue broader post-V1 polish and packaging triage.
+- [ ] Replace temporary procedural platform skins with generated tile-kit runtime art during public-demo polish.
+
+## 2026-06-26 - Phase 8 V1 Candidate Acceptance Audit Completed
+
+**Type:** App / QA / Ops / Decision  
+**Source:** Codex  
+**Related Files:**
+
+- `docs/PHASE8_V1_ACCEPTANCE_AUDIT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+- `docs/07-ops/COMPLETED.md`
+
+**Summary:**
+
+Audited the extended vertical slice against the initiative's V1/Phase 8 deliverables and exit criteria. Accepted the current build as a V1 candidate based on generated runtime assets, smoke-proven full-route completion, death/restart paths, persistence coverage, reward/shop build variety, boss completion, HUD/readability, hit feedback, build-size stabilization, and a passing `npm run smoke:all`.
+
+**Follow-Ups:**
+
+- [ ] Triage post-V1 polish and packaging.
+- [ ] Replace prototype VFX with generated VFX sprites before public-demo polish.
+
+## 2026-06-26 - Phase 8 V1 Stabilization And Build-Size Review Completed
+
+**Type:** App / QA / Performance / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `vite.config.ts`
+- `docs/PHASE8_V1_STABILIZATION_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+- `docs/07-ops/FUTURE-TODO.md`
+
+**Summary:**
+
+Split Phaser into a named production vendor chunk, reduced the app chunk to about `89 KB`, removed the recurring Vite large-chunk warning for the current V1 build, and recorded the remaining runtime-art compression debt separately.
+
+**Follow-Ups:**
+
+- [ ] Complete a V1 candidate acceptance audit.
+- [ ] Compress or further split large runtime art assets after V1 acceptance criteria are locked.
+
+## 2026-06-26 - Phase 8 Combat VFX And Hit Feedback Pass Completed
+
+**Type:** App / Gameplay / VFX / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/feedback/HitFeedback.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_COMBAT_VFX_HIT_FEEDBACK_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added reusable visible hit feedback for weapon, ranged, skill, player-damage, and boss-pressure impacts, exported smoke-verifiable `hitFeedbackCount` datasets, and hardened browser smoke assertions so missing/non-numeric feedback counters fail loudly.
+
+**Follow-Ups:**
+
+- [ ] Replace prototype circles/text with bespoke generated VFX sprites.
+- [ ] Review bundle-size warning and production build chunking before calling V1 stable.
+
+## 2026-06-26 - Phase 8 Combat Feedback And HUD Readability Pass Completed
+
+**Type:** App / Gameplay / UI / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/UIScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_COMBAT_HUD_READABILITY_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Expanded the HUD from a fixed health/weapon display into a live combat readability panel with max-health-aware HP, weapon, carried skill readiness, route state, and target health. Added smoke assertions proving HUD state for starting weapon, locked skill state, skill cooldown visibility, audit shield max health, second-path route state, and boss target state.
+
+**Follow-Ups:**
+
+- [ ] Add stronger hit VFX and impact feedback outside debug hitboxes.
+- [ ] Add controller-friendly selected states for reward/shop cards.
+
+## 2026-06-26 - Phase 8 Boss Build Variety And Balance Pass Completed
+
+**Type:** App / Gameplay / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_BOSS_BUILD_VARIETY_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Extended carried Spite Belch into the Toll Baron encounter, added a skill-oriented boss route from shop purchase through second path to boss completion, and verified that the boss scene receives and uses the carried skill.
+
+**Follow-Ups:**
+
+- [ ] Tune Toll Baron health and stamp cadence after combat HUD/readability improves.
+- [ ] Add more build-specific boss reactions when additional skills or mutations exist.
+
+## 2026-06-26 - Phase 8 Carried Skill Usability And Selection Polish Completed
+
+**Type:** App / Gameplay / UI / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RewardScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_CARRIED_SKILL_AND_SELECTION_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Carried the shop's Spite Belch choice into the second combat path as a usable cone skill, added smoke coverage proving two downstream skill hits, and gave reward/shop cards hover and click affordances while preserving keyboard selection.
+
+**Follow-Ups:**
+
+- [ ] Decide whether carried skills should also be usable during the Toll Baron fight.
+- [ ] Add controller navigation and an explicit selected-card state.
+
+## 2026-06-26 - Phase 8 Route Cohesion And Balance Pass Completed
+
+**Type:** App / Gameplay / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_ROUTE_COHESION_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added a full-slice browser smoke route from first room to reward shop to Petty Grudge second path to Toll Baron completion, and fixed the connected boss handoff so the selected Tax Pike reward/mutation build carries into the mini-boss scene.
+
+**Follow-Ups:**
+
+- [ ] Make carried `Spite Belch` usable in downstream combat, not only persisted.
+- [ ] Add player-facing selection states for shop cards.
+
+## 2026-06-26 - Phase 8 Reward / Shop Icon And UI Polish Completed
+
+**Type:** Design / App / Art  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/source/ai_raw/reward_shop_icon_board_raw.png`
+- `assets/game/atlases/ui/reward_shop_icons/atlas-spec.json`
+- `assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.png`
+- `assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.json`
+- `assets/docs/asset_log.md`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RewardScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_REWARD_SHOP_ICON_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Generated reward/shop category icons, exported them as a named Phaser atlas, integrated weapon/survival/skill/mutation icons into the five shop cards, and verified the full smoke suite.
+
+**Follow-Ups:**
+
+- [ ] Add selected/hover states when the shop becomes mouse/controller navigable.
+- [ ] Consider a smaller derivative icon atlas if later bundle-size review requires it.
+
+## 2026-06-26 - Phase 8 Reward / Shop Presentation Art Completed
+
+**Type:** Design / App / Art  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/source/ai_raw/reward_shop_counter_raw.png`
+- `assets/game/ui/menus/reward_shop_counter_runtime.webp`
+- `assets/docs/asset_log.md`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RewardScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_REWARD_SHOP_ART_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Generated and integrated dedicated Rotten Borough reward/shop counter art, exported a compact runtime WebP, loaded it through the asset registry, rendered it behind the five build-choice cards, and verified the full smoke suite.
+
+**Follow-Ups:**
+
+- [ ] Generate category icons for weapon, survival, skill, and mutation choices.
+- [ ] Tighten final card layout and hover/selection affordances.
+
+## 2026-06-26 - Phase 8 Reward / Shop Choice Surface Completed
+
+**Type:** App / Gameplay / UI  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/rewards/RewardChoice.ts`
+- `src/game/scenes/RewardScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_REWARD_SHOP_SURFACE_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Upgraded the reward handoff into a five-choice reward/shop surface with weapon, survival, skill, and mutation options; preserved the default pike reach handoff; added downstream shop-choice state; and added browser smoke that selects Petty Grudge from the shop and verifies the second-path mutation state.
+
+**Follow-Ups:**
+
+- [ ] Replace geometric shop cards with dedicated generated shop/reward presentation art.
+- [ ] Add final iconography for weapon, skill, and mutation choice categories.
+
+## 2026-06-26 - Phase 8 Mutation Prototypes Completed
+
+**Type:** App / Gameplay / Content  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/mutations/MutationStats.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_MUTATION_PROTOTYPES_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added Hangover Hide and Petty Grudge as the first two mutation prototypes, wired query-selectable mutation state into the second path, applied survival and damage effects, exposed mutation debug/smoke state, persisted mutation unlocks, and added browser routes proving both mutations.
+
+**Follow-Ups:**
+
+- [ ] Move mutation selection into the reward/shop room UI.
+- [ ] Add icons and final presentation for mutation choices.
+
+## 2026-06-26 - Phase 8 First Active Skill Prototype Completed
+
+**Type:** App / Gameplay / Content  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/skills/SkillStats.ts`
+- `src/game/input/InputMapper.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_SKILL_PROTOTYPE_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added Spite Belch as Foxman's first active skill prototype on the `K` key, with cooldown state, debug hitbox visuals, enemy damage/knockback, smoke-visible skill state, and a `?smoke=skill` browser route that proves unlock, use count, hit count, enemy death, and persistence.
+
+**Follow-Ups:**
+
+- [ ] Replace debug skill geometry with dedicated VFX/art.
+- [ ] Integrate skill unlocks into the upgraded reward/shop path.
+
+## 2026-06-26 - Phase 8 Ranged Combat Prototype Completed
+
+**Type:** App / Gameplay / Content  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/combat/WeaponStats.ts`
+- `src/game/scenes/RunScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_RANGED_COMBAT_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added the Receipt Spitter as Foxman's first ranged weapon prototype, wired it to the existing attack button, added readable debug projectile rectangles, exposed projectile fired/hit state for smoke, and added a `?smoke=ranged` browser route that proves projectile pickup, hits, enemy death, and persistence.
+
+**Follow-Ups:**
+
+- [ ] Replace debug projectile geometry with dedicated ranged weapon/projectile art.
+- [ ] Add tuning for ammo, cooldown, or heat once the first skill and mutation systems exist.
+
+## 2026-06-26 - Phase 8 Rotten Borough Background Optimization Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `scripts/export-runtime-background.py`
+- `assets/game/backgrounds/rotten_borough/bg_rotten_borough_mood_runtime.webp`
+- `src/game/assets.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_BACKGROUND_OPTIMIZATION_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added a repeatable runtime background exporter, generated a `1280x720` WebP for Rotten Borough, kept the stable `rottenBoroughMood` asset key, reduced the production background payload from about `2.27 MB` to about `118 KB`, and verified all smoke routes.
+
+**Follow-Ups:**
+
+- [ ] Consider layered parallax backgrounds during the next dedicated biome art pass.
+- [ ] Revisit WebP quality if visual QA later finds compression artifacts on large displays.
+
+## 2026-06-26 - Phase 8 Foxman Atlas Migration Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/game/atlases/characters/foxman/atlas-spec.json`
+- `assets/game/atlases/characters/foxman/foxman_atlas.png`
+- `assets/game/atlases/characters/foxman/foxman_atlas.json`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/Player.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_FOXMAN_ATLAS_REPORT.md`
+
+**Summary:**
+
+Expanded the atlas workflow to Foxman's player runtime sheet, migrated player pose swaps to named atlas frames, reduced the emitted Foxman art payload from about `940 KB` to about `194 KB`, and tightened the boss-death smoke route after the smaller atlas bounds exposed a non-deterministic death setup.
+
+**Follow-Ups:**
+
+- [ ] Split or optimize Rotten Borough background/parallax assets.
+- [ ] Add a dedicated player animation system once multi-frame animation sheets replace single-pose prototype frames.
+
+## 2026-06-26 - Phase 8 Pickup And Exit Prop Atlas Migration Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/game/atlases/props/rotten_borough/atlas-spec.json`
+- `assets/game/atlases/props/rotten_borough/pickup_exit_atlas.png`
+- `assets/game/atlases/props/rotten_borough/pickup_exit_atlas.json`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_PROP_ATLAS_REPORT.md`
+
+**Summary:**
+
+Expanded the atlas workflow to the pickup/exit prop sheet, migrated pickups, gates, exit arrow, and the reused boss-door marker to named atlas frames, reduced the emitted prop art payload from about `1.1 MB` to about `217 KB`, and verified the full route suite through browser smoke.
+
+**Follow-Ups:**
+
+- [ ] Split or optimize Rotten Borough background/parallax assets.
+- [ ] Replace reused gate art with a dedicated boss-door prop in a later asset pass.
+
+## 2026-06-26 - Phase 8 Drunken Guard Atlas Migration Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/game/atlases/enemies/drunken_guard/atlas-spec.json`
+- `assets/game/atlases/enemies/drunken_guard/drunken_guard_atlas.png`
+- `assets/game/atlases/enemies/drunken_guard/drunken_guard_atlas.json`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_GUARD_ATLAS_REPORT.md`
+
+**Summary:**
+
+Expanded the atlas workflow to the Drunken Guard runtime sheet, migrated the first-room guard to named atlas frames, reduced the emitted guard art payload from about `1.1 MB` to about `236 KB`, and verified the full route suite through browser smoke.
+
+**Follow-Ups:**
+
+- [ ] Continue atlas packing for Foxman and Rotten Borough background/parallax assets.
+- [ ] Replace reused gate art with a dedicated boss-door prop in a later asset pass.
+
+## 2026-06-26 - Phase 8 Tax Clerk Atlas Migration Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/game/atlases/enemies/tax_clerk/atlas-spec.json`
+- `assets/game/atlases/enemies/tax_clerk/tax_clerk_atlas.png`
+- `assets/game/atlases/enemies/tax_clerk/tax_clerk_atlas.json`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_TAX_CLERK_ATLAS_REPORT.md`
+
+**Summary:**
+
+Expanded the atlas workflow to the Tax Clerk runtime sheet, migrated `taxClerk` and `eliteAuditor` to named atlas frames, reduced the emitted tax clerk art payload from about `1.0 MB` to about `227 KB`, and verified all second-path and boss routes through full browser smoke.
+
+**Follow-Ups:**
+
+- [ ] Continue atlas packing for Foxman and Rotten Borough background/parallax assets.
+- [ ] Add richer enemy attack tells for tax clerk and elite auditor beyond contact pressure.
+
+## 2026-06-26 - Phase 8 Second Path Damage And Restart Completed
+
+**Type:** App / Product / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/vite-env.d.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_SECOND_PATH_DAMAGE_REPORT.md`
+
+**Summary:**
+
+Made tax clerk and elite auditor contact dangerous in the audit-office path, added visible second-path death and restart behavior, preserved reward differences after restart, and added browser smoke for `?smoke=secondDeath&reward=auditShield`.
+
+**Follow-Ups:**
+
+- [ ] Continue atlas packing for remaining large generated assets after the Tax Clerk migration.
+- [ ] Replace reused gate art with a dedicated boss-door prop in a later asset pass.
+- [ ] Add richer enemy attack tells for tax clerk and elite auditor beyond contact pressure.
+
+## 2026-06-26 - Phase 8 Visible Second-Path-To-Boss Transition Completed
+
+**Type:** App / Product / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_CONNECTED_BOSS_ROUTE_REPORT.md`
+
+**Summary:**
+
+Added a visible boss gate, exit arrow, and `BOSS TOLL` prompt after second-path completion, connected the second path to the Toll Baron room, persisted `boss_room_found`, and added browser smoke for `?smoke=secondBoss&reward=pikeReach`.
+
+**Follow-Ups:**
+
+- [ ] Continue atlas packing for remaining large generated assets.
+- [ ] Replace reused gate art with a dedicated boss-door prop in a later asset pass.
+
+## 2026-06-26 - Phase 8 Player Damage, Death, And Restart Completed
+
+**Type:** App / Product / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/entities/Player.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/vite-env.d.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_FAIL_STATE_REPORT.md`
+
+**Summary:**
+
+Moved player health and invulnerability into the `Player` entity, made the Toll Baron stamp damage Foxman, added visible boss-room death and restart behavior, persisted deaths, and expanded browser smoke with a `?smoke=bossDeath` route that verifies death and restart.
+
+**Follow-Ups:**
+
+- [ ] Continue atlas packing for remaining large generated assets.
+
+## 2026-06-26 - Phase 8 Atlas Packing And Toll Baron Migration Completed
+
+**Type:** App / Tools / Performance  
+**Source:** Codex  
+**Related Files:**
+
+- `scripts/export-frame-atlas.py`
+- `assets/game/atlases/enemies/toll_baron/atlas-spec.json`
+- `assets/game/atlases/enemies/toll_baron/toll_baron_atlas.png`
+- `assets/game/atlases/enemies/toll_baron/toll_baron_atlas.json`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/docs/asset_log.md`
+- `docs/PHASE8_ATLAS_PACKING_REPORT.md`
+
+**Summary:**
+
+Added a repeatable frame-atlas exporter, migrated the Toll Baron from a full generated sheet to a compact Phaser atlas, kept the stable `tollBaronRuntime` asset key, and verified the mini-boss route still works through full browser smoke.
+
+**Follow-Ups:**
+
+- [ ] Split or optimize Rotten Borough background/parallax assets.
+- [ ] Replace reused gate art with a dedicated boss-door prop in a later asset pass.
+
+## 2026-06-26 - Phase 8 Toll Baron Art And Boss Behavior Completed
+
+**Type:** Design / App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/source/prompts/toll_baron_runtime_sheet.md`
+- `assets/source/ai_raw/enemy_toll_baron_runtime_sheet_chroma.png`
+- `assets/game/sprites/enemies/enemy_toll_baron_runtime_sheet_alpha.png`
+- `assets/docs/asset_log.md`
+- `src/game/assets.ts`
+- `src/game/assetFrames.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_TOLL_BARON_ART_AND_BEHAVIOR_REPORT.md`
+
+**Summary:**
+
+Generated and integrated unique Toll Baron runtime art, added measured boss-specific frame crops, replaced the mini-boss placeholder art, added a first toll-stamp boss special, and expanded browser smoke to require the boss special before route completion.
+
+**Follow-Ups:**
+
+- [ ] Add a richer multi-step Toll Baron pattern after the connected route is in place.
+
+## 2026-06-26 - Phase 8 Mini-Boss Room Completed
+
+**Type:** App / Product / Design  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/MiniBossScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/GameConfig.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_MINIBOSS_ROOM_REPORT.md`
+
+**Summary:**
+
+Added a third combat beat with a Toll Baron mini-boss prototype, direct `?smoke=boss` route, boss completion telemetry, `toll_baron_humiliated` persistence unlock, and browser smoke coverage in `npm run smoke:all`.
+
+**Follow-Ups:**
+
+- [ ] Add a richer multi-step Toll Baron pattern.
+
+## 2026-06-26 - Phase 8 Reward Choice And Elite Prototype Completed
+
+**Type:** App / Product / Design  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/rewards/RewardChoice.ts`
+- `src/game/scenes/RewardScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/combat/WeaponStats.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_REWARD_CHOICE_AND_ELITE_REPORT.md`
+
+**Summary:**
+
+Added two reward choices, made those rewards alter the second path, introduced an elite auditor prototype as the third enemy escalation, extended persistence with reward and elite unlocks, and updated browser smoke to verify both reward branches.
+
+**Follow-Ups:**
+
+- [ ] Generate unique elite auditor runtime art.
+- [ ] Add a third combat room or mini-boss prototype.
+- [ ] Start slicing large sprite sheets into packed atlases.
+
+## 2026-06-25 - Phase 8 Tax Clerk Art And Browser Smoke Harness Completed
+
+**Type:** Design / App / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `assets/source/ai_raw/enemy_tax_clerk_runtime_sheet_chroma.png`
+- `assets/game/sprites/enemies/enemy_tax_clerk_runtime_sheet_alpha.png`
+- `assets/source/prompts/tax_clerk_runtime_sheet.md`
+- `src/game/assetFrames.ts`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `package.json`
+- `docs/PHASE8_TAX_CLERK_ART_AND_BROWSER_SMOKE_REPORT.md`
+
+**Summary:**
+
+Generated and integrated a transparent tax clerk runtime sprite sheet, replaced the tint-only tax clerk variant with tax clerk-specific art, and added a committed Chrome DevTools browser smoke harness covering title/pause, first room, reward handoff, and second path.
+
+**Follow-Ups:**
+
+- [ ] Add a real reward choice before the second path.
+- [ ] Add a third enemy or elite prototype.
+- [ ] Pack runtime sheets into atlases or sliced frames.
+
+## 2026-06-25 - Phase 8 Second Combat / Reward Path Completed
+
+**Type:** App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/combat/WeaponStats.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/RewardScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/GameConfig.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_SECOND_PATH_REPORT.md`
+
+**Summary:**
+
+Added a real second combat path reached from the reward room, gave the Tax Pike distinct reach/damage/knockback stats, made the tax clerk variant a killable encounter in `SecondRunScene`, and smoke-validated the second path, reward handoff, and first-room regression.
+
+**Follow-Ups:**
+
+- [x] Generate unique tax clerk runtime art.
+- [ ] Add a real reward choice before the second path.
+- [x] Commit an automated browser smoke runner.
+
+## 2026-06-25 - Phase 8 Extended-Slice Foundation Completed
+
+**Type:** App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/progression/ProgressStore.ts`
+- `src/game/scenes/RewardScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/GameConfig.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_FOUNDATION_REPORT.md`
+
+**Summary:**
+
+Added the first Phase 8 expansion hooks: local progress persistence, direct reward stub route, optional Tax Pike pickup prototype, tax clerk guard variant prototype, and browser smoke validation for the reward scene.
+
+**Follow-Ups:**
+
+- [x] Build the second combat/reward path.
+- [x] Make the Tax Pike mechanically distinct.
+- [ ] Give the tax clerk unique art and encounter behavior.
+
+## 2026-06-25 - Phase 7 Vertical-Slice Polish Completed
+
+**Type:** App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/TitleScene.ts`
+- `src/game/scenes/PauseScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/GameConfig.ts`
+- `src/game/dialogue/BarkDeck.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE7_VERTICAL_SLICE_POLISH_REPORT.md`
+
+**Summary:**
+
+Completed the Phase 7 polish layer with title/start flow, pause/resume overlay, bark cooldown system, audio cue hooks, combat feedback, completion feedback, and browser smoke validation for both title/pause and room completion.
+
+**Follow-Ups:**
+
+- [ ] Start Phase 8 extended-slice foundation.
+- [ ] Replace cue stubs with generated or synthesized SFX.
+- [ ] Commit automated browser smoke runner.
+
+## 2026-06-25 - Phase 7A Polish Feedback Pass Completed
+
+**Type:** App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/audio/AudioBus.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/scenes/RunScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE7A_POLISH_FEEDBACK_REPORT.md`
+
+**Summary:**
+
+Added the first feedback polish pass with completion banner/flash, hit stop, guard knockback, player damage flicker, camera feedback, and audio cue telemetry while keeping the room smoke route passing.
+
+**Follow-Ups:**
+
+- [ ] Add title/start flow.
+- [ ] Add pause.
+- [ ] Add comedy bark cooldown system.
+- [ ] Replace cue stubs with first real SFX.
+
+## 2026-06-25 - Phase 6 Asset Integration Pass Completed
+
+**Type:** Design / App  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/assetFrames.ts`
+- `src/game/assets.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/entities/Player.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/vite-env.d.ts`
+- `tests/unit/asset-keys.test.ts`
+- `assets/game/sprites/enemies/enemy_guard_drunken_runtime_sheet_alpha.png`
+- `assets/game/props/rotten_borough/prop_pickup_exit_runtime_sheet_alpha.png`
+- `docs/PHASE6_ASSET_INTEGRATION_REPORT.md`
+- `assets/docs/qa_phase6_asset_integration.md`
+
+**Summary:**
+
+Integrated generated transparent runtime sheets for Foxman crops, the drunken guard, and pickup/exit props; replaced room debug shapes with prop crops; removed the raw guard concept from the production registry; and smoke-validated the complete room route after the asset swap.
+
+**Follow-Ups:**
+
+- [ ] Add hit pause, knockback, invulnerability feedback, and first audio hooks.
+- [ ] Export proper packed atlases or individual frames instead of relying on large crop sheets.
+- [ ] Add automated browser smoke checkpoint capture.
+
+## 2026-06-25 - Phase 5 Vertical-Slice Room Completed
+
+**Type:** App / Product  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/UIScene.ts`
+- `src/game/entities/Pickup.ts`
+- `src/game/levels/RoomObjective.ts`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE5_VERTICAL_SLICE_ROOM_REPORT.md`
+
+**Summary:**
+
+Built the first replayable room route with traversal, Butcher Saber pickup, drunken guard encounter, locked exit, room completion state, HUD weapon display, and `?smoke=room` validation proving the route completes.
+
+**Follow-Ups:**
+
+- [ ] Run the asset integration pass for cleaner runtime sprites and pickup/exit visuals.
+- [ ] Add hit pause, knockback, invulnerability feedback, and audio stubs.
+- [ ] Convert browser smoke paths into repeatable scripted browser tests.
+
+## 2026-06-25 - Phase 4 Combat Sandbox Completed
+
+**Type:** App / Gameplay  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/combat/Health.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/input/InputMapper.ts`
+- `src/game/assets.ts`
+- `docs/PHASE4_COMBAT_SANDBOX_REPORT.md`
+
+**Summary:**
+
+Added the first combat sandbox with player attack input, debug hitboxes, a drunken guard enemy with patrol/chase/attack/dead states, enemy damage/death, player damage, and death/restart smoke validation.
+
+**Follow-Ups:**
+
+- [ ] Build the first vertical-slice room with pickup, encounter, and exit.
+- [ ] Replace guard concept-sheet crop with transparent runtime sprite art.
+- [ ] Add hit pause, knockback, and invulnerability frames.
+
+## 2026-06-25 - Phase 3 Movement Sandbox Completed
+
+**Type:** App / Gameplay  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/entities/Player.ts`
+- `src/game/movement/PlayerMotor.ts`
+- `src/game/input/InputMapper.ts`
+- `src/game/data/movement.ts`
+- `src/game/scenes/RunScene.ts`
+- `docs/PHASE3_MOVEMENT_SANDBOX_REPORT.md`
+
+**Summary:**
+
+Added the first movement sandbox with keyboard movement, jump buffering/coyote-time tuning, collision platforms, camera follow, debug state output, and browser smoke validation for fall, jump, run, land, and idle states.
+
+**Follow-Ups:**
+
+- [ ] Slice Foxman prototype art into animation frames.
+- [ ] Add dodge/roll and one-way platform behavior.
+
+## 2026-06-25 - Phase 2 Engine Scaffold Completed
+
+**Type:** App / Engineering  
+**Source:** Codex  
+**Related Files:**
+
+- `package.json`
+- `package-lock.json`
+- `index.html`
+- `tsconfig.json`
+- `vite.config.ts`
+- `src/main.ts`
+- `src/style.css`
+- `src/game/GameConfig.ts`
+- `src/game/assets.ts`
+- `src/game/scenes/BootScene.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/UIScene.ts`
+- `tests/unit/asset-keys.test.ts`
+- `tests/smoke/check-dist.mjs`
+- `docs/PHASE2_ENGINE_SCAFFOLD_REPORT.md`
+
+**Summary:**
+
+Created the runnable Vite + TypeScript + Phaser scaffold, imported project-local generated assets, rendered a Phaser canvas, added basic tests and smoke validation, and verified the app visually in desktop and narrow browser viewports.
+
+**Follow-Ups:**
+
+- [ ] Build the first movement sandbox.
+- [ ] Slice Foxman prototype poses into animation frames.
+- [ ] Add browser smoke automation once movement exists.
+
+## 2026-06-25 - Phase 1 Style Lock And First Assets Completed
+
+**Type:** Design / AI Art  
+**Source:** Human + Codex  
+**Related Files:**
+
+- `assets/docs/art_direction.md`
+- `assets/docs/palette.md`
+- `assets/docs/animation_specs.md`
+- `assets/docs/import_notes.md`
+- `assets/docs/asset_log.md`
+- `assets/docs/qa_phase1_batch_001.md`
+- `assets/docs/style_lock_decision.md`
+- `assets/source/prompts/`
+- `assets/source/concepts/`
+- `assets/source/ai_raw/`
+- `assets/game/sprites/characters/foxman/char_foxman_candidate_b_prototype_sheet_alpha.png`
+
+**Summary:**
+
+Created the Phase 1 art-direction package, generated the first concept batch, selected Foxman candidate B as the base design, and produced a transparent Foxman prototype sheet for early runtime import experiments.
+
+**Follow-Ups:**
+
+- [ ] Create the Vite + TypeScript + Phaser engine scaffold.
+- [ ] Slice the Foxman prototype sheet into frame metadata after the scaffold exists.
+- [ ] Generate or clean a transparent drunken guard prototype during the combat asset pass.
+
+## 2026-06-25 - Master Initiative Plan Drafted
+
+**Type:** Production / Docs  
+**Source:** Human + Codex + Subagents  
+**Related Files:**
+
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Drafted the master initiative plan for `The Adventures of Foxman, a Merciless Bastard`, including creative pillars, content boundaries, asset gates, engineering phases, QA cadence, swarm coordination, and first vertical-slice scope. The plan is awaiting user approval before implementation begins.
+
+**Follow-Ups:**
+
+- [ ] User approves moving from planning to run.
+- [ ] Create the engine scaffold after approval.
+- [ ] Create the asset prompt book and first generated concepts after approval.
+
+## 2026-06-25 - Project Operating System Added
+
+**Type:** Ops / Docs  
+**Source:** Human + Codex  
+**Related Files:**
+
+- `PROJECT.md`
+- `AGENTS.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+- `docs/07-ops/FUTURE-TODO.md`
+- `docs/07-ops/COMPLETED.md`
+- `docs/07-ops/SKILLS.md`
+- `docs/07-ops/SHIPPING-UPDATE-SKILL.md`
+- `docs/07-ops/OPERATING-MANUAL.md`
+- `docs/07-ops/PROMPT-TEMPLATE.md`
+
+**Summary:**
+
+Added a lightweight project operating system so future human and agent work can stay aligned, track active tasks, preserve completed work, and update project state after meaningful changes.
+
+**Follow-Ups:**
+
+- [ ] Approve the master initiative plan.
+- [ ] Keep ops docs updated after meaningful work.

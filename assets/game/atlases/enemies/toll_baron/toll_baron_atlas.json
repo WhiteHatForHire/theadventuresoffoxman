@@ -1,0 +1,171 @@
+{
+  "frames": {
+    "idle": {
+      "frame": {
+        "x": 8,
+        "y": 8,
+        "w": 438,
+        "h": 426
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 438,
+        "h": 426
+      },
+      "sourceSize": {
+        "w": 438,
+        "h": 426
+      },
+      "sourceCrop": {
+        "x": 32,
+        "y": 56,
+        "w": 438,
+        "h": 426
+      }
+    },
+    "patrol": {
+      "frame": {
+        "x": 454,
+        "y": 8,
+        "w": 448,
+        "h": 408
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 448,
+        "h": 408
+      },
+      "sourceSize": {
+        "w": 448,
+        "h": 408
+      },
+      "sourceCrop": {
+        "x": 511,
+        "y": 80,
+        "w": 448,
+        "h": 408
+      }
+    },
+    "alert": {
+      "frame": {
+        "x": 8,
+        "y": 442,
+        "w": 506,
+        "h": 415
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 506,
+        "h": 415
+      },
+      "sourceSize": {
+        "w": 506,
+        "h": 415
+      },
+      "sourceCrop": {
+        "x": 995,
+        "y": 73,
+        "w": 506,
+        "h": 415
+      }
+    },
+    "attack": {
+      "frame": {
+        "x": 522,
+        "y": 442,
+        "w": 452,
+        "h": 430
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 452,
+        "h": 430
+      },
+      "sourceSize": {
+        "w": 452,
+        "h": 430
+      },
+      "sourceCrop": {
+        "x": 46,
+        "y": 535,
+        "w": 452,
+        "h": 430
+      }
+    },
+    "hurt": {
+      "frame": {
+        "x": 8,
+        "y": 880,
+        "w": 410,
+        "h": 381
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 410,
+        "h": 381
+      },
+      "sourceSize": {
+        "w": 410,
+        "h": 381
+      },
+      "sourceCrop": {
+        "x": 531,
+        "y": 551,
+        "w": 410,
+        "h": 381
+      }
+    },
+    "dead": {
+      "frame": {
+        "x": 426,
+        "y": 880,
+        "w": 569,
+        "h": 237
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 569,
+        "h": 237
+      },
+      "sourceSize": {
+        "w": 569,
+        "h": 237
+      },
+      "sourceCrop": {
+        "x": 954,
+        "y": 715,
+        "w": 569,
+        "h": 237
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-frame-atlas.py",
+    "version": "1",
+    "image": "toll_baron_atlas.png",
+    "source": "assets/game/sprites/enemies/enemy_toll_baron_runtime_sheet_alpha.png",
+    "size": {
+      "w": 1003,
+      "h": 1269
+    },
+    "scale": "1"
+  }
+}

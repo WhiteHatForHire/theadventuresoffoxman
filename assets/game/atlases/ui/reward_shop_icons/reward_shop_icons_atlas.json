@@ -1,0 +1,119 @@
+{
+  "frames": {
+    "weapon": {
+      "frame": {
+        "x": 8,
+        "y": 8,
+        "w": 627,
+        "h": 627
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      },
+      "sourceSize": {
+        "w": 627,
+        "h": 627
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      }
+    },
+    "survival": {
+      "frame": {
+        "x": 643,
+        "y": 8,
+        "w": 627,
+        "h": 627
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      },
+      "sourceSize": {
+        "w": 627,
+        "h": 627
+      },
+      "sourceCrop": {
+        "x": 627,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      }
+    },
+    "skill": {
+      "frame": {
+        "x": 8,
+        "y": 643,
+        "w": 627,
+        "h": 627
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      },
+      "sourceSize": {
+        "w": 627,
+        "h": 627
+      },
+      "sourceCrop": {
+        "x": 0,
+        "y": 627,
+        "w": 627,
+        "h": 627
+      }
+    },
+    "mutation": {
+      "frame": {
+        "x": 643,
+        "y": 643,
+        "w": 627,
+        "h": 627
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 627,
+        "h": 627
+      },
+      "sourceSize": {
+        "w": 627,
+        "h": 627
+      },
+      "sourceCrop": {
+        "x": 627,
+        "y": 627,
+        "w": 627,
+        "h": 627
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-frame-atlas.py",
+    "version": "1",
+    "image": "reward_shop_icons_atlas.png",
+    "source": "assets/source/ai_raw/reward_shop_icon_board_raw.png",
+    "size": {
+      "w": 1278,
+      "h": 1278
+    },
+    "scale": "1"
+  }
+}

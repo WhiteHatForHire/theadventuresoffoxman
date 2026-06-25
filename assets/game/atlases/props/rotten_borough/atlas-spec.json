@@ -1,0 +1,16 @@
+{
+  "source": "assets/game/props/rotten_borough/prop_pickup_exit_runtime_sheet_alpha.png",
+  "outputImage": "assets/game/atlases/props/rotten_borough/pickup_exit_atlas.png",
+  "outputJson": "assets/game/atlases/props/rotten_borough/pickup_exit_atlas.json",
+  "maxWidth": 1024,
+  "padding": 8,
+  "quantizeColors": 256,
+  "frames": {
+    "lockedGate": { "x": 596, "y": 135, "width": 428, "height": 560 },
+    "unlockedGate": { "x": 1045, "y": 135, "width": 430, "height": 565 },
+    "butcherSaber": { "x": 35, "y": 292, "width": 260, "height": 370 },
+    "pickupRing": { "x": 357, "y": 321, "width": 183, "height": 354 },
+    "lockIcon": { "x": 1497, "y": 408, "width": 104, "height": 164 },
+    "exitArrow": { "x": 1622, "y": 427, "width": 115, "height": 121 }
+  }
+}
