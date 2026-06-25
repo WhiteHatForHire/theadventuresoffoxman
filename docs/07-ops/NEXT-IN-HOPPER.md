@@ -28,7 +28,7 @@ Create the master initiative plan, then begin a gated vertical-slice build for `
 
 # Active Tasks
 
-## 1. Full Foxman Case Study Essay And Visual Capture
+## 1. Foxman Case Study Screenshot And Annotation Pass
 
 **Status:** Active  
 **Priority:** P1  
@@ -36,14 +36,14 @@ Create the master initiative plan, then begin a gated vertical-slice build for `
 
 ### Goal
 
-Turn the new case-study structure into a complete visual longform artifact with screenshots, annotated failures, asset galleries, production timeline, code map references, postmortem analysis, and business story.
+Extend the completed case-study Markdown/DOCX package with live gameplay screenshots, annotated failure visuals, and stronger before/after evidence.
 
 ### Acceptance Criteria
 
 - Capture and save live screenshots for title, first room, reward shop, second path, boss, death/restart, and fixed playable route.
 - Add annotated before/after visuals for the green-wash/debug-scaffold failure and the manual-control smoke-route failure.
-- Expand `docs/case-study/FOXMAN_CASE_STUDY.md` from structure into essay prose.
-- Cross-link the asset gallery, code map, phase reports, and smoke evidence.
+- Add the new images to `docs/case-study/FOXMAN_CASE_STUDY.md` and regenerate `docs/case-study/Foxman_Case_Study.docx`.
+- Re-render the DOCX and visually inspect representative pages.
 - Preserve the central thesis: one-shot generation creates artifacts, while agent orchestration creates production quality.
 
 ## 2. Post-V1 Polish And Packaging Triage
@@ -74,6 +74,7 @@ None right now.
 
 # Recently Moved Out
 
+- Presentation-ready Foxman case-study DOCX created on 2026-06-26.
 - Foxman case study structure, asset gallery, and code map created on 2026-06-26.
 - Manual play link and smoke autorun split completed on 2026-06-26.
 - First-room presentation and visual smoke guard completed on 2026-06-26.

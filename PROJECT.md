@@ -53,6 +53,7 @@ Non-goals:
 
 - [`FOXMANS_INITIATIVE.md`](docs/FOXMANS_INITIATIVE.md) - master production plan, gates, and build roadmap.
 - [`FOXMAN_CASE_STUDY.md`](docs/case-study/FOXMAN_CASE_STUDY.md) - visual case-study structure for the one-shot generation postmortem and business story.
+- [`Foxman_Case_Study.docx`](docs/case-study/Foxman_Case_Study.docx) - presentation-ready case-study document with embedded asset plates, token economics, code map, and asset-location guide.
 - [`ASSET_GALLERY.md`](docs/case-study/ASSET_GALLERY.md) - visual inventory of source concepts, raw AI outputs, runtime sheets, atlases, backgrounds, props, UI, and prompt docs.
 - [`CODE_MAP.md`](docs/case-study/CODE_MAP.md) - full codebase map for scenes, systems, tests, docs, and pipeline scripts.
 - [`PHASE2_ENGINE_SCAFFOLD_REPORT.md`](docs/PHASE2_ENGINE_SCAFFOLD_REPORT.md) - validation evidence for the first runnable Phaser scaffold.
