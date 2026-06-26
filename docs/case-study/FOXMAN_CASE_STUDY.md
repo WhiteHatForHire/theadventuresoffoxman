@@ -12,6 +12,10 @@ Core thesis:
 
 > One-shot generation can produce assets, scaffolds, and plausible systems quickly, but it does not reliably produce a coherent product without orchestration, taste, manual playtesting, and explicit quality gates.
 
+Director-model thesis:
+
+> The agentic era does not reward people who merely ask AI to make things. It rewards people who can direct agents through strategy, sequencing, review, and quality gates. Without that director layer, AI produces nice shallow shells: impressive at a glance, thin under pressure, and rarely useful at production depth.
+
 Supporting docs:
 
 - [Asset Gallery](ASSET_GALLERY.md)
@@ -229,7 +233,95 @@ The Foxman run should be framed as a failed one-shot demo and a successful produ
 
 ---
 
-# 5. Production Timeline
+# 5. The Director Model: Direction Is The Product Layer
+
+## Purpose
+
+Connect Foxman to the broader solo-builder lesson from `THE DIRECTOR MODEL`: agentic tools do not remove the need for product thinking, review, workflow design, or honest judgment. They amplify those things. When the human brings direction, agents can make projects completable. When the human brings only a vague prompt, agents produce shallow shells.
+
+## The Shallow Shell Failure
+
+Most people using AI to build software, games, tools, or content will get something that looks better than it is:
+
+- a polished landing page with no acquisition logic
+- an app shell with no security model
+- a demo flow with no edge-case handling
+- a game scene with no feel
+- a generated asset pack with no runtime art pipeline
+- a test suite that proves the wrong thing
+- a roadmap that flatters the current state instead of protecting the next gate
+
+This is the dangerous middle zone. The output is good enough to impress the builder and weak enough to fail a serious user. It is not nothing. It is worse than nothing if it convinces the team to stop asking hard questions.
+
+Foxman landed exactly there for a moment. It had docs, assets, scenes, a boss, smoke routes, and a V1 label. It also had a first human play experience where the character autoran and the room looked like debug scaffolding. That is the shell problem in miniature.
+
+## Direction Versus Prompting
+
+Prompting asks for output. Direction decides what output should exist, in what order, against what standard, and when it is not good enough.
+
+The director model requires:
+
+- product thinking: knowing what matters and why
+- sequencing: building the next useful gate, not the next shiny feature
+- review: reading outputs closely enough to reject shallow compliance
+- role design: assigning agents to implementation, review, security, QA, or synthesis
+- context discipline: preserving state so the project does not decay between sessions
+- honest self-assessment: knowing when you do not understand an output well enough to approve it
+- taste: seeing when the result technically satisfies the prompt while failing the user
+
+The key distinction:
+
+> AI does the implementation. The director owns the standard.
+
+## Why Foxman Matters As Evidence
+
+Foxman is useful because the run had more direction than a lazy prompt but still not enough. It had a project brain, gates, smoke routes, asset phases, and reports. That raised the floor dramatically. It did not automatically produce depth.
+
+The run shows three levels of agentic output:
+
+| Level | What It Looks Like | What It Actually Means |
+| --- | --- | --- |
+| Prompted shell | Impressive screenshots, generated copy, working buttons, plausible code | Fast surface creation with unknown depth |
+| Orchestrated scaffold | Docs, gates, tests, assets, phase reports, repeatable scripts | Real production shape, but still not product quality |
+| Directed product | Manual feel gates, review protocols, accepted/rejected outputs, scalable architecture, user-first QA | A system with depth, durability, and a reason to exist |
+
+Foxman reached the orchestrated scaffold level. The case study exists because the work briefly pretended that was enough.
+
+## Completability, Not Speed
+
+The bigger business point is not that AI makes builders faster. Speed is the shallow interpretation. The deeper claim from the Director Model is completability: agentic workflows can help one person cross production surfaces that used to require a team, if the director supplies sequencing, review, and gates.
+
+Foxman demonstrates the inverse. Speed and volume without sufficient direction produced:
+
+- too much feature surface before the first room felt good
+- asset volume before runtime composition maturity
+- smoke coverage before manual play confidence
+- milestone language before demo readiness
+
+The lesson is not "use less AI." The lesson is "increase the quality of direction until the agents are producing depth, not decorative progress."
+
+## Director Questions Foxman Should Have Asked Earlier
+
+- What does the first ten seconds need to prove before any second path or boss exists?
+- Is this link a playable experience or an automation route?
+- What would make the first room embarrassing if shown cold?
+- Which smoke tests prove user value, and which only prove state transitions?
+- Which generated assets are actually integrated into the runtime experience?
+- What is the smallest manual-play gate that can block false V1 language?
+- Are we building durable systems or stacking shallow features?
+
+## Case-Study Frame
+
+Foxman should be read as a warning and an operating manual:
+
+- Warning: AI can produce a lot of impressive work that is shallow, brittle, or not useful.
+- Operating manual: with director-level sequencing, review, context management, and quality gates, the same tools can produce work that becomes completable.
+
+The director model is the difference between "AI made me a thing" and "I operated a small agentic studio toward a standard."
+
+---
+
+# 6. Production Timeline
 
 ## Purpose
 
@@ -279,7 +371,7 @@ flowchart LR
 
 ---
 
-# 6. Asset Gallery
+# 7. Asset Gallery
 
 ## Purpose
 
@@ -314,7 +406,7 @@ Canonical source:
 
 ---
 
-# 7. The Playable Build
+# 8. The Playable Build
 
 ## Purpose
 
@@ -354,7 +446,7 @@ flowchart LR
 
 ---
 
-# 8. The Looks-Done Trap
+# 9. The Looks-Done Trap
 
 ## Purpose
 
@@ -383,7 +475,7 @@ This is the first major lesson section. It should show how generated assets and 
 
 ---
 
-# 9. What One-Shot Generation Got Right
+# 10. What One-Shot Generation Got Right
 
 ## Purpose
 
@@ -405,7 +497,7 @@ AI is excellent at producing material and momentum. That is valuable. The mistak
 
 ---
 
-# 10. What One-Shot Generation Got Wrong
+# 11. What One-Shot Generation Got Wrong
 
 ## Purpose
 
@@ -420,6 +512,8 @@ Name the production failures directly.
 - Smoke tests lacked enough visual and manual-play assertions.
 - The level did not receive enough layout/game-feel direction.
 - The project had many features before it had a truly convincing first minute.
+- The work had production shape before it had production depth.
+- The agent built what was asked, but the direction layer did not reject shallow compliance early enough.
 
 ## Key Line
 
@@ -427,7 +521,7 @@ Name the production failures directly.
 
 ---
 
-# 11. Agent Orchestration Is A Skill
+# 12. Agent Orchestration Is A Skill
 
 ## Purpose
 
@@ -436,6 +530,8 @@ Make the business argument.
 ## Argument
 
 Agent orchestration is not just writing a longer prompt. It is the discipline of converting a vague, high-ambition goal into an ordered production system that protects quality.
+
+This is the Director Model in practice. The human is not valuable because they can type every line of code or draw every asset. The human is valuable because they decide what matters, what happens next, what standard applies, and when an apparently completed output is still not acceptable.
 
 ## Orchestration Skills
 
@@ -449,6 +545,8 @@ Agent orchestration is not just writing a longer prompt. It is the discipline of
 - Asset acceptance.
 - Naming and doc discipline.
 - Knowing when a milestone label is lying.
+- Seeing when AI has produced a shallow shell instead of a scalable, useful system.
+- Designing protocols cheap enough that quality gates actually get followed.
 
 ## Key Line
 
@@ -456,7 +554,7 @@ Agent orchestration is not just writing a longer prompt. It is the discipline of
 
 ---
 
-# 12. Foxman Failure Modes
+# 13. Foxman Failure Modes
 
 ## Purpose
 
@@ -488,9 +586,13 @@ Huge goals produce many local wins and make it harder to see whether the core th
 
 Agents can obey instructions while missing the embarrassment-level failure a human sees in two seconds.
 
+### The Shallow Shell
+
+The output looks impressive in screenshots and status logs, but it lacks depth: weak first-use experience, fragile assumptions, limited scalability, and unclear user value.
+
 ---
 
-# 13. Business Story
+# 14. Business Story
 
 ## Purpose
 
@@ -509,6 +611,8 @@ Translate the postmortem into strategic value.
 
 AI generation changes the cost curve of production, but it does not remove production management. It shifts bottlenecks from raw creation to selection, integration, orchestration, QA, and taste.
 
+The Director Model sharpens that argument: the new leverage is not "anyone can prompt a finished product." The new leverage is that a solo operator with product judgment, workflow discipline, and review protocols can direct agent labor across a surface area that used to require a small team. Without that operator, the same tools mostly create attractive shells.
+
 ## Commercial Takeaways
 
 - AI can make early exploration dramatically cheaper.
@@ -517,14 +621,15 @@ AI generation changes the cost curve of production, but it does not remove produ
 - AI also creates hidden review debt.
 - Teams need stronger gates, not weaker ones.
 - The valuable role is not "prompt writer"; it is AI production director.
+- The market will be flooded with shallow AI-built artifacts; the valuable work will be directed systems that survive contact with users.
 
 ## Suggested Framing
 
-> The future is not one-shot product generation. The future is agentic production systems operated by people with taste.
+> The future is not one-shot product generation. The future is agentic production systems operated by people with taste, judgment, and review discipline.
 
 ---
 
-# 14. Token Economics
+# 15. Token Economics
 
 ## Purpose
 
@@ -582,9 +687,11 @@ At 5.3M tokens, the raw API cost is not shocking by itself. The more important c
 
 The business lesson is that token cost is only the visible meter. The hidden meter is integration debt.
 
+Director-model interpretation: cheap generation lowers the cost of making shells. It does not lower the cost of deciding what deserves to exist, what must be rejected, what needs review, and what has to survive real users.
+
 ---
 
-# 15. Recommended Production Model
+# 16. Recommended Production Model
 
 ## Purpose
 
@@ -603,6 +710,14 @@ Show the better way.
 9. Manual playtest gate.
 10. Demo packaging gate.
 
+## Director Protocols
+
+- End every session with a handoff that preserves state, blockers, next moves, and quality risks.
+- Split implementation, review, and QA into distinct agent roles when stakes justify it.
+- Require manual-play or manual-use gates before any public-demo language.
+- Treat "looks right" as a hypothesis, not evidence.
+- Keep asking whether the output is deep enough to be useful or merely polished enough to pass a screenshot test.
+
 ## Mermaid Draft
 
 ```mermaid
@@ -620,7 +735,7 @@ flowchart TD
 
 ---
 
-# 16. What Foxman Needs Next
+# 17. What Foxman Needs Next
 
 ## Purpose
 
@@ -638,10 +753,11 @@ Give the project a recovery path.
 - Add manual QA checklist.
 - Add visual screenshot regression.
 - Rename V1 as internal tech slice unless a public demo gate passes.
+- Add a director checklist that blocks shallow-shell progress before future content expansion.
 
 ---
 
-# 17. Appendix
+# 18. Appendix
 
 ## Include
 

@@ -32,6 +32,27 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-06-26 - Foxman Director-Model Case Study Thesis Added
+
+**Type:** Docs / Design / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `docs/case-study/FOXMAN_CASE_STUDY.md`
+- `docs/case-study/Foxman_Case_Study.docx`
+- `scripts/build_case_study_docx.py`
+- `docs/07-ops/COMPLETED.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Expanded the case study with the Director Model thesis from Marcus's field notes: AI prompting alone produces nice shallow shells, while direction supplies the product layer through sequencing, review, role design, context discipline, quality gates, and taste. Added the prompted-shell/orchestrated-scaffold/directed-product ladder, framed Foxman as an orchestrated scaffold that briefly mistook production shape for production depth, regenerated the DOCX, and rendered it to 35 pages for visual QA.
+
+**Follow-Ups:**
+
+- [ ] Add a dedicated director checklist artifact for future Foxman content gates.
+- [ ] Add annotated screenshots that visually contrast shallow-shell presentation with directed-product expectations.
+
 ## 2026-06-26 - Foxman Case Study Build-Process Narrative Expanded
 
 **Type:** Docs / Design / Ops  

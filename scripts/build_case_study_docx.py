@@ -441,7 +441,70 @@ def build_doc() -> None:
         "One-shot generation created output. Agent orchestration had to turn that output into evidence, reject bad milestone language, and force fixes where the player experience contradicted the reports.",
     )
 
-    doc.add_heading("3. Token Economics", level=1)
+    doc.add_page_break()
+    doc.add_heading("3. The Director Model: Direction Is The Product Layer", level=1)
+    doc.add_paragraph(
+        "Foxman should not be read as an argument against AI building. It is an argument against undirected AI building. The lesson from the Director Model is that agentic tools amplify the operator's product thinking, sequencing, review discipline, and quality gates. Without that layer, most builders will get nice shallow shells: impressive at a glance, thin under pressure, and rarely useful at production depth."
+    )
+    add_callout(
+        doc,
+        "Prompting is not directing",
+        "Prompting asks for output. Direction decides what output should exist, in what order, against what standard, and when an apparently completed output is still not good enough.",
+    )
+    add_table(
+        doc,
+        ["Level", "What It Looks Like", "What It Actually Means"],
+        [
+            (
+                "Prompted shell",
+                "Impressive screenshots, generated copy, working buttons, plausible code",
+                "Fast surface creation with unknown depth, weak review, and unclear durability.",
+            ),
+            (
+                "Orchestrated scaffold",
+                "Docs, gates, tests, assets, phase reports, repeatable scripts",
+                "Real production shape, but still not product quality unless human review blocks shallow compliance.",
+            ),
+            (
+                "Directed product",
+                "Manual feel gates, review protocols, accepted/rejected outputs, scalable architecture, user-first QA",
+                "A system with depth, durability, and a reason to exist.",
+            ),
+        ],
+        widths=[1.4, 2.5, 2.6],
+    )
+    doc.add_heading("Why Foxman Matters", level=2)
+    doc.add_paragraph(
+        "Foxman reached the orchestrated scaffold level. It had a project brain, assets, scenes, a boss route, smoke tests, and a V1 label. It did not yet have enough directed product judgment. That is the exact trap most AI builders will fall into: they will mistake production shape for production depth."
+    )
+    add_bullets(
+        doc,
+        [
+            "A landing page can look polished while having no acquisition logic.",
+            "An app shell can look complete while lacking security, observability, and edge-case handling.",
+            "A game scene can look busy while lacking feel, pacing, and readable player intent.",
+            "A generated asset pack can look rich while having no runtime integration pipeline.",
+            "A test suite can look responsible while proving state transitions instead of user value.",
+        ],
+    )
+    add_callout(
+        doc,
+        "Completability, not speed",
+        "The real agentic advantage is not merely faster output. It is making serious work completable for a solo operator who can direct agents, preserve context, review outputs, and enforce gates.",
+    )
+    doc.add_heading("Director Questions Foxman Needed Earlier", level=2)
+    add_bullets(
+        doc,
+        [
+            "What must the first ten seconds prove before any second path or boss exists?",
+            "Is this link a playable experience or an automation route?",
+            "Which smoke tests prove user value, and which only prove state transitions?",
+            "Are we building durable systems or stacking shallow features?",
+            "What output should be rejected even though it technically satisfies the prompt?",
+        ],
+    )
+
+    doc.add_heading("4. Token Economics", level=1)
     doc.add_paragraph(
         "The working project accounting number for the run is 5,300,000 tokens. The exact dollar value depends on the input/output split, so the correct business framing is a scenario range rather than a single pretend invoice."
     )
@@ -461,7 +524,7 @@ def build_doc() -> None:
         "Pricing source: OpenAI GPT-5.5 availability and pricing note, which lists gpt-5.5 at $5 per 1M input tokens and $30 per 1M output tokens. Batch/Flex is half standard rate; Priority/Fast is 2.5x standard rate."
     )
 
-    doc.add_heading("4. Production Timeline", level=1)
+    doc.add_heading("5. Production Timeline", level=1)
     add_numbered(
         doc,
         [
@@ -481,19 +544,20 @@ def build_doc() -> None:
         ],
     )
 
-    doc.add_heading("5. Failure Modes", level=1)
+    doc.add_heading("6. Failure Modes", level=1)
     for title, body in [
         ("The Scaffold Mirage", "Scenes, entities, tests, docs, and assets made the repo look game-shaped before the game felt good."),
         ("The Smoke-Test Lie", "Automation proved route completion while hiding the first-time player experience."),
         ("The Asset Dump Problem", "Good images did not become good game art until scaled, composed, framed, and tested in motion."),
         ("The V1 Delusion", "The phrase V1 candidate sounded more finished than the build deserved."),
+        ("The Shallow Shell", "The output looks impressive in screenshots and status logs, but it lacks depth, durability, scalability, and user value."),
         ("The Taste Gap", "The agent could satisfy local instructions while missing failures a human saw in seconds."),
     ]:
         add_callout(doc, title, body)
 
-    doc.add_heading("6. Business Lesson", level=1)
+    doc.add_heading("7. Business Lesson", level=1)
     doc.add_paragraph(
-        "The useful commercial conclusion is not that AI cannot help make games. It can. The useful conclusion is that agentic production needs direction. AI lowers the cost of generating material and raises the value of selection, orchestration, QA, integration discipline, and taste."
+        "The useful commercial conclusion is not that AI cannot help make games. It can. The useful conclusion is that agentic production needs direction. AI lowers the cost of generating material and raises the value of selection, orchestration, QA, integration discipline, and taste. The market will be flooded with shallow AI-built artifacts; the valuable work will be directed systems that survive contact with users."
     )
     add_bullets(
         doc,
@@ -501,13 +565,14 @@ def build_doc() -> None:
             "Use AI for fast ideation, scaffold generation, asset exploration, and test harness construction.",
             "Do not let test pass states substitute for manual playtest gates.",
             "Protect the first human experience before expanding content.",
-            "Treat agent orchestration as a production discipline.",
+            "Treat agent orchestration as a production discipline, not a prompt trick.",
             "Budget for review debt, not just token spend.",
+            "Judge depth, scalability, and usefulness before praising output volume.",
         ],
     )
 
     doc.add_page_break()
-    doc.add_heading("7. Asset Gallery", level=1)
+    doc.add_heading("8. Asset Gallery", level=1)
     doc.add_paragraph(
         "The following gallery embeds the major project assets: runtime atlases, gameplay backgrounds, runtime sheets, source concepts, and raw generations. This is the visual evidence that the run produced substantial material even when the product experience remained rough."
     )
@@ -515,13 +580,13 @@ def build_doc() -> None:
         add_asset_block(doc, asset, idx, image_cache)
 
     doc.add_page_break()
-    doc.add_heading("8. Code Map", level=1)
+    doc.add_heading("9. Code Map", level=1)
     doc.add_paragraph(
         "The codebase has real bones. The important distinction is that bones are not the same as shipped product quality."
     )
     add_table(doc, ["Area", "Files", "Role"], CODE_ROWS, widths=[1.3, 2.5, 2.7])
 
-    doc.add_heading("9. Where The Assets Live", level=1)
+    doc.add_heading("10. Where The Assets Live", level=1)
     add_table(
         doc,
         ["Folder", "Contents"],
@@ -538,7 +603,7 @@ def build_doc() -> None:
         widths=[2.3, 4.2],
     )
 
-    doc.add_heading("10. Recovery Plan", level=1)
+    doc.add_heading("11. Recovery Plan", level=1)
     add_bullets(
         doc,
         [
@@ -548,6 +613,7 @@ def build_doc() -> None:
             "Replace procedural platform dressing with generated tile-kit runtime art.",
             "Add visual regression screenshots alongside smoke-route state checks.",
             "Rename the current artifact internally as a technical slice unless a real demo gate passes.",
+            "Add a director checklist that blocks shallow-shell progress before future content expansion.",
         ],
     )
 
