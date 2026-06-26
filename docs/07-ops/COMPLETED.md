@@ -32,6 +32,25 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-06-26 - Foxman Case Study Build-Process Narrative Expanded
+
+**Type:** Docs / Design / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `docs/case-study/FOXMAN_CASE_STUDY.md`
+- `docs/case-study/Foxman_Case_Study.docx`
+- `scripts/build_case_study_docx.py`
+- `docs/07-ops/COMPLETED.md`
+
+**Summary:**
+
+Expanded the case study around the actual core story: the original one-shot production prompt, the agentic build process, the production-shaped outputs, the green-wash/debug-scaffold failure, the autorun playable-link failure, the over-generous V1 framing, and the repair attempts that split manual play from smoke automation, cleaned up the first-room presentation, and hardened the smoke harness. Regenerated the DOCX and rendered it to 34 pages for visual QA.
+
+**Follow-Ups:**
+
+- [ ] Add live screenshots and annotated before/after plates for the green-wash and autorun/manual-control failures.
+
 ## 2026-06-26 - Foxman Presentation Case Study DOCX Created
 
 **Type:** Docs / Design / Ops  

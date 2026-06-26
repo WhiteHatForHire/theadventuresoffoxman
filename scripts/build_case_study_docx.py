@@ -359,7 +359,89 @@ def build_doc() -> None:
         ],
     )
 
-    doc.add_heading("2. Token Economics", level=1)
+    doc.add_heading("2. Build Process, Prompt, Glitches, And Repair Attempts", level=1)
+    doc.add_paragraph(
+        "This is the core Foxman story. The prompt did not ask for a tiny prototype. It asked for a one-go, gated production run: asset design first, AI-generated textures and sprite sheets, a Phaser side-scroller, ongoing smoke tests, playtesting, and a huge initiative doc. The system answered with production-shaped output, but not production-quality judgment."
+    )
+    add_callout(
+        doc,
+        "Core process failure",
+        "The run produced a convincing trail of artifacts before the first ten seconds of player experience were defensible.",
+    )
+    add_table(
+        doc,
+        ["Prompt Intent", "What The Run Produced", "Where It Broke"],
+        [
+            (
+                "Full one-shot side-scroller with gates",
+                "Initiative docs, phase reports, hopper/completed logs, ADRs, and V1 audit",
+                "The docs created confidence faster than the playable experience earned it.",
+            ),
+            (
+                "AI-generated textures, sprites, backgrounds, models",
+                "Concept sheets, raw generations, alpha sheets, atlases, background art, UI boards",
+                "Asset volume outpaced in-game composition, animation feel, and tile-kit polish.",
+            ),
+            (
+                "Code bones and flesh",
+                "Vite/TypeScript/Phaser scenes, player, enemies, rewards, boss, HUD, persistence",
+                "Feature count grew before the first room felt authored or fun.",
+            ),
+            (
+                "Ongoing smoke tests and playtest",
+                "Broad browser smoke matrix with route completion and state assertions",
+                "Bot routes were mistaken for playable links; automation hid human-control failure.",
+            ),
+        ],
+        widths=[2.0, 2.3, 2.2],
+    )
+
+    doc.add_heading("The Glitchy Outputs", level=2)
+    add_bullets(
+        doc,
+        [
+            "Green-wash first room: a huge neon completion effect and raw-looking platforms made the room read like a missing-texture/debug screen.",
+            "Autorun playable link: the shared scene was effectively a smoke route, so Foxman moved without the player controlling him.",
+            "Debug scaffold aesthetic: hitboxes, projectile rectangles, procedural platform dressing, and state-driven test assumptions were still visible.",
+            "Over-generous V1 label: a smoke-proven technical slice was described with language that sounded closer to demo readiness than it deserved.",
+        ],
+    )
+
+    doc.add_heading("Repair Attempts", level=2)
+    add_table(
+        doc,
+        ["Fix", "What Improved", "What Still Needed Human Production Work"],
+        [
+            (
+                "Manual play split",
+                "Smoke automation now requires smokeAuto=1; manual scene links keep player control.",
+                "Controls onboarding, first-minute tutorialization, and game feel still need design passes.",
+            ),
+            (
+                "First-room cleanup",
+                "Debug state text was hidden, platforms were toned down, gate scale improved, and green-artifact smoke guard was added.",
+                "The room still needs authored layout, camera composition, and real tile-kit runtime art.",
+            ),
+            (
+                "Smoke hardening",
+                "Routes now assert more state: HUD fields, hit feedback, death/restart, boss completion, reward handoff, and visual green regression.",
+                "Tests still cannot judge whether the game is enjoyable, readable, or satisfying to touch.",
+            ),
+            (
+                "Postmortem reframe",
+                "The project is now positioned as an internal technical slice and production autopsy.",
+                "A public demo still needs a separate human-first acceptance gate.",
+            ),
+        ],
+        widths=[1.45, 2.45, 2.6],
+    )
+    add_callout(
+        doc,
+        "Pattern",
+        "One-shot generation created output. Agent orchestration had to turn that output into evidence, reject bad milestone language, and force fixes where the player experience contradicted the reports.",
+    )
+
+    doc.add_heading("3. Token Economics", level=1)
     doc.add_paragraph(
         "The working project accounting number for the run is 5,300,000 tokens. The exact dollar value depends on the input/output split, so the correct business framing is a scenario range rather than a single pretend invoice."
     )
@@ -379,7 +461,7 @@ def build_doc() -> None:
         "Pricing source: OpenAI GPT-5.5 availability and pricing note, which lists gpt-5.5 at $5 per 1M input tokens and $30 per 1M output tokens. Batch/Flex is half standard rate; Priority/Fast is 2.5x standard rate."
     )
 
-    doc.add_heading("3. Production Timeline", level=1)
+    doc.add_heading("4. Production Timeline", level=1)
     add_numbered(
         doc,
         [
@@ -399,7 +481,7 @@ def build_doc() -> None:
         ],
     )
 
-    doc.add_heading("4. Failure Modes", level=1)
+    doc.add_heading("5. Failure Modes", level=1)
     for title, body in [
         ("The Scaffold Mirage", "Scenes, entities, tests, docs, and assets made the repo look game-shaped before the game felt good."),
         ("The Smoke-Test Lie", "Automation proved route completion while hiding the first-time player experience."),
@@ -409,7 +491,7 @@ def build_doc() -> None:
     ]:
         add_callout(doc, title, body)
 
-    doc.add_heading("5. Business Lesson", level=1)
+    doc.add_heading("6. Business Lesson", level=1)
     doc.add_paragraph(
         "The useful commercial conclusion is not that AI cannot help make games. It can. The useful conclusion is that agentic production needs direction. AI lowers the cost of generating material and raises the value of selection, orchestration, QA, integration discipline, and taste."
     )
@@ -425,7 +507,7 @@ def build_doc() -> None:
     )
 
     doc.add_page_break()
-    doc.add_heading("6. Asset Gallery", level=1)
+    doc.add_heading("7. Asset Gallery", level=1)
     doc.add_paragraph(
         "The following gallery embeds the major project assets: runtime atlases, gameplay backgrounds, runtime sheets, source concepts, and raw generations. This is the visual evidence that the run produced substantial material even when the product experience remained rough."
     )
@@ -433,13 +515,13 @@ def build_doc() -> None:
         add_asset_block(doc, asset, idx, image_cache)
 
     doc.add_page_break()
-    doc.add_heading("7. Code Map", level=1)
+    doc.add_heading("8. Code Map", level=1)
     doc.add_paragraph(
         "The codebase has real bones. The important distinction is that bones are not the same as shipped product quality."
     )
     add_table(doc, ["Area", "Files", "Role"], CODE_ROWS, widths=[1.3, 2.5, 2.7])
 
-    doc.add_heading("8. Where The Assets Live", level=1)
+    doc.add_heading("9. Where The Assets Live", level=1)
     add_table(
         doc,
         ["Folder", "Contents"],
@@ -456,7 +538,7 @@ def build_doc() -> None:
         widths=[2.3, 4.2],
     )
 
-    doc.add_heading("9. Recovery Plan", level=1)
+    doc.add_heading("10. Recovery Plan", level=1)
     add_bullets(
         doc,
         [

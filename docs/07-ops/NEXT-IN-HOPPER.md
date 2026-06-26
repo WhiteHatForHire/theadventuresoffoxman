@@ -74,6 +74,7 @@ None right now.
 
 # Recently Moved Out
 
+- Foxman case-study build-process narrative expansion completed on 2026-06-26.
 - Presentation-ready Foxman case-study DOCX created on 2026-06-26.
 - Foxman case study structure, asset gallery, and code map created on 2026-06-26.
 - Manual play link and smoke autorun split completed on 2026-06-26.

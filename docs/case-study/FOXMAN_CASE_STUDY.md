@@ -101,7 +101,135 @@ The prompt asked for ambition, but ambition is not a substitute for production c
 
 ---
 
-# 4. Production Timeline
+# 4. The Build Process, Prompt, Glitches, And Repair Attempts
+
+## Purpose
+
+This is the core of the case study. The Foxman story is not just "AI made a rough prototype." The story is that the prompt explicitly asked for a full one-go production run with design, generated assets, code, gates, ongoing smoke tests, and playtesting, and the system still drifted into a familiar failure mode: lots of artifacts, lots of reports, lots of green checks, and a first human experience that immediately felt wrong.
+
+## Original Prompt Shape
+
+The initiating brief was intentionally extreme:
+
+- Build a side-scroller in a Dead Cells style.
+- Use a fox/man hybrid protagonist.
+- Generate textures, character models, backgrounds, animated sprite sheets, and supporting art.
+- Start with a full design-team asset phase.
+- Then create the code skeleton and flesh it out.
+- Playtest and smoke test continuously.
+- Treat the run like a huge, gated, agentic initiative rather than a toy prototype.
+- Create a huge initiative doc and run through gates.
+
+That prompt did the right thing at the intent level: it did not ask for a single HTML mockup or a vibe sketch. It asked for production shape. The failure happened in the translation from production language into production judgment.
+
+## What The Agentic Build Actually Did
+
+The run created a real production-looking structure:
+
+1. A project brain with `PROJECT.md`, `AGENTS.md`, initiative gates, hopper docs, completed logs, ADRs, and phase reports.
+2. A Vite, TypeScript, Phaser 3 game scaffold.
+3. Concept images for Foxman, Rotten Borough, enemies, material boards, UI/VFX, and tiles.
+4. Runtime sprite sheets, cleaned alpha sheets, and packed Phaser atlases.
+5. A first room, reward shop, second combat path, boss route, death/restart loops, HUD state, active skill, ranged weapon, mutations, and persistence.
+6. A browser smoke matrix that drove the game through multiple routes.
+7. A V1 acceptance audit that treated smoke-proven route completion as enough to accept the technical slice.
+
+That is why the failure is useful. The run did not fail because nothing was built. It failed because a lot was built before the first-minute human experience had earned the right to expand.
+
+## The Glitchy Outputs That Exposed The Truth
+
+### 1. The Green-Wash Room
+
+The first shared visual of the supposedly playable room had a huge neon-green wash, blocky platform geometry, a giant completion state, and UI that read like debug telemetry. It looked less like a grimy side-scroller and more like a missing-texture diagnostic screen wearing a Foxman title.
+
+The important point is not that a green effect existed. The important point is that the system accepted the room because the route completed. The visual outcome was obviously embarrassing to a human, but it was not represented as a failing gate until the user reacted to it.
+
+### 2. The Autorun Playable Link
+
+The first playable link was effectively a smoke route. Foxman ran through the room because the URL path triggered automated behavior. From the system's perspective, this was useful: it proved pickup, combat, exit unlock, and completion. From the user's perspective, it was absurd: the player opened the game and had no control.
+
+This is the cleanest business lesson in the whole run:
+
+> A bot route is not a playable link.
+
+The later fix split manual smoke-scene loading from automation. Direct smoke links such as `/?smoke=room` now open scenes without bot control; automated tests must opt in with `smokeAuto=1`.
+
+### 3. The Debug Scaffold Aesthetic
+
+Several implemented features remained visibly prototype-shaped:
+
+- attack and skill rectangles
+- receipt projectiles that still read as debug marks
+- platform skins that were procedural rather than proper tile art
+- visible state strips and route/debug assumptions
+- a boss route that could complete but did not yet feel like authored action design
+
+These are acceptable inside a development sandbox. They are not acceptable as evidence that a raunchy Dead Cells-style game has been one-shot generated.
+
+### 4. The Over-Generous V1 Label
+
+The V1 acceptance audit was internally consistent and still too flattering. It accepted generated runtime assets, route completion, death/restart paths, reward/shop build variety, boss completion, HUD readability, hit feedback, build-size stabilization, and a passing smoke suite.
+
+Those are meaningful engineering facts. They are not the same as demo readiness. This is where orchestration failed at the language layer: the project called a technical slice a V1 candidate before the human experience was defensible.
+
+## Fix Attempts And What They Actually Fixed
+
+### Fix 1: Manual Play Split
+
+The smoke harness was changed so automation requires `smokeAuto=1`. Manual scene links no longer trigger bot control. That repaired the "Foxman autoruns and I have no controls" failure.
+
+What it did not fix:
+
+- first-minute tutorialization
+- game feel
+- control onboarding
+- level design quality
+
+### Fix 2: First-Room Presentation Cleanup
+
+The room presentation was cleaned up so collision platforms no longer looked like raw debug blocks, the generated Rotten Borough background stayed visible, the debug-state strip was hidden, the exit gate was scaled back, and the smoke route gained a visual guard against large neon missing-texture green artifacts.
+
+What it did not fix:
+
+- the need for real tile-kit runtime art
+- camera and composition polish
+- authored encounter pacing
+- a stronger first-room layout
+
+### Fix 3: Smoke Harness Hardening
+
+The browser route matrix became more explicit. It checks route state, death/restart, boss completion, reward handoff, HUD fields, hit feedback counts, and green-artifact regression.
+
+What it did not fix:
+
+- whether the game is fun
+- whether the first-time player understands the controls
+- whether the room feels like Dead Cells instead of a test track
+
+### Fix 4: Case-Study Reframe
+
+The postmortem reframes the output as an internal technical slice and production lesson, not as a finished game. That matters because bad milestone language is itself a product risk. If the team lies to itself, the demo gets worse while the reports get shinier.
+
+## The Core Pattern
+
+The run followed a loop:
+
+1. The user asked for a huge one-shot production challenge.
+2. The agent created gates and docs that looked like disciplined production.
+3. The agent generated assets and code quickly.
+4. Smoke tests validated route completion.
+5. The project language drifted toward acceptance.
+6. Human review found obvious experiential failures.
+7. The fixes repaired symptoms and improved the harness.
+8. The case study revealed the real lesson: orchestration is not ceremony; it is the work.
+
+## Case-Study Thesis Update
+
+The Foxman run should be framed as a failed one-shot demo and a successful production autopsy. It did not prove that a polished game can be generated in one go. It proved that without tight agent orchestration, even a sophisticated prompt can produce a convincing trail of artifacts while missing the player's first ten seconds.
+
+---
+
+# 5. Production Timeline
 
 ## Purpose
 
@@ -151,7 +279,7 @@ flowchart LR
 
 ---
 
-# 5. Asset Gallery
+# 6. Asset Gallery
 
 ## Purpose
 
@@ -186,7 +314,7 @@ Canonical source:
 
 ---
 
-# 6. The Playable Build
+# 7. The Playable Build
 
 ## Purpose
 
@@ -226,7 +354,7 @@ flowchart LR
 
 ---
 
-# 7. The Looks-Done Trap
+# 8. The Looks-Done Trap
 
 ## Purpose
 
@@ -255,7 +383,7 @@ This is the first major lesson section. It should show how generated assets and 
 
 ---
 
-# 8. What One-Shot Generation Got Right
+# 9. What One-Shot Generation Got Right
 
 ## Purpose
 
@@ -277,7 +405,7 @@ AI is excellent at producing material and momentum. That is valuable. The mistak
 
 ---
 
-# 9. What One-Shot Generation Got Wrong
+# 10. What One-Shot Generation Got Wrong
 
 ## Purpose
 
@@ -299,7 +427,7 @@ Name the production failures directly.
 
 ---
 
-# 10. Agent Orchestration Is A Skill
+# 11. Agent Orchestration Is A Skill
 
 ## Purpose
 
@@ -328,7 +456,7 @@ Agent orchestration is not just writing a longer prompt. It is the discipline of
 
 ---
 
-# 11. Foxman Failure Modes
+# 12. Foxman Failure Modes
 
 ## Purpose
 
@@ -362,7 +490,7 @@ Agents can obey instructions while missing the embarrassment-level failure a hum
 
 ---
 
-# 12. Business Story
+# 13. Business Story
 
 ## Purpose
 
@@ -396,7 +524,7 @@ AI generation changes the cost curve of production, but it does not remove produ
 
 ---
 
-# 13. Token Economics
+# 14. Token Economics
 
 ## Purpose
 
@@ -456,7 +584,7 @@ The business lesson is that token cost is only the visible meter. The hidden met
 
 ---
 
-# 14. Recommended Production Model
+# 15. Recommended Production Model
 
 ## Purpose
 
@@ -492,7 +620,7 @@ flowchart TD
 
 ---
 
-# 15. What Foxman Needs Next
+# 16. What Foxman Needs Next
 
 ## Purpose
 
@@ -513,7 +641,7 @@ Give the project a recovery path.
 
 ---
 
-# 16. Appendix
+# 17. Appendix
 
 ## Include
 
