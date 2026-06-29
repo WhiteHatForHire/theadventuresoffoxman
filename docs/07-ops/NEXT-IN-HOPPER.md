@@ -79,6 +79,7 @@ Turn the first playable route from merely completable into something that feels 
 - Playtest the first room without smoke autorun and record the roughest friction points.
 - Tune combat timing, enemy tell/recovery windows, camera behavior, and pickup/exit readability.
 - Keep the new manual opening browser route passing.
+- Confirm packed-atlas body anchoring remains stable during pose changes.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
 ---
@@ -91,6 +92,7 @@ None right now.
 
 # Recently Moved Out
 
+- Atlas body anchoring and first-room visual cleanup completed on 2026-06-29.
 - First-room manual playability rescue completed on 2026-06-29.
 - Foxman director-model case-study thesis added on 2026-06-26.
 - Foxman case-study build-process narrative expansion completed on 2026-06-26.

@@ -46,8 +46,7 @@ export class GuardEnemy extends Phaser.Physics.Arcade.Sprite {
 
     const body = this.body as Phaser.Physics.Arcade.Body;
     const bodySize = this.bodySizeForVariant();
-    body.setSize(bodySize.width, bodySize.height);
-    body.setOffset(bodySize.offsetX, bodySize.offsetY);
+    this.anchorBodyToCurrentFrame(bodySize);
     body.setDragX(1200);
     body.setGravityY(1500);
   }
@@ -152,10 +151,27 @@ export class GuardEnemy extends Phaser.Physics.Arcade.Sprite {
     this.pose = pose;
     if (this.frameMode === "atlas") {
       this.setFrame(pose);
+      if (this.body) {
+        this.anchorBodyToCurrentFrame(this.bodySizeForVariant());
+      }
       return;
     }
 
     this.setCrop(frame.x, frame.y, frame.width, frame.height);
+    if (this.body) {
+      this.anchorBodyToCurrentFrame(this.bodySizeForVariant(), frame);
+    }
+  }
+
+  private anchorBodyToCurrentFrame(bodySize: BodyShape, frame = this.frames[this.pose ?? "idle"]): void {
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    const footPadding = this.variant === "tollBaron" ? 16 : 12;
+
+    body.setSize(bodySize.width, bodySize.height);
+    body.setOffset(
+      Math.max(0, (frame.width - bodySize.width) / 2),
+      Math.max(0, frame.height - bodySize.height - footPadding),
+    );
   }
 
   private healthForVariant(variant: GuardVariant): number {
@@ -196,12 +212,12 @@ export class GuardEnemy extends Phaser.Physics.Arcade.Sprite {
   private bodySizeForVariant(): BodyShape {
     switch (this.variant) {
       case "tollBaron":
-        return { width: 140, height: 185, offsetX: 150, offsetY: 235 };
+        return { width: 132, height: 185 };
       case "eliteAuditor":
       case "taxClerk":
-        return { width: 82, height: 150, offsetX: 94, offsetY: 410 };
+        return { width: 82, height: 150 };
       default:
-        return { width: 82, height: 150, offsetX: 94, offsetY: 410 };
+        return { width: 82, height: 150 };
     }
   }
 
@@ -244,6 +260,4 @@ type EnemyFrameKey = keyof typeof GuardFrames;
 type BodyShape = {
   width: number;
   height: number;
-  offsetX: number;
-  offsetY: number;
 };

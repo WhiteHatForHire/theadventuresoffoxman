@@ -143,5 +143,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.pose = pose;
     this.setFrame(pose);
+    this.anchorBodyToCurrentFrame();
+  }
+
+  private anchorBodyToCurrentFrame(): void {
+    const body = this.body as Phaser.Physics.Arcade.Body | null;
+    if (!body) {
+      return;
+    }
+
+    const bodyWidth = 72;
+    const bodyHeight = 150;
+    const footPadding = 10;
+    const frameWidth = this.frame.width;
+    const frameHeight = this.frame.height;
+
+    body.setSize(bodyWidth, bodyHeight);
+    body.setOffset(
+      Math.max(0, (frameWidth - bodyWidth) / 2),
+      Math.max(0, frameHeight - bodyHeight - footPadding),
+    );
   }
 }

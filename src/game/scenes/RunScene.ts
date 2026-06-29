@@ -31,7 +31,6 @@ export class RunScene extends Phaser.Scene {
   private inputMapper!: InputMapper;
   private player!: Player;
   private guard!: GuardEnemy;
-  private taxClerk!: GuardEnemy;
   private debugText!: Phaser.GameObjects.Text;
   private attackHitbox!: Phaser.GameObjects.Rectangle;
   private enemyAttackHitbox!: Phaser.GameObjects.Rectangle;
@@ -85,7 +84,6 @@ export class RunScene extends Phaser.Scene {
   private readonly roomWidth = 1650;
   private readonly playerStart = { x: 240, y: 500 };
   private readonly guardStart = { x: 720, y: 500 };
-  private readonly taxClerkStart = { x: 1160, y: 310 };
   private readonly saberPickup = { x: 430, y: 500 };
   private readonly receiptPickup = { x: 980, y: 390 };
   private readonly exitX = 1450;
@@ -118,10 +116,8 @@ export class RunScene extends Phaser.Scene {
     this.pauseAltKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     this.player = new Player(this, this.playerStart.x, this.playerStart.y);
     this.guard = new GuardEnemy(this, this.guardStart.x, this.guardStart.y);
-    this.taxClerk = new GuardEnemy(this, this.taxClerkStart.x, this.taxClerkStart.y, "taxClerk");
     this.physics.add.collider(this.player, platforms);
     this.physics.add.collider(this.guard, platforms);
-    this.physics.add.collider(this.taxClerk, platforms);
 
     this.cameras.main.setBounds(0, 0, this.roomWidth, GAME_HEIGHT);
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12, -120, 80);
@@ -460,7 +456,7 @@ export class RunScene extends Phaser.Scene {
 
     this.attackHitbox
       .setPosition(this.player.x + facing * 58, this.player.y - 80)
-      .setVisible(attacking);
+      .setVisible(false);
 
     const guardInFront =
       facing > 0 ? this.guard.x >= this.player.x - 24 : this.guard.x <= this.player.x + 24;
@@ -511,7 +507,7 @@ export class RunScene extends Phaser.Scene {
 
     this.enemyAttackHitbox
       .setPosition(this.guard.x + (this.guard.flipX ? -54 : 54), this.guard.y - 76)
-      .setVisible(guardCanAttack && this.guard.health.alive);
+      .setVisible(false);
 
     if (!this.player.health.alive) {
       this.deaths += 1;
@@ -757,7 +753,7 @@ export class RunScene extends Phaser.Scene {
     this.skillHitbox
       .setPosition(this.player.x + facing * (skill.range / 2), this.player.y - 88)
       .setSize(skill.range, 118)
-      .setVisible(true);
+      .setVisible(false);
     this.cameras.main.shake(70, 0.003);
 
     const guardInSkillRange =

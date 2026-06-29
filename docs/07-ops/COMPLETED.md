@@ -32,6 +32,28 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-06-29 - Atlas Body Anchoring And First-Room Visual Cleanup Completed
+
+**Type:** App / Gameplay / QA  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/entities/Player.ts`
+- `src/game/entities/GuardEnemy.ts`
+- `src/game/scenes/RunScene.ts`
+- `docs/PHASE8_FIRST_ROOM_PLAYABILITY_RESCUE_REPORT.md`
+- `docs/07-ops/COMPLETED.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Fixed the packed-atlas physics mismatch that made Foxman report non-idle movement states while standing still and made enemy hit reactions/placement look broken. Player and enemy Arcade bodies now re-anchor to the active atlas frame on pose changes. The first room also no longer renders the inactive tax clerk decoration or visible combat debug rectangles, leaving a cleaner one-guard opening encounter. Manual browser probes and the full validation suite passed.
+
+**Follow-Ups:**
+
+- [ ] Add screenshot evidence from the fixed first-room state to the case-study annotation pass.
+- [ ] Continue deeper human-play tuning beyond this physics/visual cleanup.
+
 ## 2026-06-29 - First-Room Manual Playability Rescue Completed
 
 **Type:** App / QA / Ops  

@@ -55,3 +55,27 @@ Browser smoke now includes:
 ## Remaining Reality
 
 The game is still a prototype V1 slice. It needs substantial polish before it can be called good: combat feel, enemy tells, level design, animation timing, camera behavior, feedback, and visual hierarchy all need deeper directed passes. The important change is that the opening loop can now be played and tested without relying on an autorun-only proof.
+
+## 2026-06-29 Follow-Up: Atlas Body Anchoring And Visual Cleanup
+
+A second manual playtest found that Foxman could visually cycle through non-idle poses while standing still, enemies could appear embedded in the environment, and hit reactions could look like they dropped bodies into the floor. The root cause was packed-atlas frame geometry: the sprites changed to frames with different source widths and heights, but the Arcade physics bodies kept offsets from the original large source sheets.
+
+Follow-up changes:
+
+- Re-anchored Foxman's physics body whenever his pose/frame changes.
+- Re-anchored enemy physics bodies whenever their pose/frame changes.
+- Kept body feet near the bottom of the active frame instead of using stale sheet offsets.
+- Removed the inactive tax clerk decoration from the first room so the opening reads as one guard encounter.
+- Hid combat debug rectangles during normal play while preserving their collision math.
+
+Follow-up validation:
+
+- Manual browser probe: start state is `idle`, grounded `true`, velocity `0`.
+- Manual browser probe after moving/stopping: grounded remains `true`, velocity returns to `0`.
+- Manual browser probe after held attack: guard health reaches `0`, guard remains on the ground, no debug hitbox rectangle is visible.
+- Manual browser probe after exit run: route reaches `RewardScene`.
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run smoke`
+- `FOXMAN_BASE_URL=http://127.0.0.1:5175 npm run smoke:browser`
