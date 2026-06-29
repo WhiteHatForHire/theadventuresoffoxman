@@ -42,6 +42,8 @@ export class RunScene extends Phaser.Scene {
   private exitText!: Phaser.GameObjects.Text;
   private completionBanner!: Phaser.GameObjects.Text;
   private barkText!: Phaser.GameObjects.Text;
+  private objectiveText!: Phaser.GameObjects.Text;
+  private controlsText!: Phaser.GameObjects.Text;
   private pauseKey!: Phaser.Input.Keyboard.Key;
   private pauseAltKey!: Phaser.Input.Keyboard.Key;
   private smokeMode:
@@ -80,40 +82,48 @@ export class RunScene extends Phaser.Scene {
   private hitFeedback!: HitFeedback;
   private exitUnlockAnnounced = false;
   private completionAnnounced = false;
+  private readonly roomWidth = 1650;
+  private readonly playerStart = { x: 240, y: 500 };
+  private readonly guardStart = { x: 720, y: 500 };
+  private readonly taxClerkStart = { x: 1160, y: 310 };
+  private readonly saberPickup = { x: 430, y: 500 };
+  private readonly receiptPickup = { x: 980, y: 390 };
+  private readonly exitX = 1450;
+  private readonly rewardTransitionX = 1580;
 
   constructor() {
     super("RunScene");
   }
 
   create(): void {
-    this.physics.world.setBounds(0, 0, 2200, GAME_HEIGHT);
+    this.physics.world.setBounds(0, 0, this.roomWidth, GAME_HEIGHT);
 
     this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, AssetKeys.rottenBoroughMood)
       .setDisplaySize(GAME_WIDTH, GAME_HEIGHT)
       .setAlpha(0.82)
       .setScrollFactor(0.25);
 
-    this.add.rectangle(1100, 646, 2200, 148, 0x09080a, 0.34)
+    this.add.rectangle(this.roomWidth / 2, 646, this.roomWidth, 148, 0x09080a, 0.34)
       .setOrigin(0.5, 0.5)
       .setDepth(0.4);
 
     const platforms = this.physics.add.staticGroup();
-    this.addPlatform(platforms, 1100, 650, 2200, 140);
-    this.addPlatform(platforms, 1320, 430, 300, 36);
-    this.addPlatform(platforms, 1720, 360, 260, 36);
+    this.addPlatform(platforms, this.roomWidth / 2, 650, this.roomWidth, 140);
+    this.addPlatform(platforms, 980, 430, 290, 36);
+    this.addPlatform(platforms, 1225, 360, 240, 36);
 
     this.inputMapper = new InputMapper(this);
     this.hitFeedback = new HitFeedback(this);
     this.pauseKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.pauseAltKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    this.player = new Player(this, 360, 500);
-    this.guard = new GuardEnemy(this, 980, 500);
-    this.taxClerk = new GuardEnemy(this, 1660, 310, "taxClerk");
+    this.player = new Player(this, this.playerStart.x, this.playerStart.y);
+    this.guard = new GuardEnemy(this, this.guardStart.x, this.guardStart.y);
+    this.taxClerk = new GuardEnemy(this, this.taxClerkStart.x, this.taxClerkStart.y, "taxClerk");
     this.physics.add.collider(this.player, platforms);
     this.physics.add.collider(this.guard, platforms);
     this.physics.add.collider(this.taxClerk, platforms);
 
-    this.cameras.main.setBounds(0, 0, 2200, GAME_HEIGHT);
+    this.cameras.main.setBounds(0, 0, this.roomWidth, GAME_HEIGHT);
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12, -120, 80);
     this.cameras.main.setDeadzone(220, 130);
 
@@ -125,11 +135,19 @@ export class RunScene extends Phaser.Scene {
       strokeThickness: 5,
     }).setScrollFactor(0);
 
-    this.add.text(42, 76, "Vertical slice: steal the saber, kill the guard, leave", {
+    this.objectiveText = this.add.text(42, 76, "Objective: grab the saber", {
       fontFamily: "Inter, system-ui, sans-serif",
       fontSize: "16px",
       color: "#d4b879",
     }).setScrollFactor(0);
+    this.controlsText = this.add.text(42, GAME_HEIGHT - 58, "Move A/D or Arrows  |  Jump Space/W/Up  |  Attack J  |  Pause P", {
+      fontFamily: "Menlo, Consolas, monospace",
+      fontSize: "13px",
+      color: "#f2e7bc",
+      backgroundColor: "#161315bb",
+      padding: { x: 9, y: 6 },
+    }).setScrollFactor(0)
+      .setDepth(30);
 
     this.debugText = this.add.text(42, 104, "", {
       fontFamily: "Menlo, Consolas, monospace",
@@ -148,15 +166,18 @@ export class RunScene extends Phaser.Scene {
       .setStrokeStyle(3, 0xffd36b, 0.95)
       .setVisible(false);
 
-    this.pickupMarker = this.createPickupMarker(720, 500);
-    this.secondaryPickupMarker = this.createSecondaryPickupMarker(1370, 390);
-    this.exitMarker = this.add.image(1960, 640, AssetKeys.pickupExitRuntime)
+    this.pickupMarker = this.createPickupMarker(this.saberPickup.x, this.saberPickup.y);
+    this.secondaryPickupMarker = this.createSecondaryPickupMarker(
+      this.receiptPickup.x,
+      this.receiptPickup.y,
+    );
+    this.exitMarker = this.add.image(this.exitX, 640, AssetKeys.pickupExitRuntime)
       .setOrigin(0.5, 1)
       .setScale(0.24)
       .setAlpha(0.86)
       .setDepth(5);
     this.setPropFrame(this.exitMarker, "lockedGate");
-    this.exitText = this.add.text(1910, 410, "LOCKED", {
+    this.exitText = this.add.text(this.exitX - 54, 410, "LOCKED", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "18px",
       color: "#b3312b",
@@ -223,7 +244,7 @@ export class RunScene extends Phaser.Scene {
     const input = this.smokeInput(time);
 
     this.player.update(time, input, time < this.attackUntil);
-    this.guard.update(time, this.player.x);
+    this.guard.update(time, this.pickup.collected ? this.player.x : this.guard.x + 900);
 
     if (input.attackPressed && time > this.attackUntil) {
       const stats = weaponStats[this.currentWeapon];
@@ -357,11 +378,11 @@ export class RunScene extends Phaser.Scene {
       return {
         left: huntingGuard && !inMeleeRange && deltaToGuard < 0,
         right:
-          (routingToShop && playerState.x < 2080) ||
+          (routingToShop && playerState.x < this.rewardTransitionX) ||
           (!roomState.complete &&
             (huntingGuard
               ? !inMeleeRange && deltaToGuard > 0
-              : playerState.x < 1880 || !roomState.exitUnlocked)),
+              : playerState.x < this.exitX - 80 || !roomState.exitUnlocked)),
         jumpPressed: false,
         jumpHeld: false,
         attackPressed: shouldAttack,
@@ -500,8 +521,8 @@ export class RunScene extends Phaser.Scene {
   }
 
   private resetAfterDeath(time: number): void {
-    this.player.resetSurvival(360, 500);
-    this.guard.resetEnemy(980, 500);
+    this.player.resetSurvival(this.playerStart.x, this.playerStart.y);
+    this.guard.resetEnemy(this.guardStart.x, this.guardStart.y);
     this.currentWeapon = "Rusty Knife";
     this.pickup.reset();
     this.secondaryPickup.reset();
@@ -582,9 +603,12 @@ export class RunScene extends Phaser.Scene {
 
     if (
       !this.pickup.collected &&
-      playerState.x > 610 &&
-      playerState.x < 860 &&
-      playerState.y > 430
+      Phaser.Math.Distance.Between(
+        this.player.x,
+        this.player.y,
+        this.saberPickup.x,
+        this.saberPickup.y,
+      ) < 125
     ) {
       this.pickup.collect();
       this.currentWeapon = "Butcher Saber";
@@ -592,6 +616,8 @@ export class RunScene extends Phaser.Scene {
       this.audio.play("pickup");
       this.tryBark("pickup", this.time.now);
       this.progressStore.unlock("butcher_saber");
+      this.objectiveText.setText("Objective: kill the guard with J");
+      this.nextPlayerDamageAt = this.time.now + 1400;
     }
 
     this.roomObjective.update(this.pickup.collected && !this.guard.health.alive);
@@ -602,6 +628,7 @@ export class RunScene extends Phaser.Scene {
       this.exitMarker.setScale(0.22).setAlpha(0.76);
       this.exitText.setText("EXIT");
       this.exitText.setColor("#a6d34a");
+      this.objectiveText.setText("Objective: exit right");
       if (!this.exitUnlockAnnounced) {
         this.exitUnlockAnnounced = true;
         this.audio.play("exit-unlocked");
@@ -612,27 +639,33 @@ export class RunScene extends Phaser.Scene {
       this.exitMarker.setScale(0.24).setAlpha(0.86);
       this.exitText.setText("LOCKED");
       this.exitText.setColor("#b3312b");
+      if (!this.pickup.collected) {
+        this.objectiveText.setText("Objective: grab the saber");
+      } else if (this.guard.health.alive) {
+        this.objectiveText.setText("Objective: kill the guard with J");
+      }
     }
 
-    if (roomState.exitUnlocked && playerState.x > 1840) {
+    if (roomState.exitUnlocked && this.player.x > this.exitX - 100) {
       this.roomObjective.complete();
       this.announceCompletion();
     }
   }
 
   private updateSecondaryPickupAndReward(): void {
-    const playerState = this.player.debugState();
-
     if (
       !this.secondaryPickup.collected &&
-      playerState.x > 1260 &&
-      playerState.x < 1480 &&
-      playerState.y < 470
+      Phaser.Math.Distance.Between(
+        this.player.x,
+        this.player.y,
+        this.receiptPickup.x,
+        this.receiptPickup.y,
+      ) < 130
     ) {
       this.unlockReceiptSpitter();
     }
 
-    if (this.roomObjective.debugState().complete && playerState.x > 2050) {
+    if (this.roomObjective.debugState().complete && this.player.x > this.rewardTransitionX) {
       this.progressStore.unlock("reward_room_stub");
       this.scene.start("RewardScene");
       this.scene.stop("UIScene");

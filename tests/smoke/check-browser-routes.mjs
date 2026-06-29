@@ -54,6 +54,38 @@ async function smokeFirstRoom(browser) {
   return { route: "/?smokeAuto=1&smoke=room", state };
 }
 
+async function smokeManualOpeningRoute(browser) {
+  const page = await browser.open("/");
+  await page.waitForDataset("scene", "TitleScene");
+  await page.key("Enter");
+  await page.waitForDataset("scene", "RunScene");
+  await page.holdKey("d", 1200);
+  await page.holdKey("j", 700);
+  await page.holdKey("d", 2600);
+  await page.waitForDataset("scene", "RewardScene", 12000);
+  const state = await page.dataset([
+    "scene",
+    "pickupCollected",
+    "enemyAlive",
+    "enemyHealth",
+    "exitUnlocked",
+    "roomComplete",
+    "currentWeapon",
+    "playerHealth",
+  ]);
+  assertEqual(state.scene, "RewardScene", "manual opening route destination");
+  assertEqual(state.pickupCollected, "true", "manual opening route pickup");
+  assertEqual(state.enemyAlive, "false", "manual opening route guard death");
+  assertEqual(state.enemyHealth, "0", "manual opening route guard health");
+  assertEqual(state.exitUnlocked, "true", "manual opening route exit");
+  assertEqual(state.roomComplete, "true", "manual opening route complete");
+  assertEqual(state.currentWeapon, "Butcher Saber", "manual opening route weapon");
+  assertAtLeastNumber(state.playerHealth, 1, "manual opening route player survival");
+  await page.close();
+
+  return { route: "/ -> Enter, hold D/J/D", state };
+}
+
 async function assertNoMissingTextureGreen(page, label) {
   const sample = await page.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
@@ -961,6 +993,25 @@ class CdpPage {
   }
 
   async key(key) {
+    await this.keyDown(key);
+    await this.keyUp(key);
+  }
+
+  async holdKey(key, durationMs) {
+    await this.keyDown(key);
+    await new Promise((resolve) => setTimeout(resolve, durationMs));
+    await this.keyUp(key);
+  }
+
+  async keyDown(key) {
+    await this.dispatchKey(key, "keyDown");
+  }
+
+  async keyUp(key) {
+    await this.dispatchKey(key, "keyUp");
+  }
+
+  async dispatchKey(key, type) {
     const isSingleLetter = key.length === 1;
     const upper = isSingleLetter ? key.toUpperCase() : key;
     const eventKey = isSingleLetter ? key.toLowerCase() : key;
@@ -982,14 +1033,7 @@ class CdpPage {
       unmodifiedText: printable,
     };
 
-    await this.send("Input.dispatchKeyEvent", {
-      ...event,
-      type: "keyDown",
-    });
-    await this.send("Input.dispatchKeyEvent", {
-      ...event,
-      type: "keyUp",
-    });
+    await this.send("Input.dispatchKeyEvent", { ...event, type });
   }
 }
 
@@ -1033,6 +1077,7 @@ try {
 
   const results = [];
   results.push(await smokeTitlePause(browser));
+  results.push(await smokeManualOpeningRoute(browser));
   results.push(await smokeFirstRoom(browser));
   results.push(await smokeRangedCombat(browser));
   results.push(await smokeSkillCombat(browser));

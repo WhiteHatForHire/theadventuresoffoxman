@@ -13,6 +13,8 @@ type MovementKeys = {
   left: Phaser.Input.Keyboard.Key;
   right: Phaser.Input.Keyboard.Key;
   jump: Phaser.Input.Keyboard.Key;
+  jumpW: Phaser.Input.Keyboard.Key;
+  jumpUp: Phaser.Input.Keyboard.Key;
   attack: Phaser.Input.Keyboard.Key;
   skill: Phaser.Input.Keyboard.Key;
   altLeft: Phaser.Input.Keyboard.Key;
@@ -31,6 +33,8 @@ export class InputMapper {
       left: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       right: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       jump: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+      jumpW: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      jumpUp: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
       attack: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J),
       skill: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K),
       altLeft: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
@@ -42,9 +46,12 @@ export class InputMapper {
     return {
       left: this.keys.left.isDown || this.keys.altLeft.isDown,
       right: this.keys.right.isDown || this.keys.altRight.isDown,
-      jumpPressed: Phaser.Input.Keyboard.JustDown(this.keys.jump),
-      jumpHeld: this.keys.jump.isDown,
-      attackPressed: Phaser.Input.Keyboard.JustDown(this.keys.attack),
+      jumpPressed:
+        Phaser.Input.Keyboard.JustDown(this.keys.jump) ||
+        Phaser.Input.Keyboard.JustDown(this.keys.jumpW) ||
+        Phaser.Input.Keyboard.JustDown(this.keys.jumpUp),
+      jumpHeld: this.keys.jump.isDown || this.keys.jumpW.isDown || this.keys.jumpUp.isDown,
+      attackPressed: Phaser.Input.Keyboard.JustDown(this.keys.attack) || this.keys.attack.isDown,
       skillPressed: Phaser.Input.Keyboard.JustDown(this.keys.skill),
     };
   }

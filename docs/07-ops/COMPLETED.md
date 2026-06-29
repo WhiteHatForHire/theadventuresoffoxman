@@ -32,6 +32,30 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-06-29 - First-Room Manual Playability Rescue Completed
+
+**Type:** App / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/input/InputMapper.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/TitleScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_FIRST_ROOM_PLAYABILITY_RESCUE_REPORT.md`
+- `PROJECT.md`
+- `docs/FOXMANS_INITIATIVE.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Rescued the opening room from a false-green smoke state by making controls visible, adding `W`/`Up` jump support, allowing held `J` attacks on cooldown, tightening the room layout, delaying guard pursuit until after the saber pickup, adding a short post-pickup grace window, and replacing hidden pickup coordinate bands with proximity checks. Added a browser smoke route that starts at `/`, presses real keys through the opening room, and verifies the reward transition with the saber collected, guard defeated, exit unlocked, room complete, and Foxman alive.
+
+**Follow-Ups:**
+
+- [ ] Continue deeper human-play feel passes for combat timing, camera behavior, enemy tells, and level design.
+- [ ] Capture before/after screenshots for the case-study failure narrative.
+
 ## 2026-06-26 - Foxman Director-Model Case Study Thesis Added
 
 **Type:** Docs / Design / Ops  

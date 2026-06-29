@@ -5,7 +5,7 @@
 ## Master Initiative Plan
 
 Date: 2026-06-25  
-Current phase: Phase 8 - extended vertical-slice content expansion  
+Current phase: Phase 8 - extended vertical-slice content expansion / V1 rescue polish  
 Default stack: Vite, TypeScript, Phaser 3  
 Target platform for first slice: desktop web browser  
 Project path: `/Users/marcusvale/Documents/june25game`
@@ -121,6 +121,7 @@ Minimum trunk health:
 - No uncaught startup console errors.
 - The current playable scene can be reached.
 - Smoke checks are updated as systems appear.
+- Manual play remains a first-class gate; autorun-only success is not enough to call a route playable.
 
 ---
 

@@ -64,6 +64,23 @@ Prepare the accepted V1 candidate for handoff by triaging polish, packaging, rel
 - Update release/handoff docs.
 - `npm run smoke:all` passes.
 
+## 3. Human-Play Feel Pass
+
+**Status:** Active  
+**Priority:** P1  
+**Type:** App / Gameplay / QA
+
+### Goal
+
+Turn the first playable route from merely completable into something that feels intentionally directed under human input.
+
+### Acceptance Criteria
+
+- Playtest the first room without smoke autorun and record the roughest friction points.
+- Tune combat timing, enemy tell/recovery windows, camera behavior, and pickup/exit readability.
+- Keep the new manual opening browser route passing.
+- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
+
 ---
 
 # Blocked / Waiting
@@ -74,6 +91,7 @@ None right now.
 
 # Recently Moved Out
 
+- First-room manual playability rescue completed on 2026-06-29.
 - Foxman director-model case-study thesis added on 2026-06-26.
 - Foxman case-study build-process narrative expansion completed on 2026-06-26.
 - Presentation-ready Foxman case-study DOCX created on 2026-06-26.

@@ -31,6 +31,25 @@ export class TitleScene extends Phaser.Scene {
       strokeThickness: 4,
     });
 
+    this.add.rectangle(330, 430, 520, 136, 0x161315, 0.76)
+      .setOrigin(0.5, 0.5)
+      .setStrokeStyle(2, 0xb88a3b, 0.9);
+    this.add.text(96, 376, "Controls", {
+      fontFamily: "Georgia, serif",
+      fontSize: "24px",
+      color: "#e4d6a2",
+      stroke: "#161315",
+      strokeThickness: 4,
+    });
+    this.add.text(96, 416, "A/D or Arrows move  |  Space/W/Up jumps\nJ attacks  |  K uses skill when unlocked  |  P pauses", {
+      fontFamily: "Inter, system-ui, sans-serif",
+      fontSize: "17px",
+      color: "#f2e7bc",
+      stroke: "#161315",
+      strokeThickness: 4,
+      lineSpacing: 6,
+    });
+
     this.add.text(76, 595, "Press Enter or click to start", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "18px",
