@@ -66,8 +66,62 @@ Browser smoke now verifies:
 
 ## Remaining Recommendations
 
-- Replace code-painted platforms with generated tile/platform assets and proper nine-slice or atlas-based rendering.
-- Add a manual traversal smoke route that specifically climbs the first-room platform staircase.
+- Add a debug-hitbox toggle instead of hard-hiding combat rectangles forever.
+- Add clearer boss reward/end-card presentation beyond the current V1 completion prompt.
+- Continue tuning enemy tells, hit windows, camera framing, and room layouts through manual play sessions.
+
+## Follow-Up Platform Asset And Traversal Pass
+
+Date: 2026-07-06
+
+### Scope
+
+This follow-up completed the two most urgent remaining recommendations from the rescue pass: replace the temporary platform renderer with project-local tile art and add regression coverage for the first-room platform staircase.
+
+### Changes Made
+
+- Added `scripts/export-rotten-borough-tiles.py`, a repeatable exporter that derives transparent runtime platform frames from `assets/source/ai_raw/tile_rotten_borough_concept_sheet.png`.
+- Added `assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.png` and `assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.json`.
+- Added `npm run assets:atlas:rotten-borough-tiles`.
+- Loaded the Rotten Borough tile atlas through `PreloadScene`.
+- Reworked `PaintedPlatform` so platforms render from atlas frames while preserving invisible Arcade physics bodies and one-way-platform behavior.
+- Lowered and widened the first-room platform staircase so Foxman's actual jump arc can reach it consistently.
+- Moved the Receipt Spitter pickup to sit on the reachable upper route.
+- Added `smoke=platforms`, a deterministic browser route that climbs the first-room staircase and grabs the upper pickup.
+- Added browser smoke assertions for `platformRouteComplete=true`, `secondaryPickupCollected=true`, and `currentWeapon=Receipt Spitter`.
+
+### Visual QA
+
+Captured representative screenshots:
+
+- `/tmp/foxman-platform-atlas-pass.png`
+- `/tmp/foxman-first-room-atlas-pass.png`
+- `/tmp/foxman-boss-atlas-pass.png`
+
+Visual status:
+
+- First-room floor and ledges now use Rotten Borough stone/wood atlas art instead of procedural boxes.
+- The upper route is visibly and mechanically reachable.
+- Normal first-room completion and boss completion remain visually intact after the platform change.
+
+### Validation
+
+Commands run:
+
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run smoke`
+- `FOXMAN_BASE_URL=http://127.0.0.1:5175 npm run smoke:browser`
+
+Browser smoke now additionally verifies:
+
+- `/?smokeAuto=1&smoke=platforms` reaches `platformRouteComplete=true`.
+- Foxman lands grounded on the platform route at `playerY=420`.
+- The upper-route pickup is collected and switches the weapon to `Receipt Spitter`.
+
+### Remaining Recommendations
+
 - Add a debug-hitbox toggle instead of hard-hiding combat rectangles forever.
 - Add clearer boss reward/end-card presentation beyond the current V1 completion prompt.
 - Continue tuning enemy tells, hit windows, camera framing, and room layouts through manual play sessions.

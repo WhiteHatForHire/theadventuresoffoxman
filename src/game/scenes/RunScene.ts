@@ -54,8 +54,10 @@ export class RunScene extends Phaser.Scene {
     | "room"
     | "fullSlice"
     | "ranged"
-    | "skill" = "none";
+    | "skill"
+    | "platforms" = "none";
   private smokeJumpSent = false;
+  private platformSmokeJumpStep = 0;
   private smokeAttackCount = 0;
   private startedAt = 0;
   private attackUntil = 0;
@@ -86,7 +88,7 @@ export class RunScene extends Phaser.Scene {
   private readonly playerStart = { x: 240, y: 500 };
   private readonly guardStart = { x: 720, y: 500 };
   private readonly saberPickup = { x: 430, y: 500 };
-  private readonly receiptPickup = { x: 1040, y: 410 };
+  private readonly receiptPickup = { x: 1088, y: 450 };
   private readonly exitX = 1450;
   private readonly rewardTransitionX = 1580;
 
@@ -108,9 +110,9 @@ export class RunScene extends Phaser.Scene {
 
     const platforms = this.physics.add.staticGroup();
     this.addPlatform(platforms, this.roomWidth / 2, 650, this.roomWidth, 140);
-    this.addPlatform(platforms, 830, 520, 260, 34, true);
-    this.addPlatform(platforms, 1085, 452, 300, 34, true);
-    this.addPlatform(platforms, 1320, 386, 260, 34, true);
+    this.addPlatform(platforms, 790, 548, 310, 34, true);
+    this.addPlatform(platforms, 1040, 500, 330, 34, true);
+    this.addPlatform(platforms, 1280, 452, 310, 34, true);
 
     this.inputMapper = new InputMapper(this);
     this.hitFeedback = new HitFeedback(this);
@@ -212,7 +214,8 @@ export class RunScene extends Phaser.Scene {
       smoke === "room" ||
       smoke === "fullSlice" ||
       smoke === "ranged" ||
-      smoke === "skill"
+      smoke === "skill" ||
+      smoke === "platforms"
         ? smoke
         : "none";
     if (this.smokeMode === "ranged") {
@@ -398,6 +401,28 @@ export class RunScene extends Phaser.Scene {
       };
     }
 
+    if (this.smokeMode === "platforms") {
+      const playerState = this.player.debugState();
+      const jumpTargets = [590, 835, 1070];
+      const shouldJump =
+        playerState.grounded &&
+        this.platformSmokeJumpStep < jumpTargets.length &&
+        playerState.x > jumpTargets[this.platformSmokeJumpStep];
+
+      if (shouldJump) {
+        this.platformSmokeJumpStep += 1;
+      }
+
+      return {
+        left: false,
+        right: !this.secondaryPickup.collected && playerState.x < 1220 && elapsed < 7000,
+        jumpPressed: shouldJump,
+        jumpHeld: shouldJump || (!playerState.grounded && this.platformSmokeJumpStep > 0),
+        attackPressed: false,
+        skillPressed: false,
+      };
+    }
+
     const grounded = this.player.debugState().grounded;
     const shouldJump = elapsed > 700 && grounded && !this.smokeJumpSent;
 
@@ -507,6 +532,7 @@ export class RunScene extends Phaser.Scene {
     this.pickupMarker.setVisible(true);
     this.secondaryPickupMarker.setVisible(true);
     this.attackUntil = 0;
+    this.platformSmokeJumpStep = 0;
     this.skillHitbox.setVisible(false);
     this.nextEnemyDamageAt = time + 500;
     this.nextPlayerDamageAt = time + 1200;
@@ -680,6 +706,9 @@ export class RunScene extends Phaser.Scene {
     document.body.dataset.skillCooldownReady = String(this.time.now >= this.skillCooldownUntil);
     document.body.dataset.exitUnlocked = String(roomState.exitUnlocked);
     document.body.dataset.roomComplete = String(roomState.complete);
+    document.body.dataset.platformRouteComplete = String(
+      this.secondaryPickup.collected || (playerState.x > 960 && playerState.y < 460),
+    );
     document.body.dataset.hitFeedbackCount = String(this.hitFeedback.count);
 
     const progress = this.progressStore.load();

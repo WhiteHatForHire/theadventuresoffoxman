@@ -55,6 +55,14 @@ export const assetUrls = {
     "../../assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.json",
     import.meta.url,
   ).href,
+  rottenBoroughTiles: new URL(
+    "../../assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.png",
+    import.meta.url,
+  ).href,
+  rottenBoroughTilesAtlas: new URL(
+    "../../assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.json",
+    import.meta.url,
+  ).href,
 } as const;
 
 export const AssetKeys = {
@@ -66,4 +74,5 @@ export const AssetKeys = {
   pickupExitRuntime: "pickup-exit-runtime",
   rewardShopCounter: "reward-shop-counter",
   rewardShopIcons: "reward-shop-icons",
+  rottenBoroughTiles: "rotten-borough-tiles",
 } as const;

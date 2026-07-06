@@ -86,6 +86,27 @@ async function smokeManualOpeningRoute(browser) {
   return { route: "/ -> Enter, hold D/J/D", state };
 }
 
+async function smokePlatformRoute(browser) {
+  const page = await browser.open("/?smokeAuto=1&smoke=platforms");
+  await page.waitForDataset("platformRouteComplete", "true", 9000);
+  await assertNoMissingTextureGreen(page, "platform traversal route");
+  const state = await page.dataset([
+    "scene",
+    "playerX",
+    "playerY",
+    "playerGrounded",
+    "platformRouteComplete",
+    "secondaryPickupCollected",
+    "currentWeapon",
+  ]);
+  assertEqual(state.scene, "RunScene", "platform route scene");
+  assertEqual(state.platformRouteComplete, "true", "platform route completion");
+  assertEqual(state.currentWeapon, "Receipt Spitter", "platform route upper pickup");
+  await page.close();
+
+  return { route: "/?smokeAuto=1&smoke=platforms", state };
+}
+
 async function assertNoMissingTextureGreen(page, label) {
   const sample = await page.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
@@ -1090,6 +1111,7 @@ try {
   const results = [];
   results.push(await smokeTitlePause(browser));
   results.push(await smokeManualOpeningRoute(browser));
+  results.push(await smokePlatformRoute(browser));
   results.push(await smokeFirstRoom(browser));
   results.push(await smokeRangedCombat(browser));
   results.push(await smokeSkillCombat(browser));

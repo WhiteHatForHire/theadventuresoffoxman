@@ -4,6 +4,7 @@ import drunkenGuardAtlas from "../../assets/game/atlases/enemies/drunken_guard/d
 import taxClerkAtlas from "../../assets/game/atlases/enemies/tax_clerk/tax_clerk_atlas.json";
 import tollBaronAtlas from "../../assets/game/atlases/enemies/toll_baron/toll_baron_atlas.json";
 import pickupExitAtlas from "../../assets/game/atlases/props/rotten_borough/pickup_exit_atlas.json";
+import rottenBoroughTilesAtlas from "../../assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.json";
 import rewardShopIconsAtlas from "../../assets/game/atlases/ui/reward_shop_icons/reward_shop_icons_atlas.json";
 import {
   FoxmanFrames,
@@ -36,6 +37,7 @@ describe("asset registry", () => {
     expect(AssetKeys.rewardShopCounter).toBe("reward-shop-counter");
     expect(AssetKeys.rewardShopIcons).toBe("reward-shop-icons");
     expect(AssetKeys.tollBaronRuntime).toBe("toll-baron-runtime");
+    expect(AssetKeys.rottenBoroughTiles).toBe("rotten-borough-tiles");
   });
 
   it("resolves workspace assets through Vite URLs", () => {
@@ -53,6 +55,8 @@ describe("asset registry", () => {
     expect(assetUrls.tollBaronRuntimeAtlas).toContain("toll_baron_atlas.json");
     expect(assetUrls.pickupExitRuntime).toContain("pickup_exit_atlas.png");
     expect(assetUrls.pickupExitRuntimeAtlas).toContain("pickup_exit_atlas.json");
+    expect(assetUrls.rottenBoroughTiles).toContain("rotten_borough_tiles_atlas.png");
+    expect(assetUrls.rottenBoroughTilesAtlas).toContain("rotten_borough_tiles_atlas.json");
   });
 
   it("defines crop frames for integrated runtime sprite sheets", () => {
@@ -138,6 +142,20 @@ describe("asset registry", () => {
     ]);
     expect(rewardShopIconsAtlas.meta.size.w).toBeLessThanOrEqual(1280);
     expect(rewardShopIconsAtlas.meta.size.h).toBeLessThanOrEqual(1280);
+  });
+
+  it("exports Rotten Borough platform tiles as a named-frame atlas", () => {
+    expect(Object.keys(rottenBoroughTilesAtlas.frames)).toEqual([
+      "stoneLong",
+      "stoneMid",
+      "stoneShort",
+      "stoneTiny",
+      "woodLong",
+      "woodMid",
+      "woodBrace",
+    ]);
+    expect(rottenBoroughTilesAtlas.meta.size.w).toBeLessThanOrEqual(512);
+    expect(rottenBoroughTilesAtlas.meta.source).toContain("tile_rotten_borough_concept_sheet.png");
   });
 });
 

@@ -40,6 +40,11 @@ export class PreloadScene extends Phaser.Scene {
       assetUrls.pickupExitRuntime,
       assetUrls.pickupExitRuntimeAtlas,
     );
+    this.load.atlas(
+      AssetKeys.rottenBoroughTiles,
+      assetUrls.rottenBoroughTiles,
+      assetUrls.rottenBoroughTilesAtlas,
+    );
   }
 
   create(): void {

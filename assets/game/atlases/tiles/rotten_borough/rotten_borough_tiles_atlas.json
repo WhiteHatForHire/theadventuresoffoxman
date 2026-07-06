@@ -1,0 +1,155 @@
+{
+  "frames": {
+    "stoneLong": {
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 263,
+        "h": 94
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 263,
+        "h": 94
+      },
+      "sourceSize": {
+        "w": 263,
+        "h": 94
+      }
+    },
+    "stoneMid": {
+      "frame": {
+        "x": 271,
+        "y": 4,
+        "w": 154,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 154,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 154,
+        "h": 64
+      }
+    },
+    "stoneShort": {
+      "frame": {
+        "x": 4,
+        "y": 102,
+        "w": 124,
+        "h": 63
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 124,
+        "h": 63
+      },
+      "sourceSize": {
+        "w": 124,
+        "h": 63
+      }
+    },
+    "stoneTiny": {
+      "frame": {
+        "x": 132,
+        "y": 102,
+        "w": 88,
+        "h": 27
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 27
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 27
+      }
+    },
+    "woodLong": {
+      "frame": {
+        "x": 224,
+        "y": 102,
+        "w": 223,
+        "h": 83
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 223,
+        "h": 83
+      },
+      "sourceSize": {
+        "w": 223,
+        "h": 83
+      }
+    },
+    "woodMid": {
+      "frame": {
+        "x": 4,
+        "y": 189,
+        "w": 224,
+        "h": 82
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 224,
+        "h": 82
+      },
+      "sourceSize": {
+        "w": 224,
+        "h": 82
+      }
+    },
+    "woodBrace": {
+      "frame": {
+        "x": 232,
+        "y": 189,
+        "w": 96,
+        "h": 131
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 131
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 131
+      }
+    }
+  },
+  "meta": {
+    "app": "scripts/export-rotten-borough-tiles.py",
+    "version": "1",
+    "image": "rotten_borough_tiles_atlas.png",
+    "source": "assets/source/ai_raw/tile_rotten_borough_concept_sheet.png",
+    "size": {
+      "w": 512,
+      "h": 324
+    },
+    "scale": "1"
+  }
+}

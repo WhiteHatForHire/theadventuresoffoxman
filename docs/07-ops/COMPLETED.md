@@ -32,6 +32,34 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-07-06 - Rotten Borough Platform Atlas And Traversal Smoke Completed
+
+**Type:** App / Art / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `scripts/export-rotten-borough-tiles.py`
+- `assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.png`
+- `assets/game/atlases/tiles/rotten_borough/rotten_borough_tiles_atlas.json`
+- `package.json`
+- `src/game/assets.ts`
+- `src/game/levels/PaintedPlatform.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/RunScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE8_PLAYABILITY_AUDIT_AND_RESCUE_REPORT.md`
+- `PROJECT.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Replaced the temporary code-painted platform treatment with a repeatable Rotten Borough tile-atlas export derived from project-local AI source art. The first-room floor and ledges now render from stone/wood atlas frames while retaining invisible Arcade physics bodies and one-way platform behavior. Reworked the first-room staircase and Receipt Spitter placement so the upper route is reachable, then added `smoke=platforms` browser coverage that climbs the platforms, grabs the upper pickup, and guards against missing-texture green.
+
+**Follow-Ups:**
+
+- [ ] Add a development hitbox/debug overlay toggle.
+- [ ] Continue human-play tuning for enemy tells, room pacing, camera framing, and combat spacing.
+
 ## 2026-07-06 - Playability Audit And Rescue Pass Completed
 
 **Type:** App / Gameplay / QA / Ops  
@@ -56,8 +84,8 @@ Audited the V1 slice against current manual-play complaints and fixed the highes
 
 **Follow-Ups:**
 
-- [ ] Replace code-painted platforms with true generated tile/platform assets.
-- [ ] Add a manual traversal smoke route for first-room platform climbing.
+- [x] Replace code-painted platforms with true generated tile/platform assets.
+- [x] Add a manual traversal smoke route for first-room platform climbing.
 - [ ] Add a debug-hitbox toggle for development builds.
 
 ## 2026-06-29 - Atlas Body Anchoring And First-Room Visual Cleanup Completed

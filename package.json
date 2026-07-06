@@ -15,6 +15,7 @@
     "assets:atlas:foxman": "python3 scripts/export-frame-atlas.py assets/game/atlases/characters/foxman/atlas-spec.json",
     "assets:atlas:pickup-exit": "python3 scripts/export-frame-atlas.py assets/game/atlases/props/rotten_borough/atlas-spec.json",
     "assets:atlas:reward-shop-icons": "python3 scripts/export-frame-atlas.py assets/game/atlases/ui/reward_shop_icons/atlas-spec.json",
+    "assets:atlas:rotten-borough-tiles": "python3 scripts/export-rotten-borough-tiles.py",
     "assets:atlas:toll-baron": "python3 scripts/export-frame-atlas.py assets/game/atlases/enemies/toll_baron/atlas-spec.json",
     "assets:atlas:tax-clerk": "python3 scripts/export-frame-atlas.py assets/game/atlases/enemies/tax_clerk/atlas-spec.json",
     "assets:bg:rotten-borough": "python3 scripts/export-runtime-background.py"

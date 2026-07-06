@@ -82,26 +82,6 @@ Turn the first playable route from merely completable into something that feels 
 - Confirm packed-atlas body anchoring remains stable during pose changes.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
-## 4. Replace Temporary Platform Rendering
-
-**Status:** Active  
-**Priority:** P1  
-**Type:** Art / App / QA
-
-### Goal
-
-Replace the code-painted platform treatment with project-local generated platform/tile assets that match the Rotten Borough art direction.
-
-### Acceptance Criteria
-
-- Generate or derive a platform/tile atlas from project-local source art.
-- Replace `PaintedPlatform` drawing with atlas-based platform segments or a reusable tile renderer.
-- Preserve invisible physics bodies and one-way platform behavior.
-- Visually inspect first room, second path, and boss room at browser scale.
-- `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke pass.
-
----
-
 # Blocked / Waiting
 
 None right now.
@@ -110,6 +90,7 @@ None right now.
 
 # Recently Moved Out
 
+- Rotten Borough tile-atlas platform rendering and platform traversal smoke coverage completed on 2026-07-06.
 - Playability audit and rescue pass completed on 2026-07-06.
 - Atlas body anchoring and first-room visual cleanup completed on 2026-06-29.
 - First-room manual playability rescue completed on 2026-06-29.
