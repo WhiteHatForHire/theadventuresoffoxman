@@ -266,7 +266,7 @@ async function smokeRewardShopMutation(browser) {
   assertEqual(state.mutationChoice, "pettyGrudge", "shop mutation downstream state");
   assertEqual(state.skillChoice, "none", "shop mutation no skill");
   assertEqual(state.weaponDamage, "3", "shop mutation damage");
-  assertEqual(state.weaponReach, "520", "shop mutation pike reach");
+  assertEqual(state.weaponReach, "365", "shop mutation pike reach");
 
   if (!String(state.progressUnlocks).includes("mutation_pettyGrudge")) {
     throw new Error("shop mutation did not persist mutation unlock");
@@ -360,7 +360,7 @@ async function smokeSecondPath(browser) {
   assertEqual(state.taxClerkVariant, "taxClerk", "second path variant");
   assertEqual(state.eliteAlive, "false", "second path elite death");
   assertEqual(state.eliteVariant, "eliteAuditor", "second path elite variant");
-  assertEqual(state.weaponReach, "520", "pike reach reward");
+  assertEqual(state.weaponReach, "365", "pike reach reward");
 
   assertAtLeastNumber(state.hitFeedbackCount, 3, "second path hit feedback");
 
@@ -391,7 +391,7 @@ async function smokeAuditShieldReward(browser) {
   assertEqual(state.rewardChoice, "auditShield", "audit shield reward choice");
   assertEqual(state.playerHealth, "6", "audit shield health bonus");
   assertEqual(state.hudHealthText, "HP: 6/6", "audit shield HUD health bonus");
-  assertEqual(state.weaponReach, "430", "audit shield leaves pike reach unchanged");
+  assertEqual(state.weaponReach, "310", "audit shield leaves pike reach unchanged");
 
   if (!String(state.progressUnlocks).includes("reward_auditShield")) {
     throw new Error("audit shield path did not persist reward_auditShield unlock");
@@ -446,7 +446,7 @@ async function smokePettyGrudgeMutation(browser) {
   assertEqual(state.mutationChoice, "pettyGrudge", "grudge mutation choice");
   assertEqual(state.playerMaxHealth, "5", "grudge mutation leaves max health");
   assertEqual(state.weaponDamage, "3", "grudge mutation damage bonus");
-  assertEqual(state.weaponReach, "520", "grudge mutation keeps pike reach reward");
+  assertEqual(state.weaponReach, "365", "grudge mutation keeps pike reach reward");
   assertEqual(state.secondPathComplete, "true", "grudge mutation completes path");
 
   if (!String(state.progressUnlocks).includes("mutation_pettyGrudge")) {
@@ -512,7 +512,7 @@ async function smokeSecondPathDeathRestart(browser) {
   assertEqual(restarted.eliteAlive, "true", "second restart elite alive");
   assertEqual(restarted.eliteHealth, "4", "second restart elite health");
   assertEqual(restarted.secondPathComplete, "false", "second restart path incomplete");
-  assertEqual(restarted.weaponReach, "430", "second restart keeps audit shield weapon reach");
+  assertEqual(restarted.weaponReach, "310", "second restart keeps audit shield weapon reach");
 
   await page.close();
   return { route: "/?smokeAuto=1&smoke=secondDeath&reward=auditShield", dead, restarted };
@@ -538,6 +538,7 @@ async function smokeConnectedBossRoute(browser) {
     "bossAlive",
     "bossVariant",
     "bossComplete",
+    "v1SliceComplete",
     "progressUnlocks",
     "hudSkillText",
     "hudRouteText",
@@ -580,6 +581,7 @@ async function smokeFullSliceRoute(browser) {
     "bossAlive",
     "bossVariant",
     "bossComplete",
+    "v1SliceComplete",
     "progressUnlocks",
     "hudSkillText",
     "hudRouteText",
@@ -592,10 +594,11 @@ async function smokeFullSliceRoute(browser) {
   assertEqual(state.rewardChoice, "pikeReach", "full slice reward choice");
   assertEqual(state.mutationChoice, "pettyGrudge", "full slice mutation choice");
   assertEqual(state.weaponDamage, "3", "full slice mutation damage");
-  assertEqual(state.weaponReach, "520", "full slice reward reach");
+  assertEqual(state.weaponReach, "365", "full slice reward reach");
   assertEqual(state.bossAlive, "false", "full slice boss defeated");
   assertEqual(state.bossVariant, "tollBaron", "full slice boss variant");
   assertEqual(state.bossComplete, "true", "full slice boss complete");
+  assertEqual(state.v1SliceComplete, "true", "full slice V1 clear prompt");
 
   assertAtLeastNumber(state.hitFeedbackCount, 3, "full slice boss hit feedback");
 
@@ -637,6 +640,7 @@ async function smokeSkillBossRoute(browser) {
     "bossAlive",
     "bossVariant",
     "bossComplete",
+    "v1SliceComplete",
     "progressUnlocks",
     "hudSkillText",
     "hudRouteText",
@@ -650,11 +654,12 @@ async function smokeSkillBossRoute(browser) {
   assertEqual(state.mutationChoice, "none", "skill boss no mutation");
   assertEqual(state.skillChoice, "Spite Belch", "skill boss carried skill");
   assertEqual(state.currentSkill, "Spite Belch", "skill boss current skill");
-  assertEqual(state.weaponReach, "520", "skill boss pike reach");
+  assertEqual(state.weaponReach, "365", "skill boss pike reach");
   assertEqual(state.weaponDamage, "2", "skill boss pike damage");
   assertEqual(state.bossAlive, "false", "skill boss defeated");
   assertEqual(state.bossVariant, "tollBaron", "skill boss variant");
   assertEqual(state.bossComplete, "true", "skill boss complete");
+  assertEqual(state.v1SliceComplete, "true", "skill boss V1 clear prompt");
 
   assertAtLeastNumber(state.hitFeedbackCount, 4, "skill boss route hit feedback");
 
@@ -704,6 +709,7 @@ async function smokeMiniBoss(browser) {
     "bossVariant",
     "bossSpecialCount",
     "bossComplete",
+    "v1SliceComplete",
     "progressUnlocks",
     "hitFeedbackCount",
   ]);
@@ -711,6 +717,7 @@ async function smokeMiniBoss(browser) {
   assertEqual(state.currentWeapon, "Butcher Saber", "mini-boss weapon");
   assertEqual(state.bossAlive, "false", "mini-boss death");
   assertEqual(state.bossVariant, "tollBaron", "mini-boss variant");
+  assertEqual(state.v1SliceComplete, "true", "mini-boss V1 clear prompt");
 
   if (Number(state.bossSpecialCount) < 1) {
     throw new Error("mini-boss did not perform toll stamp special");
@@ -722,8 +729,13 @@ async function smokeMiniBoss(browser) {
     throw new Error("mini-boss did not persist toll_baron_humiliated unlock");
   }
 
+  await page.key("Enter");
+  await page.waitForDataset("scene", "TitleScene", 5000);
+  const after = await page.dataset(["scene"]);
+  assertEqual(after.scene, "TitleScene", "mini-boss completion return to title");
+
   await page.close();
-  return { route: "/?smokeAuto=1&smoke=boss", state };
+  return { route: "/?smokeAuto=1&smoke=boss -> Enter", state, after };
 }
 
 async function smokeBossDeathRestart(browser) {

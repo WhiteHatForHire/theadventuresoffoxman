@@ -13,6 +13,7 @@ import { Player } from "../entities/Player";
 import { HitFeedback } from "../feedback/HitFeedback";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
 import { InputMapper, type InputSnapshot } from "../input/InputMapper";
+import { addPaintedPlatform } from "../levels/PaintedPlatform";
 import {
   applyMutationHealthBonus,
   applyMutationWeaponBonus,
@@ -32,6 +33,7 @@ export class MiniBossScene extends Phaser.Scene {
   private skillHitbox!: Phaser.GameObjects.Rectangle;
   private bossStampHitbox!: Phaser.GameObjects.Rectangle;
   private completionBanner!: Phaser.GameObjects.Text;
+  private sliceCompletePrompt!: Phaser.GameObjects.Text;
   private deathBanner!: Phaser.GameObjects.Text;
   private restartPrompt!: Phaser.GameObjects.Text;
   private restartKey!: Phaser.Input.Keyboard.Key;
@@ -120,7 +122,7 @@ export class MiniBossScene extends Phaser.Scene {
       strokeThickness: 5,
     }).setScrollFactor(0);
 
-    this.add.text(42, 76, "Prototype boss: bigger, meaner, and absolutely convinced fees are foreplay.", {
+    this.add.text(42, 76, "Prototype boss: bigger, meaner, and absolutely convinced fees are divine law.", {
       fontFamily: "Inter, system-ui, sans-serif",
       fontSize: "16px",
       color: "#ffb06b",
@@ -153,6 +155,21 @@ export class MiniBossScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setAlpha(0);
 
+    this.sliceCompletePrompt = this.add.text(
+      GAME_WIDTH / 2,
+      188,
+      "V1 SLICE CLEARED - Press Enter to run it back",
+      {
+        fontFamily: "Inter, system-ui, sans-serif",
+        fontSize: "17px",
+        color: "#f2e7bc",
+        stroke: "#161315",
+        strokeThickness: 4,
+      },
+    ).setOrigin(0.5, 0.5)
+      .setScrollFactor(0)
+      .setAlpha(0);
+
     this.deathBanner = this.add.text(GAME_WIDTH / 2, 180, "FOXMAN GOT TAXED", {
       fontFamily: "Georgia, serif",
       fontSize: "34px",
@@ -182,10 +199,20 @@ export class MiniBossScene extends Phaser.Scene {
         ? smoke
         : "none";
     window.__FOXMAN_RESTART_BOSS__ = () => this.restartMiniBoss();
+    window.__FOXMAN_COMPLETE_TO_TITLE__ = () => this.returnToTitle();
+    this.input.keyboard?.on("keydown-ENTER", () => {
+      if (this.boss && !this.boss.health.alive) {
+        this.returnToTitle();
+      }
+    });
   }
 
   update(time: number): void {
     const input = this.smokeInput(time);
+
+    if (this.boss && !this.boss.health.alive) {
+      this.handleSliceCompleteInput();
+    }
 
     if (!this.player.health.alive) {
       this.handleRestartInput();
@@ -276,7 +303,7 @@ export class MiniBossScene extends Phaser.Scene {
     this.attackHitbox
       .setPosition(this.player.x + facing * 92, this.player.y - 82)
       .setSize(stats.reach, 70)
-      .setVisible(time < this.attackUntil);
+      .setVisible(false);
 
     const bossInRange =
       Math.abs(this.boss.x - this.player.x) < stats.reach &&
@@ -313,7 +340,7 @@ export class MiniBossScene extends Phaser.Scene {
     this.skillHitbox
       .setPosition(this.player.x + facing * (skill.range / 2), this.player.y - 88)
       .setSize(skill.range, 118)
-      .setVisible(true);
+      .setVisible(false);
     this.cameras.main.shake(70, 0.003);
 
     this.trySkillDamageBoss(time, skill);
@@ -358,6 +385,8 @@ export class MiniBossScene extends Phaser.Scene {
     this.barks.trySpeak("room-complete", time);
     this.cameras.main.flash(260, 255, 176, 107, false);
     this.completionBanner.setAlpha(1);
+    this.sliceCompletePrompt.setAlpha(1);
+    document.body.dataset.v1SliceComplete = "true";
   }
 
   private updateBossStamp(time: number): void {
@@ -399,7 +428,7 @@ export class MiniBossScene extends Phaser.Scene {
       .setSize(width, 88)
       .setFillStyle(0xffd36b, alpha)
       .setStrokeStyle(3, 0xffd36b, 0.95)
-      .setVisible(true);
+      .setVisible(false);
 
     if (!this.bossStampImpactDone && time >= this.bossStampImpactAt) {
       this.bossStampImpactDone = true;
@@ -452,6 +481,17 @@ export class MiniBossScene extends Phaser.Scene {
     }
   }
 
+  private handleSliceCompleteInput(): void {
+    if (Phaser.Input.Keyboard.JustDown(this.restartAltKey)) {
+      this.returnToTitle();
+    }
+  }
+
+  private returnToTitle(): void {
+    this.scene.stop("UIScene");
+    this.scene.start("TitleScene");
+  }
+
   private restartMiniBoss(): void {
     this.player.resetSurvival(260, 500);
     this.boss.resetEnemy(1120, 500);
@@ -473,6 +513,7 @@ export class MiniBossScene extends Phaser.Scene {
     this.deathBanner.setAlpha(0);
     this.restartPrompt.setAlpha(0);
     this.completionBanner.setAlpha(0);
+    this.sliceCompletePrompt.setAlpha(0);
     this.attackHitbox.setVisible(false);
     this.skillHitbox.setVisible(false);
     this.bossStampHitbox.setVisible(false);
@@ -485,13 +526,7 @@ export class MiniBossScene extends Phaser.Scene {
     width: number,
     height: number,
   ): void {
-    const platform = this.add.rectangle(x, y, width, height, 0x161315, 0.8)
-      .setStrokeStyle(3, 0xffb06b, 0.82);
-
-    platforms.add(platform);
-    const body = platform.body as Phaser.Physics.Arcade.StaticBody;
-    body.setSize(width, height);
-    body.updateFromGameObject();
+    addPaintedPlatform(this, platforms, x, y, width, height, { accent: "ember" });
   }
 
   private hitStop(durationMs: number): void {
@@ -535,6 +570,7 @@ export class MiniBossScene extends Phaser.Scene {
     document.body.dataset.bossVariant = bossState.variant;
     document.body.dataset.bossSpecialCount = String(this.bossStampCount);
     document.body.dataset.bossComplete = String(complete);
+    document.body.dataset.v1SliceComplete = String(complete && this.sliceCompletePrompt.alpha > 0);
     document.body.dataset.kills = String(this.kills);
     document.body.dataset.deaths = String(this.deaths);
     document.body.dataset.deathBanner = String(this.deathBanner.alpha > 0);

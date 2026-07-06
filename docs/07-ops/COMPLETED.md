@@ -32,6 +32,34 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-07-06 - Playability Audit And Rescue Pass Completed
+
+**Type:** App / Gameplay / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/levels/PaintedPlatform.ts`
+- `src/game/combat/WeaponStats.ts`
+- `src/game/scenes/RunScene.ts`
+- `src/game/scenes/SecondRunScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
+- `src/vite-env.d.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_PLAYABILITY_AUDIT_AND_RESCUE_REPORT.md`
+- `PROJECT.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Audited the V1 slice against current manual-play complaints and fixed the highest-impact failures: unreachable/weak first-room platform layout, raw visible platform rectangles in later rooms, low exit placement, overlong melee ranges, visible debug hitboxes in second/boss scenes, and the Toll Baron dead-end completion state. Added a shared painted-platform renderer, shortened melee reach tuning, added a V1 boss-clear prompt with Enter-to-title behavior, and extended browser smoke coverage for `v1SliceComplete` and boss completion return.
+
+**Follow-Ups:**
+
+- [ ] Replace code-painted platforms with true generated tile/platform assets.
+- [ ] Add a manual traversal smoke route for first-room platform climbing.
+- [ ] Add a debug-hitbox toggle for development builds.
+
 ## 2026-06-29 - Atlas Body Anchoring And First-Room Visual Cleanup Completed
 
 **Type:** App / Gameplay / QA  

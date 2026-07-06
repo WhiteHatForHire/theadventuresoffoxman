@@ -14,6 +14,7 @@ import { Player } from "../entities/Player";
 import { HitFeedback } from "../feedback/HitFeedback";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
 import { InputMapper, type InputSnapshot } from "../input/InputMapper";
+import { addPaintedPlatform } from "../levels/PaintedPlatform";
 import {
   applyMutationHealthBonus,
   applyMutationWeaponBonus,
@@ -338,7 +339,7 @@ export class SecondRunScene extends Phaser.Scene {
     this.attackHitbox
       .setPosition(this.player.x + facing * 120, this.player.y - 86)
       .setSize(stats.reach, 56)
-      .setVisible(attacking);
+      .setVisible(false);
 
     this.tryDamageEnemy(this.taxClerk, time, stats, facing, "tax_clerk_evicted");
     this.tryDamageEnemy(this.eliteAuditor, time, stats, facing, "elite_auditor_embarrassed");
@@ -445,7 +446,7 @@ export class SecondRunScene extends Phaser.Scene {
     this.skillHitbox
       .setPosition(this.player.x + facing * (skill.range / 2), this.player.y - 88)
       .setSize(skill.range, 118)
-      .setVisible(true);
+      .setVisible(false);
     this.cameras.main.shake(70, 0.003);
 
     this.trySkillDamageEnemy(this.taxClerk, time, skill, "tax_clerk_evicted");
@@ -525,13 +526,7 @@ export class SecondRunScene extends Phaser.Scene {
     width: number,
     height: number,
   ): void {
-    const platform = this.add.rectangle(x, y, width, height, 0x161315, 0.78)
-      .setStrokeStyle(3, 0x9cc7ff, 0.72);
-
-    platforms.add(platform);
-    const body = platform.body as Phaser.Physics.Arcade.StaticBody;
-    body.setSize(width, height);
-    body.updateFromGameObject();
+    addPaintedPlatform(this, platforms, x, y, width, height, { accent: "audit" });
   }
 
   private hitStop(durationMs: number): void {

@@ -16,21 +16,21 @@ export const weaponStats: Record<WeaponName, WeaponStats> = {
   "Rusty Knife": {
     kind: "melee",
     damage: 1,
-    reach: 185,
+    reach: 135,
     hitStopMs: 45,
     knockback: 180,
   },
   "Butcher Saber": {
     kind: "melee",
     damage: 3,
-    reach: 330,
+    reach: 205,
     hitStopMs: 85,
     knockback: 290,
   },
   "Tax Pike": {
     kind: "melee",
     damage: 2,
-    reach: 430,
+    reach: 310,
     hitStopMs: 65,
     knockback: 420,
   },
@@ -48,8 +48,8 @@ export const weaponStats: Record<WeaponName, WeaponStats> = {
 export function applyTaxPikeReachReward(stats: WeaponStats): WeaponStats {
   return {
     ...stats,
-    reach: stats.reach + 90,
-    knockback: stats.knockback + 40,
+    reach: stats.reach + 55,
+    knockback: stats.knockback + 30,
   };
 }
 

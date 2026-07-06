@@ -220,7 +220,7 @@ describe("weapon stats", () => {
   it("applies the pike reach reward without changing damage", () => {
     const rewarded = applyTaxPikeReachReward(weaponStats["Tax Pike"]);
 
-    expect(rewarded.reach).toBe(weaponStats["Tax Pike"].reach + 90);
+    expect(rewarded.reach).toBe(weaponStats["Tax Pike"].reach + 55);
     expect(rewarded.damage).toBe(weaponStats["Tax Pike"].damage);
   });
 });

@@ -10,6 +10,7 @@ import { Player } from "../entities/Player";
 import { HitFeedback } from "../feedback/HitFeedback";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
 import { InputMapper, type InputSnapshot } from "../input/InputMapper";
+import { addPaintedPlatform } from "../levels/PaintedPlatform";
 import { RoomObjective } from "../levels/RoomObjective";
 import { ProgressStore } from "../progression/ProgressStore";
 import { smokeAutoEnabled, smokeParam } from "../smoke";
@@ -85,7 +86,7 @@ export class RunScene extends Phaser.Scene {
   private readonly playerStart = { x: 240, y: 500 };
   private readonly guardStart = { x: 720, y: 500 };
   private readonly saberPickup = { x: 430, y: 500 };
-  private readonly receiptPickup = { x: 980, y: 390 };
+  private readonly receiptPickup = { x: 1040, y: 410 };
   private readonly exitX = 1450;
   private readonly rewardTransitionX = 1580;
 
@@ -107,8 +108,9 @@ export class RunScene extends Phaser.Scene {
 
     const platforms = this.physics.add.staticGroup();
     this.addPlatform(platforms, this.roomWidth / 2, 650, this.roomWidth, 140);
-    this.addPlatform(platforms, 980, 430, 290, 36);
-    this.addPlatform(platforms, 1225, 360, 240, 36);
+    this.addPlatform(platforms, 830, 520, 260, 34, true);
+    this.addPlatform(platforms, 1085, 452, 300, 34, true);
+    this.addPlatform(platforms, 1320, 386, 260, 34, true);
 
     this.inputMapper = new InputMapper(this);
     this.hitFeedback = new HitFeedback(this);
@@ -167,13 +169,13 @@ export class RunScene extends Phaser.Scene {
       this.receiptPickup.x,
       this.receiptPickup.y,
     );
-    this.exitMarker = this.add.image(this.exitX, 640, AssetKeys.pickupExitRuntime)
+    this.exitMarker = this.add.image(this.exitX, 582, AssetKeys.pickupExitRuntime)
       .setOrigin(0.5, 1)
       .setScale(0.24)
       .setAlpha(0.86)
       .setDepth(5);
     this.setPropFrame(this.exitMarker, "lockedGate");
-    this.exitText = this.add.text(this.exitX - 54, 410, "LOCKED", {
+    this.exitText = this.add.text(this.exitX - 52, 472, "LOCKED", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "18px",
       color: "#b3312b",
@@ -267,46 +269,12 @@ export class RunScene extends Phaser.Scene {
     y: number,
     width: number,
     height: number,
+    oneWay = false,
   ): void {
-    this.drawPlatformSkin(x, y, width, height);
-
-    const platform = this.add.rectangle(x, y, width, height, 0x161315, 0)
-      .setVisible(false);
-
-    platforms.add(platform);
-    const body = platform.body as Phaser.Physics.Arcade.StaticBody;
-    body.setSize(width, height);
-    body.updateFromGameObject();
-  }
-
-  private drawPlatformSkin(x: number, y: number, width: number, height: number): void {
-    const top = y - height / 2;
-    const capHeight = Math.min(22, Math.max(10, height * 0.34));
-    const graphics = this.add.graphics().setDepth(1);
-
-    graphics.fillStyle(0x4e4638, 0.9);
-    graphics.fillRect(x - width / 2, top, width, capHeight);
-    graphics.lineStyle(2, 0xb88a3b, 0.72);
-    graphics.strokeRect(x - width / 2, top, width, capHeight);
-
-    graphics.fillStyle(0x121014, height > 60 ? 0.56 : 0.36);
-    graphics.fillRect(x - width / 2, top + capHeight, width, height - capHeight);
-
-    graphics.lineStyle(1, 0x8b7651, 0.38);
-    const crackCount = Math.max(5, Math.floor(width / 180));
-    for (let index = 0; index < crackCount; index += 1) {
-      const crackX = x - width / 2 + 48 + index * (width / crackCount);
-      const crackY = top + 5 + (index % 3) * 4;
-      graphics.lineBetween(crackX, crackY, crackX + 28, crackY + 4);
-      graphics.lineBetween(crackX + 32, crackY + 3, crackX + 48, crackY - 2);
-    }
-
-    if (height > 60) {
-      graphics.fillStyle(0x0a0809, 0.5);
-      graphics.fillRect(x - width / 2, y + height / 2 - 12, width, 12);
-      graphics.fillStyle(0x4f6a2d, 0.18);
-      graphics.fillRect(x - width / 2, y + height / 2 - 52, width, 34);
-    }
+    addPaintedPlatform(this, platforms, x, y, width, height, {
+      accent: "brass",
+      oneWay,
+    });
   }
 
   private smokeInput(time: number): InputSnapshot {
@@ -321,7 +289,7 @@ export class RunScene extends Phaser.Scene {
     if (this.smokeMode === "combat") {
       const playerState = this.player.debugState();
       const deltaToGuard = this.guard.x - playerState.x;
-      const inMeleeRange = Math.abs(deltaToGuard) < 320;
+      const inMeleeRange = Math.abs(deltaToGuard) < weaponStats[this.currentWeapon].reach - 10;
       const shouldAttack =
         inMeleeRange &&
         this.guard.health.alive &&
@@ -357,7 +325,7 @@ export class RunScene extends Phaser.Scene {
       const roomState = this.roomObjective.debugState();
       const playerState = this.player.debugState();
       const deltaToGuard = this.guard.x - playerState.x;
-      const inMeleeRange = Math.abs(deltaToGuard) < 320;
+      const inMeleeRange = Math.abs(deltaToGuard) < weaponStats[this.currentWeapon].reach - 10;
       const huntingGuard = this.pickup.collected && this.guard.health.alive;
       const routingToShop = this.smokeMode === "fullSlice" && roomState.complete;
       const shouldAttack =
@@ -462,7 +430,7 @@ export class RunScene extends Phaser.Scene {
       facing > 0 ? this.guard.x >= this.player.x - 24 : this.guard.x <= this.player.x + 24;
     const guardInMeleeRange =
       guardInFront &&
-      Math.abs(this.guard.x - this.player.x) < 330 &&
+      Math.abs(this.guard.x - this.player.x) < stats.reach &&
       Math.abs(this.guard.y - this.player.y) < 180;
 
     if (
