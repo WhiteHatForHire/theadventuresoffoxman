@@ -107,6 +107,27 @@ async function smokePlatformRoute(browser) {
   return { route: "/?smokeAuto=1&smoke=platforms", state };
 }
 
+async function smokeDashRoute(browser) {
+  const page = await browser.open("/?smokeAuto=1&smoke=dash");
+  await page.waitForDataset("playerDashCount", "1", 5000);
+  await new Promise((resolve) => setTimeout(resolve, 80));
+  const state = await page.dataset([
+    "scene",
+    "playerState",
+    "playerX",
+    "playerVelocityX",
+    "playerDashCount",
+    "playerDashReady",
+  ]);
+  assertEqual(state.scene, "RunScene", "dash route scene");
+  assertEqual(state.playerDashCount, "1", "dash route count");
+  assertAtLeastNumber(state.playerX, 260, "dash route movement");
+  assertAtLeastNumber(Math.abs(Number(state.playerVelocityX)), 500, "dash route burst speed");
+  await page.close();
+
+  return { route: "/?smokeAuto=1&smoke=dash", state };
+}
+
 async function assertNoMissingTextureGreen(page, label) {
   const sample = await page.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
@@ -1112,6 +1133,7 @@ try {
   results.push(await smokeTitlePause(browser));
   results.push(await smokeManualOpeningRoute(browser));
   results.push(await smokePlatformRoute(browser));
+  results.push(await smokeDashRoute(browser));
   results.push(await smokeFirstRoom(browser));
   results.push(await smokeRangedCombat(browser));
   results.push(await smokeSkillCombat(browser));

@@ -32,6 +32,32 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-07-07 - Dash Dodge Human-Play Feel Pass Completed
+
+**Type:** App / Gameplay / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/input/InputMapper.ts`
+- `src/game/data/movement.ts`
+- `src/game/movement/PlayerMotor.ts`
+- `src/game/entities/Player.ts`
+- `src/game/scenes/RunScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `tests/unit/asset-keys.test.ts`
+- `docs/PHASE8_PLAYABILITY_AUDIT_AND_RESCUE_REPORT.md`
+- `PROJECT.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Added a real dash/dodge verb on `Shift` and `L`, using Foxman's existing dash atlas pose and a short burst at `620` horizontal velocity. The dash supports a grounded/air use model, refreshes air dash on landing, avoids damage while active, resets cleanly on restart, and is exposed through browser debug datasets. Added `smoke=dash` browser coverage and movement tuning assertions so the verb remains distinct from normal running.
+
+**Follow-Ups:**
+
+- [ ] Add dash trail/smear VFX and a dash audio cue.
+- [ ] Continue broader human-play tuning for enemy tells, camera framing, and combat spacing.
+
 ## 2026-07-06 - Rotten Borough Platform Atlas And Traversal Smoke Completed
 
 **Type:** App / Art / QA / Ops  

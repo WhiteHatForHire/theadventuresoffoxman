@@ -165,6 +165,9 @@ describe("movement tuning", () => {
     expect(playerMovement.maxRunSpeed).toBeLessThanOrEqual(420);
     expect(playerMovement.coyoteMs).toBeGreaterThanOrEqual(90);
     expect(playerMovement.jumpBufferMs).toBeGreaterThanOrEqual(100);
+    expect(playerMovement.dashSpeed).toBeGreaterThan(playerMovement.maxRunSpeed);
+    expect(playerMovement.dashDurationMs).toBeGreaterThanOrEqual(120);
+    expect(playerMovement.dashCooldownMs).toBeGreaterThan(playerMovement.dashDurationMs);
   });
 });
 

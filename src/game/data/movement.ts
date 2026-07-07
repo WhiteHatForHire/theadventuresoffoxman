@@ -6,4 +6,7 @@ export const playerMovement = {
   gravityY: 1500,
   coyoteMs: 110,
   jumpBufferMs: 130,
+  dashSpeed: 620,
+  dashDurationMs: 240,
+  dashCooldownMs: 520,
 } as const;

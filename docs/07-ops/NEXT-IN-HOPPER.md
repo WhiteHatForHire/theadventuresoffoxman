@@ -82,6 +82,23 @@ Turn the first playable route from merely completable into something that feels 
 - Confirm packed-atlas body anchoring remains stable during pose changes.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
+## 4. Dash Feedback Polish
+
+**Status:** Active  
+**Priority:** P1  
+**Type:** App / Gameplay / VFX / QA
+
+### Goal
+
+Make the new dash verb read with clearer impact and polish at browser scale.
+
+### Acceptance Criteria
+
+- Add dash trail/smear VFX that does not obscure combat readability.
+- Add a lightweight dash audio/cue hook through the existing audio bus.
+- Confirm dash remains smoke-proven and does not break manual opening, platform, combat, second-path, or boss routes.
+- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
+
 # Blocked / Waiting
 
 None right now.
@@ -90,6 +107,7 @@ None right now.
 
 # Recently Moved Out
 
+- Dash/dodge human-play feel pass completed on 2026-07-07.
 - Rotten Borough tile-atlas platform rendering and platform traversal smoke coverage completed on 2026-07-06.
 - Playability audit and rescue pass completed on 2026-07-06.
 - Atlas body anchoring and first-room visual cleanup completed on 2026-06-29.

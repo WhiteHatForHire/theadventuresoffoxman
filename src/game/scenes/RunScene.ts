@@ -55,7 +55,8 @@ export class RunScene extends Phaser.Scene {
     | "fullSlice"
     | "ranged"
     | "skill"
-    | "platforms" = "none";
+    | "platforms"
+    | "dash" = "none";
   private smokeJumpSent = false;
   private platformSmokeJumpStep = 0;
   private smokeAttackCount = 0;
@@ -140,7 +141,7 @@ export class RunScene extends Phaser.Scene {
       fontSize: "16px",
       color: "#d4b879",
     }).setScrollFactor(0);
-    this.controlsText = this.add.text(42, GAME_HEIGHT - 58, "Move A/D or Arrows  |  Jump Space/W/Up  |  Attack J  |  Pause P", {
+    this.controlsText = this.add.text(42, GAME_HEIGHT - 58, "Move A/D or Arrows  |  Jump Space/W/Up  |  Dash Shift/L  |  Attack J  |  Pause P", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "13px",
       color: "#f2e7bc",
@@ -215,7 +216,8 @@ export class RunScene extends Phaser.Scene {
       smoke === "fullSlice" ||
       smoke === "ranged" ||
       smoke === "skill" ||
-      smoke === "platforms"
+      smoke === "platforms" ||
+      smoke === "dash"
         ? smoke
         : "none";
     if (this.smokeMode === "ranged") {
@@ -420,6 +422,19 @@ export class RunScene extends Phaser.Scene {
         jumpHeld: shouldJump || (!playerState.grounded && this.platformSmokeJumpStep > 0),
         attackPressed: false,
         skillPressed: false,
+      };
+    }
+
+    if (this.smokeMode === "dash") {
+      const playerState = this.player.debugState();
+      return {
+        left: false,
+        right: elapsed < 1200,
+        jumpPressed: false,
+        jumpHeld: false,
+        attackPressed: false,
+        skillPressed: false,
+        dashPressed: playerState.dashCount === 0 && elapsed > 420,
       };
     }
 
@@ -683,6 +698,8 @@ export class RunScene extends Phaser.Scene {
     document.body.dataset.playerGrounded = String(playerState.grounded);
     document.body.dataset.playerVelocityX = String(playerState.velocityX);
     document.body.dataset.playerVelocityY = String(playerState.velocityY);
+    document.body.dataset.playerDashReady = String(playerState.dashReady);
+    document.body.dataset.playerDashCount = String(playerState.dashCount);
     document.body.dataset.playerHealth = String(playerState.health);
     document.body.dataset.playerAlive = String(playerState.alive);
     document.body.dataset.enemyHealth = String(guardState.health);

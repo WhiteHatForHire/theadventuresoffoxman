@@ -59,6 +59,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (attacking) {
       this.setPose("attack");
+    } else if (state === "dash") {
+      this.setPose("dash");
     } else if (Math.abs(body.velocity.x) > 18 && body.blocked.down) {
       this.setPose("run");
     } else if (!body.blocked.down) {
@@ -78,6 +80,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   damage(amount: number, sourceX = this.x, time = 0, invulnerabilityMs = 650): boolean {
+    if (this.motor.debugState().state === "dash") {
+      return false;
+    }
+
     if (!this.isVulnerable(time)) {
       return false;
     }
@@ -108,6 +114,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     body.enable = true;
     body.setAcceleration(0, 0);
     body.setVelocity(0, 0);
+    this.motor.reset();
   }
 
   isVulnerable(time: number): boolean {
@@ -131,6 +138,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         return 0xd4b879;
       case "land":
         return 0xffffff;
+      case "dash":
+        return 0x9cc7ff;
       default:
         return 0xffffff;
     }

@@ -125,3 +125,59 @@ Browser smoke now additionally verifies:
 - Add a debug-hitbox toggle instead of hard-hiding combat rectangles forever.
 - Add clearer boss reward/end-card presentation beyond the current V1 completion prompt.
 - Continue tuning enemy tells, hit windows, camera framing, and room layouts through manual play sessions.
+
+## Follow-Up Dash Feel Pass
+
+Date: 2026-07-07
+
+### Scope
+
+This follow-up improved moment-to-moment human play by adding a dedicated dash verb, using Foxman's existing dash atlas pose, and proving the verb through browser smoke coverage.
+
+### Changes Made
+
+- Added dash input on `Shift` and `L`.
+- Added dash movement tuning: `dashSpeed=620`, `dashDurationMs=240`, and `dashCooldownMs=520`.
+- Added a short facing-aware burst in `PlayerMotor`, including one air dash that refreshes when grounded.
+- Raised the Arcade max-velocity cap only during active dash, then restored the normal run-speed cap afterward.
+- Rendered Foxman's existing `dash` atlas frame while dashing.
+- Made active dash frames avoid incoming damage so the action behaves like a proper dodge, not only a sprint.
+- Reset dash state during death/restart.
+- Updated first-room controls text to show `Dash Shift/L`.
+- Added debug datasets for `playerDashReady` and `playerDashCount`.
+- Added `smoke=dash` browser coverage that asserts dash state, dash count, and burst velocity.
+- Added unit coverage for dash movement tuning.
+
+### Visual QA
+
+Captured representative screenshot:
+
+- `/tmp/foxman-dash-pass.png`
+
+Visual status:
+
+- Foxman enters the dash pose at browser scale.
+- Browser state during capture reported `playerState=dash`, `playerVelocityX=620`, and `playerDashCount=1`.
+
+### Validation
+
+Commands run:
+
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run smoke`
+- `FOXMAN_BASE_URL=http://127.0.0.1:5175 npm run smoke:browser`
+
+Browser smoke now additionally verifies:
+
+- `/?smokeAuto=1&smoke=dash` reaches `playerState=dash`.
+- Dash burst velocity exceeds normal run speed at `playerVelocityX=620`.
+- Existing manual opening, platform, room, ranged, skill, reward/shop, second-path, mutation, death/restart, connected boss, full-slice, skill-boss, mini-boss, and boss-death routes still pass.
+
+### Remaining Recommendations
+
+- Add dash VFX and audio so the new move reads with more impact.
+- Add a debug-hitbox toggle instead of hard-hiding combat rectangles forever.
+- Add clearer boss reward/end-card presentation beyond the current V1 completion prompt.
+- Continue tuning enemy tells, hit windows, camera framing, and room layouts through manual play sessions.

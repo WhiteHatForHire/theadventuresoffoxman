@@ -7,7 +7,8 @@ export type PlayerMovementState =
   | "run"
   | "jump"
   | "fall"
-  | "land";
+  | "land"
+  | "dash";
 
 export type PlayerDebugState = {
   x: number;
@@ -16,11 +17,18 @@ export type PlayerDebugState = {
   velocityY: number;
   grounded: boolean;
   state: PlayerMovementState;
+  dashReady: boolean;
+  dashCount: number;
 };
 
 export class PlayerMotor {
   private lastGroundedAt = 0;
   private jumpBufferedAt = -Infinity;
+  private dashUntil = -Infinity;
+  private nextDashAt = 0;
+  private dashDirection = 1;
+  private airDashAvailable = true;
+  private dashCount = 0;
   private state: PlayerMovementState = "idle";
   private wasGrounded = false;
 
@@ -35,6 +43,7 @@ export class PlayerMotor {
 
     if (grounded) {
       this.lastGroundedAt = time;
+      this.airDashAvailable = true;
     }
 
     if (input.jumpPressed) {
@@ -43,6 +52,35 @@ export class PlayerMotor {
 
     const wantsLeft = input.left && !input.right;
     const wantsRight = input.right && !input.left;
+    const canDash = time >= this.nextDashAt && (grounded || this.airDashAvailable);
+
+    if (wantsLeft) {
+      this.dashDirection = -1;
+    } else if (wantsRight) {
+      this.dashDirection = 1;
+    }
+
+    if (input.dashPressed && canDash) {
+      this.dashUntil = time + playerMovement.dashDurationMs;
+      this.nextDashAt = time + playerMovement.dashCooldownMs;
+      this.airDashAvailable = false;
+      this.dashCount += 1;
+      this.jumpBufferedAt = -Infinity;
+    }
+
+    if (time < this.dashUntil) {
+      this.body.setMaxVelocity(playerMovement.dashSpeed, 1200);
+      this.body.setAccelerationX(0);
+      this.body.setVelocityX(this.dashDirection * playerMovement.dashSpeed);
+      if (this.body.velocity.y > 80) {
+        this.body.setVelocityY(80);
+      }
+      this.state = "dash";
+      this.wasGrounded = grounded;
+      return this.state;
+    }
+
+    this.body.setMaxVelocity(playerMovement.maxRunSpeed, 1200);
 
     if (wantsLeft) {
       this.body.setAccelerationX(-playerMovement.acceleration);
@@ -79,7 +117,21 @@ export class PlayerMotor {
       velocityY: Math.round(this.body.velocity.y),
       grounded: this.body.blocked.down || this.body.touching.down,
       state: this.state,
+      dashReady: this.state !== "dash" && this.body.world.scene.time.now >= this.nextDashAt,
+      dashCount: this.dashCount,
     };
+  }
+
+  reset(): void {
+    this.lastGroundedAt = 0;
+    this.jumpBufferedAt = -Infinity;
+    this.dashUntil = -Infinity;
+    this.nextDashAt = 0;
+    this.dashDirection = 1;
+    this.airDashAvailable = true;
+    this.dashCount = 0;
+    this.state = "idle";
+    this.wasGrounded = false;
   }
 
   private resolveState(grounded: boolean): PlayerMovementState {
