@@ -128,6 +128,42 @@ async function smokeDashRoute(browser) {
   return { route: "/?smokeAuto=1&smoke=dash", state };
 }
 
+async function smokeSumpWarrens(browser) {
+  const page = await browser.open("/?smokeAuto=1&smoke=sump");
+  await page.waitForDataset("sumpComplete", "true", 18000);
+  await assertNoMissingTextureGreen(page, "sump warrens");
+  const state = await page.dataset([
+    "scene",
+    "sumpLivingEnemies",
+    "sumpComplete",
+    "currentWeapon",
+    "playerAlive",
+    "playerHealth",
+    "kills",
+    "progressUnlocks",
+    "hudRouteText",
+    "hudTargetText",
+    "hitFeedbackCount",
+  ]);
+  assertEqual(state.scene, "SumpWarrensScene", "sump scene");
+  assertEqual(state.sumpLivingEnemies, "0", "sump living enemies");
+  assertEqual(state.sumpComplete, "true", "sump complete");
+  assertEqual(state.currentWeapon, "Tax Pike", "sump weapon");
+  assertEqual(state.playerAlive, "true", "sump player alive");
+  assertAtLeastNumber(state.playerHealth, 1, "sump player survival");
+  assertAtLeastNumber(state.kills, 3, "sump kills");
+  assertAtLeastNumber(state.hitFeedbackCount, 3, "sump hit feedback");
+  if (!String(state.progressUnlocks).includes("act2_sump_warrens_cleared")) {
+    throw new Error("sump route did not persist act2_sump_warrens_cleared");
+  }
+  if (!String(state.hudRouteText).includes("sump cleared")) {
+    throw new Error("sump route HUD did not show cleared route state");
+  }
+  await page.close();
+
+  return { route: "/?smokeAuto=1&smoke=sump", state };
+}
+
 async function assertNoMissingTextureGreen(page, label) {
   const sample = await page.evaluate(`(() => {
     const canvas = document.querySelector("canvas");
@@ -1134,6 +1170,7 @@ try {
   results.push(await smokeManualOpeningRoute(browser));
   results.push(await smokePlatformRoute(browser));
   results.push(await smokeDashRoute(browser));
+  results.push(await smokeSumpWarrens(browser));
   results.push(await smokeFirstRoom(browser));
   results.push(await smokeRangedCombat(browser));
   results.push(await smokeSkillCombat(browser));
@@ -1165,3 +1202,5 @@ try {
     rmSync(userDataDir, { force: true, maxRetries: 5, recursive: true, retryDelay: 150 });
   }
 }
+
+process.exit(0);

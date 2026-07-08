@@ -61,6 +61,12 @@ export class PreloadScene extends Phaser.Scene {
       return;
     }
 
+    if (smoke === "sump") {
+      this.scene.start("SumpWarrensScene");
+      this.scene.launch("UIScene");
+      return;
+    }
+
     if (smoke === "boss" || smoke === "bossDeath") {
       this.scene.start("MiniBossScene");
       this.scene.launch("UIScene");

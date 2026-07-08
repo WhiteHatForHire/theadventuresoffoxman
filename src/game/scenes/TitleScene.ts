@@ -41,7 +41,7 @@ export class TitleScene extends Phaser.Scene {
       stroke: "#161315",
       strokeThickness: 4,
     });
-    this.add.text(96, 416, "A/D or Arrows move  |  Space/W/Up jumps\nJ attacks  |  K uses skill when unlocked  |  P pauses", {
+    this.add.text(96, 416, "A/D or Arrows move  |  Space/W/Up jumps\nShift/L dashes  |  J attacks  |  K uses skill  |  P pauses", {
       fontFamily: "Inter, system-ui, sans-serif",
       fontSize: "17px",
       color: "#f2e7bc",

@@ -91,6 +91,8 @@ export class UIScene extends Phaser.Scene {
         return document.body.dataset.secondPathComplete === "true" ? "boss door" : "audit office";
       case "MiniBossScene":
         return document.body.dataset.bossComplete === "true" ? "boss cleared" : "toll baron";
+      case "SumpWarrensScene":
+        return document.body.dataset.sumpComplete === "true" ? "sump cleared" : "sump warrens";
       default:
         return "opening scam";
     }
@@ -106,6 +108,10 @@ export class UIScene extends Phaser.Scene {
       const clerk = document.body.dataset.taxClerkHealth ?? "?";
       const elite = document.body.dataset.eliteHealth ?? "?";
       return `clerk ${clerk} / elite ${elite}`;
+    }
+
+    if (document.body.dataset.scene === "SumpWarrensScene") {
+      return `sump crew ${document.body.dataset.sumpLivingEnemies ?? "?"}`;
     }
 
     const enemyHealth = document.body.dataset.enemyHealth ?? "?";

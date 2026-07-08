@@ -32,6 +32,33 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-07-08 - Full Game Initiative And Act 2 Sump Warrens Prototype Completed
+
+**Type:** Docs / App / Campaign / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `docs/FOXMANS_FULL_GAME_INITIATIVE.md`
+- `docs/PHASE9_FULL_GAME_EXPANSION_REPORT.md`
+- `src/game/scenes/SumpWarrensScene.ts`
+- `src/game/GameConfig.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `src/game/scenes/UIScene.ts`
+- `src/game/scenes/TitleScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `PROJECT.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Created the full-game campaign initiative with a five-act roadmap and gate structure, then implemented the first post-V1 campaign chapter: Act 2, `The Sump Warrens`. The new scene adds two connected level sections, mixed enemies, tile-atlas platforms, an unlockable drain exit, Act 2 progress unlocks, HUD integration, direct smoke-route access through `smoke=sump`, and browser smoke assertions proving the chapter can be cleared.
+
+**Follow-Ups:**
+
+- [ ] Connect Toll Baron completion to Act 2 through a player-facing continue action.
+- [ ] Add Sump Warrens death/restart coverage.
+- [ ] Add unique Act 2 art and props beyond the reused Rotten Borough kit.
+
 ## 2026-07-07 - Dash Dodge Human-Play Feel Pass Completed
 
 **Type:** App / Gameplay / QA / Ops  

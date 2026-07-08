@@ -10,7 +10,7 @@ Update this file whenever a task is completed, superseded, blocked, or moved int
 
 # Current Shipping Objective
 
-Create the master initiative plan, then begin a gated vertical-slice build for `The Adventures of Foxman, a Merciless Bastard`.
+Expand `The Adventures of Foxman, a Merciless Bastard` from accepted V1 slice into a full-game campaign spine.
 
 ---
 
@@ -64,25 +64,41 @@ Prepare the accepted V1 candidate for handoff by triaging polish, packaging, rel
 - Update release/handoff docs.
 - `npm run smoke:all` passes.
 
-## 3. Human-Play Feel Pass
+## 3. Connect Act 1 Boss Clear Into Act 2
 
 **Status:** Active  
 **Priority:** P1  
-**Type:** App / Gameplay / QA
+**Type:** App / Campaign / QA
 
 ### Goal
 
-Turn the first playable route from merely completable into something that feels intentionally directed under human input.
+Make the new Act 2 Sump Warrens chapter reachable from Toll Baron completion through a clear player-facing action, not only through direct smoke-route access.
 
 ### Acceptance Criteria
 
-- Playtest the first room without smoke autorun and record the roughest friction points.
-- Tune combat timing, enemy tell/recovery windows, camera behavior, and pickup/exit readability.
-- Keep the new manual opening browser route passing.
-- Confirm packed-atlas body anchoring remains stable during pose changes.
+- Add a post-boss continue prompt or exit that starts `SumpWarrensScene`.
+- Preserve existing direct boss Enter-to-title smoke behavior or update smoke expectations intentionally.
+- Add browser coverage for boss-clear-to-Act-2 transition.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
-## 4. Dash Feedback Polish
+## 4. Sump Warrens Death / Restart Coverage
+
+**Status:** Active  
+**Priority:** P1  
+**Type:** App / Campaign / QA
+
+### Goal
+
+Add failure-state coverage for the new Act 2 chapter so it meets the same survivability bar as the existing second path and boss scenes.
+
+### Acceptance Criteria
+
+- Add Sump Warrens player death/restart UI.
+- Add `smoke=sumpDeath` or equivalent browser route.
+- Verify enemies and player reset cleanly.
+- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
+
+## 5. Dash Feedback Polish
 
 **Status:** Active  
 **Priority:** P1  
@@ -90,13 +106,13 @@ Turn the first playable route from merely completable into something that feels 
 
 ### Goal
 
-Make the new dash verb read with clearer impact and polish at browser scale.
+Make the dash verb read with clearer impact and polish at browser scale.
 
 ### Acceptance Criteria
 
 - Add dash trail/smear VFX that does not obscure combat readability.
 - Add a lightweight dash audio/cue hook through the existing audio bus.
-- Confirm dash remains smoke-proven and does not break manual opening, platform, combat, second-path, or boss routes.
+- Confirm dash remains smoke-proven and does not break manual opening, platform, combat, second-path, Sump Warrens, or boss routes.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
 # Blocked / Waiting
@@ -107,6 +123,7 @@ None right now.
 
 # Recently Moved Out
 
+- Full-game initiative and Act 2 Sump Warrens prototype completed on 2026-07-08.
 - Dash/dodge human-play feel pass completed on 2026-07-07.
 - Rotten Borough tile-atlas platform rendering and platform traversal smoke coverage completed on 2026-07-06.
 - Playability audit and rescue pass completed on 2026-07-06.

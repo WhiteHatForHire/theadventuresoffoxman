@@ -6,6 +6,7 @@ import { MiniBossScene } from "./scenes/MiniBossScene";
 import { RewardScene } from "./scenes/RewardScene";
 import { RunScene } from "./scenes/RunScene";
 import { SecondRunScene } from "./scenes/SecondRunScene";
+import { SumpWarrensScene } from "./scenes/SumpWarrensScene";
 import { TitleScene } from "./scenes/TitleScene";
 import { UIScene } from "./scenes/UIScene";
 
@@ -40,5 +41,6 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     RewardScene,
     SecondRunScene,
     MiniBossScene,
+    SumpWarrensScene,
   ],
 };
