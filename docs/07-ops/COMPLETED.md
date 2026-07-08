@@ -32,6 +32,28 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-07-08 - Act 1 Boss Clear To Act 2 Handoff Completed
+
+**Type:** App / Campaign / QA / Ops  
+**Source:** Codex  
+**Related Files:**
+
+- `src/game/scenes/MiniBossScene.ts`
+- `src/vite-env.d.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE9_FULL_GAME_EXPANSION_REPORT.md`
+- `PROJECT.md`
+- `docs/07-ops/NEXT-IN-HOPPER.md`
+
+**Summary:**
+
+Changed the Toll Baron completion flow from the old V1 demo reset into the Act 2 campaign handoff. The boss clear prompt now tells the player to continue to Act 2, Enter starts `SumpWarrensScene`, progress persists `act1_cleared` and `act2_sump_warrens_found`, and browser smoke now asserts the boss-clear-to-Act-2 transition.
+
+**Follow-Ups:**
+
+- [ ] Add Sump Warrens death/restart coverage.
+- [ ] Continue campaign-spine expansion beyond the first Act 2 prototype.
+
 ## 2026-07-08 - Full Game Initiative And Act 2 Sump Warrens Prototype Completed
 
 **Type:** Docs / App / Campaign / QA / Ops  
@@ -55,7 +77,6 @@ Created the full-game campaign initiative with a five-act roadmap and gate struc
 
 **Follow-Ups:**
 
-- [ ] Connect Toll Baron completion to Act 2 through a player-facing continue action.
 - [ ] Add Sump Warrens death/restart coverage.
 - [ ] Add unique Act 2 art and props beyond the reused Rotten Borough kit.
 

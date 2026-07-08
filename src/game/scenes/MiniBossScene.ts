@@ -158,7 +158,7 @@ export class MiniBossScene extends Phaser.Scene {
     this.sliceCompletePrompt = this.add.text(
       GAME_WIDTH / 2,
       188,
-      "V1 SLICE CLEARED - Press Enter to run it back",
+      "ACT 1 CLEARED - Press Enter for Act 2",
       {
         fontFamily: "Inter, system-ui, sans-serif",
         fontSize: "17px",
@@ -199,10 +199,11 @@ export class MiniBossScene extends Phaser.Scene {
         ? smoke
         : "none";
     window.__FOXMAN_RESTART_BOSS__ = () => this.restartMiniBoss();
+    window.__FOXMAN_COMPLETE_TO_ACT_TWO__ = () => this.continueToActTwo();
     window.__FOXMAN_COMPLETE_TO_TITLE__ = () => this.returnToTitle();
     this.input.keyboard?.on("keydown-ENTER", () => {
       if (this.boss && !this.boss.health.alive) {
-        this.returnToTitle();
+        this.continueToActTwo();
       }
     });
   }
@@ -483,8 +484,15 @@ export class MiniBossScene extends Phaser.Scene {
 
   private handleSliceCompleteInput(): void {
     if (Phaser.Input.Keyboard.JustDown(this.restartAltKey)) {
-      this.returnToTitle();
+      this.continueToActTwo();
     }
+  }
+
+  private continueToActTwo(): void {
+    this.progressStore.unlock("act1_cleared");
+    this.progressStore.unlock("act2_sump_warrens_found");
+    this.scene.start("SumpWarrensScene");
+    this.scene.launch("UIScene");
   }
 
   private returnToTitle(): void {

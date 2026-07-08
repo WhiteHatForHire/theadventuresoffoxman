@@ -56,6 +56,7 @@ Updated:
 - `src/game/scenes/PreloadScene.ts`
 - `src/game/scenes/UIScene.ts`
 - `src/game/scenes/TitleScene.ts`
+- `src/game/scenes/MiniBossScene.ts`
 
 Integration details:
 
@@ -63,6 +64,8 @@ Integration details:
 - Added direct browser route: `/?smokeAuto=1&smoke=sump`.
 - Updated HUD route/target labels for Act 2.
 - Updated title controls to mention dash.
+- Updated the Toll Baron clear prompt so Enter now advances from Act 1 into `SumpWarrensScene` instead of returning to the title.
+- Added Act 1 completion persistence through `act1_cleared` during the boss-to-Act-2 handoff.
 
 ## Smoke Coverage
 
@@ -73,6 +76,7 @@ Updated:
 New browser smoke route:
 
 - `/?smokeAuto=1&smoke=sump`
+- `/?smokeAuto=1&smoke=boss -> Enter -> Act 2`
 
 Assertions:
 
@@ -85,6 +89,9 @@ Assertions:
 - Hit feedback fires.
 - `act2_sump_warrens_cleared` is persisted.
 - HUD route displays `sump cleared`.
+- Boss-clear handoff starts `SumpWarrensScene`.
+- Boss-clear handoff persists `act1_cleared` and `act2_sump_warrens_found`.
+- Act 2 starts with its encounter intact after the handoff.
 
 ## Visual QA
 
@@ -110,9 +117,10 @@ Commands run:
 
 Browser smoke output showed the full matrix passing, including the new Sump route, and exited cleanly after the smoke cleanup patch.
 
+Follow-up browser smoke output also proved the player-facing Act 1-to-Act-2 handoff: clearing the Toll Baron and pressing Enter now starts `SumpWarrensScene` instead of returning to the title.
+
 ## Remaining Recommendations
 
-- Connect Toll Baron completion into Act 2 through a player-facing continue action instead of only direct smoke route access.
 - Split Sump Warrens into reusable act/level metadata instead of scene-local layout definitions.
 - Add unique Act 2 background/props and reduce reuse of Rotten Borough art.
 - Add death/restart coverage inside Sump Warrens.

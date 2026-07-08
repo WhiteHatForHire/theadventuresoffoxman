@@ -808,12 +808,27 @@ async function smokeMiniBoss(browser) {
   }
 
   await page.key("Enter");
-  await page.waitForDataset("scene", "TitleScene", 5000);
-  const after = await page.dataset(["scene"]);
-  assertEqual(after.scene, "TitleScene", "mini-boss completion return to title");
+  await page.waitForDataset("scene", "SumpWarrensScene", 5000);
+  const after = await page.dataset([
+    "scene",
+    "currentWeapon",
+    "sumpLivingEnemies",
+    "progressUnlocks",
+    "hudRouteText",
+    "hudTargetText",
+  ]);
+  assertEqual(after.scene, "SumpWarrensScene", "mini-boss completion advances to Act 2");
+  assertEqual(after.currentWeapon, "Tax Pike", "Act 2 starting weapon");
+  assertEqual(after.sumpLivingEnemies, "3", "Act 2 starts with its encounter intact");
+
+  for (const unlock of ["act1_cleared", "act2_sump_warrens_found"]) {
+    if (!String(after.progressUnlocks).includes(unlock)) {
+      throw new Error(`mini-boss handoff did not persist ${unlock}`);
+    }
+  }
 
   await page.close();
-  return { route: "/?smokeAuto=1&smoke=boss -> Enter", state, after };
+  return { route: "/?smokeAuto=1&smoke=boss -> Enter -> Act 2", state, after };
 }
 
 async function smokeBossDeathRestart(browser) {

@@ -64,24 +64,7 @@ Prepare the accepted V1 candidate for handoff by triaging polish, packaging, rel
 - Update release/handoff docs.
 - `npm run smoke:all` passes.
 
-## 3. Connect Act 1 Boss Clear Into Act 2
-
-**Status:** Active  
-**Priority:** P1  
-**Type:** App / Campaign / QA
-
-### Goal
-
-Make the new Act 2 Sump Warrens chapter reachable from Toll Baron completion through a clear player-facing action, not only through direct smoke-route access.
-
-### Acceptance Criteria
-
-- Add a post-boss continue prompt or exit that starts `SumpWarrensScene`.
-- Preserve existing direct boss Enter-to-title smoke behavior or update smoke expectations intentionally.
-- Add browser coverage for boss-clear-to-Act-2 transition.
-- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
-
-## 4. Sump Warrens Death / Restart Coverage
+## 3. Sump Warrens Death / Restart Coverage
 
 **Status:** Active  
 **Priority:** P1  
@@ -98,7 +81,7 @@ Add failure-state coverage for the new Act 2 chapter so it meets the same surviv
 - Verify enemies and player reset cleanly.
 - Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
 
-## 5. Dash Feedback Polish
+## 4. Dash Feedback Polish
 
 **Status:** Active  
 **Priority:** P1  
@@ -123,6 +106,7 @@ None right now.
 
 # Recently Moved Out
 
+- Act 1 boss-clear-to-Act-2 handoff completed on 2026-07-08.
 - Full-game initiative and Act 2 Sump Warrens prototype completed on 2026-07-08.
 - Dash/dodge human-play feel pass completed on 2026-07-07.
 - Rotten Borough tile-atlas platform rendering and platform traversal smoke coverage completed on 2026-07-06.
