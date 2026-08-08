@@ -1,14 +1,21 @@
 import Phaser from "phaser";
 import { FoxmanFrames } from "../assetFrames";
 import { AssetKeys } from "../assets";
+import { AudioBus } from "../audio/AudioBus";
 import { Health } from "../combat/Health";
 import type { InputSnapshot } from "../input/InputMapper";
-import { PlayerMotor, type PlayerDebugState } from "../movement/PlayerMotor";
+import {
+  PlayerMotor,
+  type PlayerDebugState,
+  type PlayerMovementState,
+} from "../movement/PlayerMotor";
 
 export type PlayerSurvivalDebugState = PlayerDebugState & {
   health: number;
   alive: boolean;
   invulnerable: boolean;
+  dashTrailCount: number;
+  dashCueCount: number;
 };
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -17,6 +24,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private pose?: keyof typeof FoxmanFrames;
   private invulnerableUntil = 0;
   private lastDamageAt = -Infinity;
+  private lastMovementState: PlayerMovementState = "idle";
+  private dashTrailCount = 0;
+  private dashCueCount = 0;
+  private readonly dashTrails = new Set<Phaser.GameObjects.Image>();
+  private readonly audio = new AudioBus();
 
   constructor(scene: Phaser.Scene, x: number, y: number, maxHealth = 5) {
     super(scene, x, y, AssetKeys.foxmanPrototype);
@@ -50,6 +62,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     const state = this.motor.update(time, input);
     const body = this.body as Phaser.Physics.Arcade.Body;
+
+    if (state === "dash" && this.lastMovementState !== "dash") {
+      this.spawnDashTrail(body.velocity.x);
+      this.audio.play("dash");
+      this.dashCueCount += 1;
+    }
+    this.lastMovementState = state;
 
     if (body.velocity.x < -8) {
       this.setFlipX(true);
@@ -110,6 +129,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setTint(0xffffff);
     this.setPose("idle");
 
+    for (const trail of this.dashTrails) {
+      trail.destroy();
+    }
+    this.dashTrails.clear();
+    this.dashTrailCount = 0;
+    this.dashCueCount = 0;
+    this.lastMovementState = "idle";
+
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.enable = true;
     body.setAcceleration(0, 0);
@@ -127,7 +154,41 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       health: this.health.current,
       alive: this.health.alive,
       invulnerable: this.lastDamageAt > -Infinity && !this.isVulnerable(this.scene.time.now),
+      dashTrailCount: this.dashTrailCount,
+      dashCueCount: this.dashCueCount,
     };
+  }
+
+  private spawnDashTrail(velocityX: number): void {
+    const direction = Math.sign(velocityX) || (this.flipX ? -1 : 1);
+
+    for (let index = 0; index < 3; index += 1) {
+      const trail = this.scene.add.image(
+        this.x - direction * (18 + index * 22),
+        this.y,
+        AssetKeys.foxmanPrototype,
+      )
+        .setFrame(this.frame.name)
+        .setOrigin(0.5, 1)
+        .setScale(0.42 - index * 0.025)
+        .setFlipX(this.flipX)
+        .setTint(0x9cc7ff)
+        .setAlpha(0.24 - index * 0.045)
+        .setDepth(this.depth - 1);
+
+      this.dashTrails.add(trail);
+      this.dashTrailCount += 1;
+      this.scene.tweens.add({
+        targets: trail,
+        alpha: 0,
+        duration: 125 + index * 35,
+        x: trail.x - direction * 24,
+        onComplete: () => {
+          this.dashTrails.delete(trail);
+          trail.destroy();
+        },
+      });
+    }
   }
 
   private tintForState(state: string): number {

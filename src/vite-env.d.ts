@@ -14,6 +14,7 @@ declare global {
     __FOXMAN_COMPLETE_TO_TITLE__?: () => void;
     __FOXMAN_RESTART_BOSS__?: () => void;
     __FOXMAN_RESTART_SECOND__?: () => void;
+    __FOXMAN_RESTART_SUMP__?: () => void;
   }
 }
 

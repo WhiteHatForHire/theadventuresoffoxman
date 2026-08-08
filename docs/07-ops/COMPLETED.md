@@ -32,6 +32,31 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-08 - Sump Warrens Act 2 Closure And Dash Feedback Completed
+
+**Type:** App / Campaign / Gameplay / QA / Ops
+**Source:** Codex
+**Related Files:**
+
+- `src/game/scenes/SumpWarrensScene.ts`
+- `src/game/entities/Player.ts`
+- `src/game/feedback/HitFeedback.ts`
+- `src/game/audio/AudioBus.ts`
+- `src/game/scenes/PreloadScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/PHASE9_FULL_GAME_EXPANSION_REPORT.md`
+- `docs/08-run/2026-08-08-sol-wave-run-receipt.md`
+
+**Summary:**
+
+Closed the first Sump Warrens chapter technically with player death, R/Enter restart, persistent death accounting, and a complete reset of player motor/health, all three enemy actors, local combat counters, exit/completion state, camera, death UI, dash state, and active hit VFX. Added the deterministic `sumpDeath` browser route, separate keyboard-R proof, a 390×844 viewport route, committed screenshots/runtime results, and clearer dash feedback through a short three-image trail plus the existing audio bus. The accepted V1 mechanics and movement tuning remain unchanged, and the complete browser matrix passes.
+
+**Follow-Ups:**
+
+- [ ] Marcus performs the Act 2 human play/feel acceptance gate.
+- [ ] Choose public-demo packaging or the next bounded campaign slice after that decision.
+- [ ] Treat dedicated touch controls, an audible dash asset, unique Act 2 art, and the Clog Prior as optional/new scope unless Marcus promotes them.
+
 ## 2026-07-08 - Act 1 Boss Clear To Act 2 Handoff Completed
 
 **Type:** App / Campaign / QA / Ops  
@@ -51,7 +76,7 @@ Changed the Toll Baron completion flow from the old V1 demo reset into the Act 2
 
 **Follow-Ups:**
 
-- [ ] Add Sump Warrens death/restart coverage.
+- [x] Add Sump Warrens death/restart coverage.
 - [ ] Continue campaign-spine expansion beyond the first Act 2 prototype.
 
 ## 2026-07-08 - Full Game Initiative And Act 2 Sump Warrens Prototype Completed
@@ -77,7 +102,7 @@ Created the full-game campaign initiative with a five-act roadmap and gate struc
 
 **Follow-Ups:**
 
-- [ ] Add Sump Warrens death/restart coverage.
+- [x] Add Sump Warrens death/restart coverage.
 - [ ] Add unique Act 2 art and props beyond the reused Rotten Borough kit.
 
 ## 2026-07-07 - Dash Dodge Human-Play Feel Pass Completed
@@ -103,7 +128,7 @@ Added a real dash/dodge verb on `Shift` and `L`, using Foxman's existing dash at
 
 **Follow-Ups:**
 
-- [ ] Add dash trail/smear VFX and a dash audio cue.
+- [x] Add dash trail/smear VFX and a dash audio cue.
 - [ ] Continue broader human-play tuning for enemy tells, camera framing, and combat spacing.
 
 ## 2026-07-06 - Rotten Borough Platform Atlas And Traversal Smoke Completed

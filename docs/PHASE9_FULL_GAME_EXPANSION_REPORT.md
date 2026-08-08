@@ -123,5 +123,26 @@ Follow-up browser smoke output also proved the player-facing Act 1-to-Act-2 hand
 
 - Split Sump Warrens into reusable act/level metadata instead of scene-local layout definitions.
 - Add unique Act 2 background/props and reduce reuse of Rotten Borough art.
-- Add death/restart coverage inside Sump Warrens.
 - Add the planned Act 2 boss: The Clog Prior.
+
+## 2026-08-08 Act 2 Closure Addendum
+
+SOL Wave 22 closed the survivability and feedback gap without expanding the act:
+
+- Added an explicit Sump death screen and R/Enter restart.
+- Restart restores Foxman to 6/6 HP, clears motor/dash state, restores all three enemies at full health, resets local kills/completion/exit/camera state, removes active hit VFX, and preserves the single persisted death.
+- Added direct `/?smokeAuto=1&smoke=sumpDeath` routing and deterministic death/restart assertions.
+- Added a separate isolated keyboard-R receipt plus the stable full-matrix restart hook used by the existing death routes.
+- Added a three-image dash trail and `dash` audio-bus cue while leaving `PlayerMotor` values and invulnerability mechanics unchanged.
+- Added a 390×844 browser route proving the canvas remains contained, has no horizontal overflow, and accepts the existing start control. This does not claim touch controls.
+
+Evidence lives under `docs/08-run/evidence/`, with the decision packet in `docs/08-run/2026-08-08-sol-wave-run-receipt.md`.
+
+Validation passed:
+
+- `npm test` — 23 tests.
+- `npm run build`.
+- `npm run smoke`.
+- Full Chrome DevTools browser matrix — 23 routes, no fatal console/network errors.
+
+Technical verdict: `accept_with_conditions`. There is no known deterministic Act 2 closure blocker. Marcus's direct play/feel review remains the release gate, and portrait-scale readability must be accepted before making a mobile-readability claim. Dedicated touch controls, an audible dash asset, unique Sump art, reusable act metadata, and the Clog Prior remain optional or future scope rather than closure blockers.

@@ -1,9 +1,10 @@
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 
 const baseUrl = process.env.FOXMAN_BASE_URL ?? "http://127.0.0.1:5173";
+const evidenceDir = process.env.FOXMAN_EVIDENCE_DIR;
 const chromeCandidates = [
   process.env.CHROME_PATH,
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -118,11 +119,16 @@ async function smokeDashRoute(browser) {
     "playerVelocityX",
     "playerDashCount",
     "playerDashReady",
+    "playerDashTrailCount",
+    "playerDashCueCount",
   ]);
   assertEqual(state.scene, "RunScene", "dash route scene");
   assertEqual(state.playerDashCount, "1", "dash route count");
   assertAtLeastNumber(state.playerX, 260, "dash route movement");
   assertAtLeastNumber(Math.abs(Number(state.playerVelocityX)), 500, "dash route burst speed");
+  assertAtLeastNumber(state.playerDashTrailCount, 3, "dash route trail images");
+  assertEqual(state.playerDashCueCount, "1", "dash route audio cue count");
+  await captureEvidence(page, "dash-feedback.png");
   await page.close();
 
   return { route: "/?smokeAuto=1&smoke=dash", state };
@@ -144,6 +150,7 @@ async function smokeSumpWarrens(browser) {
     "hudRouteText",
     "hudTargetText",
     "hitFeedbackCount",
+    "hitFeedbackActiveCount",
   ]);
   assertEqual(state.scene, "SumpWarrensScene", "sump scene");
   assertEqual(state.sumpLivingEnemies, "0", "sump living enemies");
@@ -159,9 +166,151 @@ async function smokeSumpWarrens(browser) {
   if (!String(state.hudRouteText).includes("sump cleared")) {
     throw new Error("sump route HUD did not show cleared route state");
   }
+  await captureEvidence(page, "sump-complete.png");
   await page.close();
 
   return { route: "/?smokeAuto=1&smoke=sump", state };
+}
+
+async function smokeSumpDeathRestart(browser) {
+  const page = await browser.open("/?smokeAuto=1&smoke=sumpDeath");
+  await page.waitForDataset("deathBanner", "true", 15000);
+  const dead = await page.dataset([
+    "scene",
+    "playerAlive",
+    "playerHealth",
+    "playerMaxHealth",
+    "deathBanner",
+    "deaths",
+    "progressDeaths",
+    "sumpLivingEnemies",
+    "sumpComplete",
+    "sumpGuardHealth",
+    "sumpClerkHealth",
+    "sumpEliteHealth",
+    "kills",
+  ]);
+  assertEqual(dead.scene, "SumpWarrensScene", "sump death scene");
+  assertEqual(dead.playerAlive, "false", "sump death player death");
+  assertEqual(dead.playerHealth, "0", "sump death player health");
+  assertEqual(dead.playerMaxHealth, "6", "sump death max health");
+  assertEqual(dead.deathBanner, "true", "sump death banner");
+  assertEqual(dead.deaths, "1", "sump death local count");
+  assertEqual(dead.sumpLivingEnemies, "3", "sump death leaves encounter active");
+  assertEqual(dead.sumpComplete, "false", "sump death does not complete Act 2");
+  assertEqual(dead.kills, "0", "sump death records no false kills");
+  assertAtLeastNumber(dead.progressDeaths, 1, "sump death persisted progress death");
+  await captureEvidence(page, "sump-death.png");
+
+  const restartMethod = process.env.FOXMAN_SMOKE_ONLY === "sumpDeath"
+    ? "keyboard-r"
+    : "deterministic-restart-hook";
+  if (restartMethod === "keyboard-r") {
+    await page.send("Page.bringToFront");
+    await page.key("r");
+  } else {
+    await page.evaluate("window.__FOXMAN_RESTART_SUMP__()");
+  }
+  await page.waitForDataset("sumpRestartCount", "1", 5000);
+  await page.waitForDataset("deathBanner", "false", 5000);
+  const restarted = await page.dataset([
+    "scene",
+    "playerAlive",
+    "playerHealth",
+    "playerMaxHealth",
+    "playerDashCount",
+    "playerDashTrailCount",
+    "playerDashCueCount",
+    "deathBanner",
+    "sumpRestartCount",
+    "sumpLivingEnemies",
+    "sumpComplete",
+    "sumpGuardHealth",
+    "sumpGuardAlive",
+    "sumpClerkHealth",
+    "sumpClerkAlive",
+    "sumpEliteHealth",
+    "sumpEliteAlive",
+    "hitFeedbackCount",
+    "hitFeedbackActiveCount",
+    "kills",
+    "progressDeaths",
+  ]);
+  assertEqual(restarted.scene, "SumpWarrensScene", "sump restart scene");
+  assertEqual(restarted.playerAlive, "true", "sump restart player alive");
+  assertEqual(restarted.playerHealth, "6", "sump restart restores health");
+  assertEqual(restarted.playerMaxHealth, "6", "sump restart keeps max health");
+  assertEqual(restarted.playerDashCount, "0", "sump restart clears dash state");
+  assertEqual(restarted.playerDashTrailCount, "0", "sump restart clears dash trails");
+  assertEqual(restarted.playerDashCueCount, "0", "sump restart clears dash cue state");
+  assertEqual(restarted.deathBanner, "false", "sump restart hides death UI");
+  assertEqual(restarted.sumpLivingEnemies, "3", "sump restart restores all enemies");
+  assertEqual(restarted.sumpComplete, "false", "sump restart relocks completion");
+  assertEqual(restarted.sumpGuardHealth, "3", "sump restart restores guard health");
+  assertEqual(restarted.sumpGuardAlive, "true", "sump restart restores guard actor");
+  assertEqual(restarted.sumpClerkHealth, "2", "sump restart restores clerk health");
+  assertEqual(restarted.sumpClerkAlive, "true", "sump restart restores clerk actor");
+  assertEqual(restarted.sumpEliteHealth, "4", "sump restart restores elite health");
+  assertEqual(restarted.sumpEliteAlive, "true", "sump restart restores elite actor");
+  assertEqual(restarted.hitFeedbackCount, "0", "sump restart clears hit feedback state");
+  assertEqual(restarted.hitFeedbackActiveCount, "0", "sump restart removes active hit VFX");
+  assertEqual(restarted.kills, "0", "sump restart clears local kills");
+  assertEqual(restarted.progressDeaths, dead.progressDeaths, "sump restart does not duplicate death");
+  await captureEvidence(page, "sump-restart.png");
+  await page.close();
+
+  return { route: "/?smokeAuto=1&smoke=sumpDeath -> restart", restartMethod, dead, restarted };
+}
+
+async function smokeMobileViewport(browser) {
+  const page = await browser.open("/", { viewport: { width: 390, height: 844 } });
+  await page.waitForDataset("scene", "TitleScene");
+  const titleViewport = await page.evaluate(`(() => {
+    const canvas = document.querySelector("canvas");
+    const rect = canvas?.getBoundingClientRect();
+    return {
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+      scrollWidth: document.documentElement.scrollWidth,
+      canvasWidth: rect?.width ?? 0,
+      canvasHeight: rect?.height ?? 0,
+      canvasLeft: rect?.left ?? -1,
+      canvasRight: rect?.right ?? 9999,
+      canvasTop: rect?.top ?? -1,
+      canvasBottom: rect?.bottom ?? 9999,
+    };
+  })()`);
+  assertEqual(String(titleViewport.innerWidth), "390", "mobile viewport width");
+  assertAtLeastNumber(titleViewport.canvasWidth, 389, "mobile canvas width");
+  assertAtMostNumber(titleViewport.canvasRight, 390.5, "mobile canvas right edge");
+  assertAtMostNumber(titleViewport.canvasBottom, 844.5, "mobile canvas bottom edge");
+  assertAtMostNumber(titleViewport.scrollWidth, 390, "mobile horizontal overflow");
+
+  await page.key("Enter");
+  await page.waitForDataset("scene", "RunScene");
+  const state = await page.dataset(["scene", "playerAlive", "hudWeaponText"]);
+  assertEqual(state.scene, "RunScene", "mobile start control reaches game");
+  assertEqual(state.playerAlive, "true", "mobile viewport player alive");
+  if (!String(state.hudWeaponText).includes("Rusty Knife")) {
+    throw new Error("mobile viewport HUD weapon text was not reachable");
+  }
+  await captureEvidence(page, "mobile-390-opening.png");
+  await page.close();
+
+  return { route: "/ at 390x844 -> Enter", titleViewport, state };
+}
+
+async function captureEvidence(page, fileName) {
+  if (!evidenceDir) {
+    return;
+  }
+
+  mkdirSync(evidenceDir, { recursive: true });
+  const screenshot = await page.send("Page.captureScreenshot", {
+    format: "png",
+    fromSurface: true,
+  });
+  writeFileSync(join(evidenceDir, fileName), Buffer.from(screenshot.data, "base64"));
 }
 
 async function assertNoMissingTextureGreen(page, label) {
@@ -962,10 +1111,11 @@ class Browser {
     this.port = port;
   }
 
-  async open(path) {
+  async open(path, options = {}) {
     const url = new URL(path, baseUrl).toString();
+    const initialUrl = options.viewport ? "about:blank" : url;
     const response = await fetch(
-      `http://127.0.0.1:${this.port}/json/new?${encodeURIComponent(url)}`,
+      `http://127.0.0.1:${this.port}/json/new?${encodeURIComponent(initialUrl)}`,
       { method: "PUT" },
     );
 
@@ -976,6 +1126,14 @@ class Browser {
     const target = await response.json();
     const page = new CdpPage(target.webSocketDebuggerUrl, target.id);
     await page.ready();
+    if (options.viewport) {
+      await page.send("Emulation.setDeviceMetricsOverride", {
+        ...options.viewport,
+        deviceScaleFactor: 1,
+        mobile: true,
+      });
+      await page.send("Page.navigate", { url });
+    }
     return page;
   }
 }
@@ -1176,34 +1334,58 @@ function assertAtLeastNumber(actual, expected, label) {
   }
 }
 
+function assertAtMostNumber(actual, expected, label) {
+  const value = Number(actual);
+  if (!Number.isFinite(value) || value > expected) {
+    throw new Error(`${label}: expected at most ${expected}, got ${actual}`);
+  }
+}
+
 try {
   await ensureServer();
   const browser = await launchChrome();
 
   const results = [];
-  results.push(await smokeTitlePause(browser));
-  results.push(await smokeManualOpeningRoute(browser));
-  results.push(await smokePlatformRoute(browser));
-  results.push(await smokeDashRoute(browser));
-  results.push(await smokeSumpWarrens(browser));
-  results.push(await smokeFirstRoom(browser));
-  results.push(await smokeRangedCombat(browser));
-  results.push(await smokeSkillCombat(browser));
-  results.push(await smokeRewardHandoff(browser));
-  results.push(await smokeRewardShopMutation(browser));
-  results.push(await smokeRewardShopSkill(browser));
-  results.push(await smokeSecondPath(browser));
-  results.push(await smokeAuditShieldReward(browser));
-  results.push(await smokeHangoverHideMutation(browser));
-  results.push(await smokePettyGrudgeMutation(browser));
-  results.push(await smokeSecondPathDeathRestart(browser));
-  results.push(await smokeConnectedBossRoute(browser));
-  results.push(await smokeFullSliceRoute(browser));
-  results.push(await smokeSkillBossRoute(browser));
-  results.push(await smokeMiniBoss(browser));
-  results.push(await smokeBossDeathRestart(browser));
+  if (process.env.FOXMAN_SMOKE_ONLY === "sumpDeath") {
+    results.push(await smokeSumpDeathRestart(browser));
+  } else {
+    results.push(await smokeTitlePause(browser));
+    results.push(await smokeManualOpeningRoute(browser));
+    results.push(await smokePlatformRoute(browser));
+    results.push(await smokeDashRoute(browser));
+    results.push(await smokeSumpWarrens(browser));
+    results.push(await smokeSumpDeathRestart(browser));
+    results.push(await smokeMobileViewport(browser));
+    results.push(await smokeFirstRoom(browser));
+    results.push(await smokeRangedCombat(browser));
+    results.push(await smokeSkillCombat(browser));
+    results.push(await smokeRewardHandoff(browser));
+    results.push(await smokeRewardShopMutation(browser));
+    results.push(await smokeRewardShopSkill(browser));
+    results.push(await smokeSecondPath(browser));
+    results.push(await smokeAuditShieldReward(browser));
+    results.push(await smokeHangoverHideMutation(browser));
+    results.push(await smokePettyGrudgeMutation(browser));
+    results.push(await smokeSecondPathDeathRestart(browser));
+    results.push(await smokeConnectedBossRoute(browser));
+    results.push(await smokeFullSliceRoute(browser));
+    results.push(await smokeSkillBossRoute(browser));
+    results.push(await smokeMiniBoss(browser));
+    results.push(await smokeBossDeathRestart(browser));
+  }
 
-  console.log(JSON.stringify({ ok: true, results }, null, 2));
+  const payload = { ok: true, results };
+  if (evidenceDir) {
+    mkdirSync(evidenceDir, { recursive: true });
+    const resultFile = process.env.FOXMAN_SMOKE_ONLY
+      ? `browser-smoke-${process.env.FOXMAN_SMOKE_ONLY}-results.json`
+      : "browser-smoke-results.json";
+    writeFileSync(
+      join(evidenceDir, resultFile),
+      `${JSON.stringify(payload, null, 2)}\n`,
+    );
+  }
+  console.log(JSON.stringify(payload, null, 2));
 } finally {
   if (chrome) {
     chrome.kill("SIGTERM");

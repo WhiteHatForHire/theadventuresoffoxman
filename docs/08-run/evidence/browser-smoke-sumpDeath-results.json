@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "/?smokeAuto=1&smoke=sumpDeath -> restart",
+      "restartMethod": "keyboard-r",
+      "dead": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "playerMaxHealth": "6",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpClerkHealth": "2",
+        "sumpEliteHealth": "4",
+        "kills": "0",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "playerDashCount": "0",
+        "playerDashTrailCount": "0",
+        "deathBanner": "false",
+        "sumpRestartCount": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpGuardAlive": "true",
+        "sumpClerkHealth": "2",
+        "sumpClerkAlive": "true",
+        "sumpEliteHealth": "4",
+        "sumpEliteAlive": "true",
+        "hitFeedbackCount": "0",
+        "hitFeedbackActiveCount": "0",
+        "kills": "0",
+        "progressDeaths": "1",
+        "canvasCount": 1
+      }
+    }
+  ]
+}

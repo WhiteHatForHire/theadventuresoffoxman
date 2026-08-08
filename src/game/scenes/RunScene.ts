@@ -700,6 +700,8 @@ export class RunScene extends Phaser.Scene {
     document.body.dataset.playerVelocityY = String(playerState.velocityY);
     document.body.dataset.playerDashReady = String(playerState.dashReady);
     document.body.dataset.playerDashCount = String(playerState.dashCount);
+    document.body.dataset.playerDashTrailCount = String(playerState.dashTrailCount);
+    document.body.dataset.playerDashCueCount = String(playerState.dashCueCount);
     document.body.dataset.playerHealth = String(playerState.health);
     document.body.dataset.playerAlive = String(playerState.alive);
     document.body.dataset.enemyHealth = String(guardState.health);

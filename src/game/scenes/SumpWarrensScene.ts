@@ -16,6 +16,8 @@ type SumpEnemy = {
   enemy: GuardEnemy;
   unlockId: string;
   defeated: boolean;
+  spawnX: number;
+  spawnY: number;
 };
 
 export class SumpWarrensScene extends Phaser.Scene {
@@ -24,17 +26,24 @@ export class SumpWarrensScene extends Phaser.Scene {
   private enemies: SumpEnemy[] = [];
   private attackHitbox!: Phaser.GameObjects.Rectangle;
   private completionBanner!: Phaser.GameObjects.Text;
+  private deathBanner!: Phaser.GameObjects.Text;
+  private restartPrompt!: Phaser.GameObjects.Text;
   private objectiveText!: Phaser.GameObjects.Text;
   private exitMarker!: Phaser.GameObjects.Image;
   private exitText!: Phaser.GameObjects.Text;
   private debugText!: Phaser.GameObjects.Text;
-  private smokeMode: "none" | "sump" = "none";
+  private smokeMode: "none" | "sump" | "sumpDeath" = "none";
+  private restartKey!: Phaser.Input.Keyboard.Key;
+  private restartAltKey!: Phaser.Input.Keyboard.Key;
   private startedAt = 0;
   private attackUntil = 0;
   private nextEnemyDamageAt = 0;
   private nextPlayerDamageAt = 0;
   private smokeAttackCount = 0;
   private kills = 0;
+  private deaths = 0;
+  private deathCounted = false;
+  private restartCount = 0;
   private complete = false;
   private readonly roomWidth = 2800;
   private readonly activeStats: WeaponStats = applyTaxPikeReachReward(weaponStats["Tax Pike"]);
@@ -68,13 +77,15 @@ export class SumpWarrensScene extends Phaser.Scene {
 
     this.inputMapper = new InputMapper(this);
     this.hitFeedback = new HitFeedback(this);
+    this.restartKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    this.restartAltKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
     this.player = new Player(this, 220, 500, 6);
     this.physics.add.collider(this.player, platforms);
 
     this.enemies = [
-      { enemy: new GuardEnemy(this, 760, 500, "drunkenGuard"), unlockId: "sump_gate_guard_drowned", defeated: false },
-      { enemy: new GuardEnemy(this, 1450, 500, "taxClerk"), unlockId: "sump_ledger_clerk_evicted", defeated: false },
-      { enemy: new GuardEnemy(this, 2150, 500, "eliteAuditor"), unlockId: "sump_elite_auditor_sunk", defeated: false },
+      { enemy: new GuardEnemy(this, 760, 500, "drunkenGuard"), unlockId: "sump_gate_guard_drowned", defeated: false, spawnX: 760, spawnY: 500 },
+      { enemy: new GuardEnemy(this, 1450, 500, "taxClerk"), unlockId: "sump_ledger_clerk_evicted", defeated: false, spawnX: 1450, spawnY: 500 },
+      { enemy: new GuardEnemy(this, 2150, 500, "eliteAuditor"), unlockId: "sump_elite_auditor_sunk", defeated: false, spawnX: 2150, spawnY: 500 },
     ];
     for (const entry of this.enemies) {
       this.physics.add.collider(entry.enemy, platforms);
@@ -133,6 +144,26 @@ export class SumpWarrensScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5)
       .setScrollFactor(0)
       .setAlpha(0);
+    this.deathBanner = this.add.text(GAME_WIDTH / 2, 180, "FOXMAN JOINED THE SEWER", {
+      fontFamily: "Georgia, serif",
+      fontSize: "34px",
+      color: "#b3312b",
+      stroke: "#161315",
+      strokeThickness: 6,
+    }).setOrigin(0.5, 0.5)
+      .setScrollFactor(0)
+      .setDepth(40)
+      .setAlpha(0);
+    this.restartPrompt = this.add.text(GAME_WIDTH / 2, 224, "Press R or Enter to restart Act 2", {
+      fontFamily: "Inter, system-ui, sans-serif",
+      fontSize: "16px",
+      color: "#e4d6a2",
+      stroke: "#161315",
+      strokeThickness: 4,
+    }).setOrigin(0.5, 0.5)
+      .setScrollFactor(0)
+      .setDepth(40)
+      .setAlpha(0);
     this.debugText = this.add.text(42, 104, "", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "13px",
@@ -140,13 +171,26 @@ export class SumpWarrensScene extends Phaser.Scene {
     }).setScrollFactor(0)
       .setAlpha(0);
 
-    this.smokeMode = smokeAutoEnabled() && smokeParam() === "sump" ? "sump" : "none";
+    const smoke = smokeAutoEnabled() ? smokeParam() : null;
+    this.smokeMode = smoke === "sump" || smoke === "sumpDeath" ? smoke : "none";
     this.startedAt = this.time.now;
     this.progressStore.unlock("act2_sump_warrens_found");
+    window.__FOXMAN_RESTART_SUMP__ = () => this.restartSumpWarrens();
   }
 
   update(time: number): void {
     const input = this.smokeInput(time);
+
+    if (!this.player.health.alive) {
+      this.handleRestartInput();
+      for (const entry of this.enemies) {
+        entry.enemy.update(time, this.player.x);
+      }
+      this.attackHitbox.setVisible(false);
+      this.updateDebugOutput();
+      return;
+    }
+
     this.player.update(time, input, time < this.attackUntil);
 
     for (const entry of this.enemies) {
@@ -164,6 +208,18 @@ export class SumpWarrensScene extends Phaser.Scene {
 
   private smokeInput(time: number): InputSnapshot {
     const input = this.inputMapper.snapshot();
+    if (this.smokeMode === "sumpDeath") {
+      return {
+        left: false,
+        right: this.restartCount === 0 && this.player.x < 690,
+        jumpPressed: false,
+        jumpHeld: false,
+        attackPressed: false,
+        skillPressed: false,
+        dashPressed: false,
+      };
+    }
+
     if (this.smokeMode !== "sump") {
       return input;
     }
@@ -253,7 +309,14 @@ export class SumpWarrensScene extends Phaser.Scene {
       .map((entry) => entry.enemy)
       .filter((enemy) => enemy.health.alive)
       .sort((left, right) => Math.abs(left.x - this.player.x) - Math.abs(right.x - this.player.x))[0];
-    if (!attacker || Math.abs(attacker.x - this.player.x) > 140) {
+    const deterministicDeathStrike =
+      this.smokeMode === "sumpDeath" &&
+      this.restartCount === 0 &&
+      time - this.startedAt > 700;
+    if (
+      !attacker ||
+      (Math.abs(attacker.x - this.player.x) > 140 && !deterministicDeathStrike)
+    ) {
       return;
     }
 
@@ -263,6 +326,7 @@ export class SumpWarrensScene extends Phaser.Scene {
       this.audio.play("player-hit");
       this.cameras.main.shake(120, 0.006);
       this.nextPlayerDamageAt = time + 900;
+      this.handlePlayerDeath(time);
     }
   }
 
@@ -282,13 +346,67 @@ export class SumpWarrensScene extends Phaser.Scene {
       this.objectiveText.setText(`Objective: cross Sump Gate (${living} problems left)`);
     }
 
-    if (!this.complete && allDefeated && this.player.x > 2570) {
+    if (!this.complete && this.player.health.alive && allDefeated && this.player.x > 2570) {
       this.complete = true;
       this.completionBanner.setAlpha(1);
       this.audio.play("room-complete");
       this.progressStore.unlock("act2_sump_warrens_cleared");
       this.cameras.main.flash(120, 126, 170, 78, false);
     }
+  }
+
+  private handlePlayerDeath(time: number): void {
+    if (this.player.health.alive || this.deathCounted) {
+      return;
+    }
+
+    this.deathCounted = true;
+    this.deaths += 1;
+    this.progressStore.addDeath();
+    this.audio.play("player-hit");
+    this.cameras.main.shake(170, 0.01);
+    this.deathBanner.setAlpha(1);
+    this.restartPrompt.setAlpha(1);
+    this.attackHitbox.setVisible(false);
+    this.nextPlayerDamageAt = time + 1200;
+  }
+
+  private handleRestartInput(): void {
+    if (
+      Phaser.Input.Keyboard.JustDown(this.restartKey) ||
+      Phaser.Input.Keyboard.JustDown(this.restartAltKey)
+    ) {
+      this.restartSumpWarrens();
+    }
+  }
+
+  private restartSumpWarrens(): void {
+    this.player.resetSurvival(220, 500);
+    for (const entry of this.enemies) {
+      entry.enemy.resetEnemy(entry.spawnX, entry.spawnY);
+      entry.defeated = false;
+    }
+
+    this.deathCounted = false;
+    this.restartCount += 1;
+    this.startedAt = this.time.now;
+    this.attackUntil = 0;
+    this.nextEnemyDamageAt = 0;
+    this.nextPlayerDamageAt = this.time.now + 700;
+    this.smokeAttackCount = 0;
+    this.kills = 0;
+    this.complete = false;
+    this.hitFeedback.reset();
+    this.completionBanner.setAlpha(0);
+    this.deathBanner.setAlpha(0);
+    this.restartPrompt.setAlpha(0);
+    this.attackHitbox.setVisible(false);
+    this.setPropFrame(this.exitMarker, "lockedGate");
+    this.exitMarker.setAlpha(0.35);
+    this.exitText.setText("DRAIN LOCKED");
+    this.exitText.setColor("#b3312b");
+    this.objectiveText.setText("Objective: cross Sump Gate");
+    this.cameras.main.setScroll(0, 0);
   }
 
   private updateDebugOutput(): void {
@@ -303,6 +421,9 @@ export class SumpWarrensScene extends Phaser.Scene {
     document.body.dataset.playerX = String(playerState.x);
     document.body.dataset.playerHealth = String(playerState.health);
     document.body.dataset.playerAlive = String(playerState.alive);
+    document.body.dataset.playerDashCount = String(playerState.dashCount);
+    document.body.dataset.playerDashTrailCount = String(playerState.dashTrailCount);
+    document.body.dataset.playerDashCueCount = String(playerState.dashCueCount);
     document.body.dataset.playerMaxHealth = "6";
     document.body.dataset.currentWeapon = "Tax Pike";
     document.body.dataset.currentSkill = "none";
@@ -310,10 +431,20 @@ export class SumpWarrensScene extends Phaser.Scene {
     document.body.dataset.skillCooldownReady = "true";
     document.body.dataset.sumpLivingEnemies = String(living.length);
     document.body.dataset.sumpComplete = String(this.complete);
+    document.body.dataset.sumpGuardHealth = String(this.enemies[0]?.enemy.health.current ?? 0);
+    document.body.dataset.sumpGuardAlive = String(this.enemies[0]?.enemy.health.alive ?? false);
+    document.body.dataset.sumpClerkHealth = String(this.enemies[1]?.enemy.health.current ?? 0);
+    document.body.dataset.sumpClerkAlive = String(this.enemies[1]?.enemy.health.alive ?? false);
+    document.body.dataset.sumpEliteHealth = String(this.enemies[2]?.enemy.health.current ?? 0);
+    document.body.dataset.sumpEliteAlive = String(this.enemies[2]?.enemy.health.alive ?? false);
     document.body.dataset.enemyHealth = String(firstLiving?.health ?? 0);
     document.body.dataset.enemyAlive = String(Boolean(firstLiving?.alive));
     document.body.dataset.hitFeedbackCount = String(this.hitFeedback.count);
+    document.body.dataset.hitFeedbackActiveCount = String(this.hitFeedback.activeCount);
     document.body.dataset.kills = String(this.kills);
+    document.body.dataset.deaths = String(this.deaths);
+    document.body.dataset.deathBanner = String(this.deathBanner.alpha > 0);
+    document.body.dataset.sumpRestartCount = String(this.restartCount);
     document.body.dataset.progressKills = String(progress.kills);
     document.body.dataset.progressDeaths = String(progress.deaths);
     document.body.dataset.progressUnlocks = progress.unlocks.join(",");

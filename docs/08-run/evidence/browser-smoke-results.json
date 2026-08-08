@@ -1,0 +1,458 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "/",
+      "state": {
+        "scene": "RunScene",
+        "paused": "false",
+        "playerState": "fall",
+        "hudWeaponText": "Weapon: Rusty Knife",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/ -> Enter, hold D/J/D",
+      "state": {
+        "scene": "RewardScene",
+        "pickupCollected": "true",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "exitUnlocked": "true",
+        "roomComplete": "true",
+        "currentWeapon": "Butcher Saber",
+        "playerHealth": "5",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=platforms",
+      "state": {
+        "scene": "RunScene",
+        "playerX": "961",
+        "playerY": "419",
+        "playerGrounded": "false",
+        "platformRouteComplete": "true",
+        "secondaryPickupCollected": "true",
+        "currentWeapon": "Receipt Spitter",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=dash",
+      "state": {
+        "scene": "RunScene",
+        "playerState": "dash",
+        "playerX": "312",
+        "playerVelocityX": "620",
+        "playerDashCount": "1",
+        "playerDashReady": "false",
+        "playerDashTrailCount": "3",
+        "playerDashCueCount": "1",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=sump",
+      "state": {
+        "scene": "SumpWarrensScene",
+        "sumpLivingEnemies": "0",
+        "sumpComplete": "true",
+        "currentWeapon": "Tax Pike",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "kills": "3",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared",
+        "hudRouteText": "Route: sump cleared",
+        "hudTargetText": "Target: sump crew 0",
+        "hitFeedbackCount": "5",
+        "hitFeedbackActiveCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=sumpDeath -> restart",
+      "restartMethod": "deterministic-restart-hook",
+      "dead": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "playerMaxHealth": "6",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpClerkHealth": "2",
+        "sumpEliteHealth": "4",
+        "kills": "0",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "playerDashCount": "0",
+        "playerDashTrailCount": "0",
+        "playerDashCueCount": "0",
+        "deathBanner": "false",
+        "sumpRestartCount": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpGuardAlive": "true",
+        "sumpClerkHealth": "2",
+        "sumpClerkAlive": "true",
+        "sumpEliteHealth": "4",
+        "sumpEliteAlive": "true",
+        "hitFeedbackCount": "0",
+        "hitFeedbackActiveCount": "0",
+        "kills": "0",
+        "progressDeaths": "1",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/ at 390x844 -> Enter",
+      "titleViewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "canvasWidth": 390,
+        "canvasHeight": 219.375,
+        "canvasLeft": 0,
+        "canvasRight": 390,
+        "canvasTop": 312,
+        "canvasBottom": 531.375
+      },
+      "state": {
+        "scene": "RunScene",
+        "playerAlive": "true",
+        "hudWeaponText": "Weapon: Rusty Knife",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=room",
+      "state": {
+        "scene": "RunScene",
+        "pickupCollected": "true",
+        "enemyAlive": "false",
+        "exitUnlocked": "true",
+        "roomComplete": "true",
+        "currentWeapon": "Butcher Saber",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=ranged",
+      "state": {
+        "scene": "RunScene",
+        "currentWeapon": "Receipt Spitter",
+        "weaponKind": "ranged",
+        "secondaryPickupCollected": "true",
+        "rangedProjectileFired": "3",
+        "rangedProjectileHits": "2",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared",
+        "hudSkillText": "Skill: none",
+        "hitFeedbackCount": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=skill",
+      "state": {
+        "scene": "RunScene",
+        "currentSkill": "Spite Belch",
+        "skillUnlocked": "true",
+        "skillUses": "2",
+        "skillHits": "2",
+        "skillCooldownReady": "false",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hitFeedbackCount": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=reward",
+      "before": {
+        "scene": "RewardScene",
+        "rewardStub": "true",
+        "rewardChoices": "pikeReach,auditShield",
+        "shopChoices": "pikeReach,auditShield,spiteBelch,hangoverHide,pettyGrudge",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "SecondRunScene",
+        "currentWeapon": "Tax Pike",
+        "rewardChoice": "pikeReach",
+        "taxClerkVariant": "taxClerk",
+        "eliteVariant": "eliteAuditor",
+        "weaponReach": "365",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=reward -> key 5",
+      "state": {
+        "scene": "SecondRunScene",
+        "shopChoice": "pettyGrudge",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "skillChoice": "none",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=rewardSkill -> key 3",
+      "state": {
+        "scene": "SecondRunScene",
+        "shopChoice": "spiteBelch",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "none",
+        "skillChoice": "Spite Belch",
+        "skillUnlocked": "true",
+        "currentSkill": "Spite Belch",
+        "skillUses": "2",
+        "skillHits": "2",
+        "taxClerkAlive": "false",
+        "eliteAlive": "false",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hudRouteText": "Route: boss door",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach",
+      "state": {
+        "scene": "SecondRunScene",
+        "currentWeapon": "Tax Pike",
+        "rewardChoice": "pikeReach",
+        "taxClerkAlive": "false",
+        "taxClerkVariant": "taxClerk",
+        "eliteAlive": "false",
+        "eliteVariant": "eliteAuditor",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach",
+        "weaponReach": "365",
+        "weaponDamage": "2",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=auditShield",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerHealth": "6",
+        "hudHealthText": "HP: 6/6",
+        "weaponReach": "310",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach&mutation=hangoverHide",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "hangoverHide",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "weaponDamage": "2",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach&mutation=pettyGrudge",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "playerMaxHealth": "5",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=secondDeath&reward=auditShield",
+      "dead": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "playerMaxHealth": "6",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "2",
+        "taxClerkAlive": "true",
+        "secondPathComplete": "false",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "deathBanner": "false",
+        "taxClerkAlive": "true",
+        "taxClerkHealth": "2",
+        "eliteAlive": "true",
+        "eliteHealth": "4",
+        "secondPathComplete": "false",
+        "weaponReach": "310",
+        "progressDeaths": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=secondBoss&reward=pikeReach",
+      "before": {
+        "scene": "SecondRunScene",
+        "secondPathComplete": "true",
+        "bossDoorVisible": "true",
+        "bossTransitionReady": "false",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "MiniBossScene",
+        "bossAlive": "true",
+        "bossVariant": "tollBaron",
+        "bossComplete": "false",
+        "v1SliceComplete": "false",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found",
+        "hudSkillText": "Skill: none",
+        "hudRouteText": "Route: toll baron",
+        "hudTargetText": "Target: Toll Baron 7",
+        "hitFeedbackCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=fullSlice -> key 5",
+      "shop": {
+        "scene": "RewardScene",
+        "shopChoices": "pikeReach,auditShield,spiteBelch,hangoverHide,pettyGrudge",
+        "rewardStub": "true",
+        "canvasCount": 1
+      },
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Tax Pike",
+        "shopChoice": "pettyGrudge",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hudSkillText": "Skill: none",
+        "hudRouteText": "Route: boss cleared",
+        "hudTargetText": "Target: Toll Baron 0",
+        "hitFeedbackCount": "4",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=rewardSkillBoss -> key 3",
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Tax Pike",
+        "shopChoice": "spiteBelch",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "none",
+        "skillChoice": "Spite Belch",
+        "currentSkill": "Spite Belch",
+        "skillUses": "2",
+        "skillHits": "2",
+        "weaponReach": "365",
+        "weaponDamage": "2",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hudRouteText": "Route: boss cleared",
+        "hudTargetText": "Target: Toll Baron 0",
+        "hitFeedbackCount": "6",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=boss -> Enter -> Act 2",
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Butcher Saber",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossSpecialCount": "2",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hitFeedbackCount": "4",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "SumpWarrensScene",
+        "currentWeapon": "Tax Pike",
+        "sumpLivingEnemies": "3",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated,act1_cleared",
+        "hudRouteText": "Route: sump warrens",
+        "hudTargetText": "Target: sump crew 3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=bossDeath",
+      "dead": {
+        "scene": "MiniBossScene",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "3",
+        "bossAlive": "true",
+        "bossSpecialCount": "3",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "MiniBossScene",
+        "playerAlive": "true",
+        "playerHealth": "5",
+        "deathBanner": "false",
+        "bossAlive": "true",
+        "bossHealth": "7",
+        "bossSpecialCount": "0",
+        "progressDeaths": "3",
+        "canvasCount": 1
+      }
+    }
+  ]
+}

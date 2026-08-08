@@ -61,7 +61,7 @@ export class PreloadScene extends Phaser.Scene {
       return;
     }
 
-    if (smoke === "sump") {
+    if (smoke === "sump" || smoke === "sumpDeath") {
       this.scene.start("SumpWarrensScene");
       this.scene.launch("UIScene");
       return;

@@ -1,4 +1,5 @@
 export type AudioCue =
+  | "dash"
   | "pickup"
   | "player-hit"
   | "enemy-hit"

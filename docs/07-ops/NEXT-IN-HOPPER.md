@@ -64,39 +64,22 @@ Prepare the accepted V1 candidate for handoff by triaging polish, packaging, rel
 - Update release/handoff docs.
 - `npm run smoke:all` passes.
 
-## 3. Sump Warrens Death / Restart Coverage
+## 3. Act 2 Closure Human Review And Next-Gate Decision
 
-**Status:** Active  
+**Status:** Ready for Marcus review
 **Priority:** P1  
-**Type:** App / Campaign / QA
+**Type:** Product / Campaign / Human gate
 
 ### Goal
 
-Add failure-state coverage for the new Act 2 chapter so it meets the same survivability bar as the existing second path and boss scenes.
+Play the technically green Act 1-to-Act-2 route and decide whether Foxman next expands the campaign or enters public-demo packaging.
 
 ### Acceptance Criteria
 
-- Add Sump Warrens player death/restart UI.
-- Add `smoke=sumpDeath` or equivalent browser route.
-- Verify enemies and player reset cleanly.
-- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
-
-## 4. Dash Feedback Polish
-
-**Status:** Active  
-**Priority:** P1  
-**Type:** App / Gameplay / VFX / QA
-
-### Goal
-
-Make the dash verb read with clearer impact and polish at browser scale.
-
-### Acceptance Criteria
-
-- Add dash trail/smear VFX that does not obscure combat readability.
-- Add a lightweight dash audio/cue hook through the existing audio bus.
-- Confirm dash remains smoke-proven and does not break manual opening, platform, combat, second-path, Sump Warrens, or boss routes.
-- Preserve `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`, and browser smoke.
+- Marcus plays Act 1 boss clear into Sump Warrens, dies, restarts with R or Enter, and continues.
+- Marcus reviews the 390px evidence without interpreting it as touch-control support.
+- Record an `accept`, `accept_with_conditions`, `revise`, or `park` decision.
+- If accepted, choose one next gate: public-demo packaging or the next bounded Act 2 content slice.
 
 # Blocked / Waiting
 
@@ -106,6 +89,8 @@ None right now.
 
 # Recently Moved Out
 
+- Sump Warrens death/restart coverage and full actor/UI/input reset completed on 2026-08-08.
+- Dash trail and audio-bus cue feedback completed on 2026-08-08 without changing movement mechanics.
 - Act 1 boss-clear-to-Act-2 handoff completed on 2026-07-08.
 - Full-game initiative and Act 2 Sump Warrens prototype completed on 2026-07-08.
 - Dash/dodge human-play feel pass completed on 2026-07-07.
