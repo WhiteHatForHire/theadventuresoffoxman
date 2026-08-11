@@ -4,6 +4,7 @@ import { PauseScene } from "./scenes/PauseScene";
 import { PreloadScene } from "./scenes/PreloadScene";
 import { MiniBossScene } from "./scenes/MiniBossScene";
 import { RewardScene } from "./scenes/RewardScene";
+import { RottenRunScene } from "./scenes/RottenRunScene";
 import { RunScene } from "./scenes/RunScene";
 import { SecondRunScene } from "./scenes/SecondRunScene";
 import { SumpWarrensScene } from "./scenes/SumpWarrensScene";
@@ -35,6 +36,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     BootScene,
     PreloadScene,
     TitleScene,
+    RottenRunScene,
     RunScene,
     UIScene,
     PauseScene,

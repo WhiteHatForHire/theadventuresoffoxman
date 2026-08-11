@@ -34,6 +34,85 @@ async function smokeTitlePause(browser) {
   return { route: "/", state };
 }
 
+async function smokeRottenRunContract(browser) {
+  const titlePage = await browser.open("/", { viewport: { width: 1366, height: 768 } });
+  await titlePage.waitForDataset("scene", "TitleScene");
+  await captureEvidence(titlePage, "rotten-mode-title-1366x768.png");
+  await titlePage.key("r");
+  await titlePage.waitForDataset("rottenScene", "RottenRunScene");
+  const titleEntry = await titlePage.dataset([
+    "scene",
+    "rottenScene",
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+  ]);
+  assertEqual(titleEntry.scene, "RottenRunScene", "Rotten Run title entry scene");
+  assertEqual(titleEntry.rottenPhase, "route-choice", "Rotten Run title entry phase");
+  if (!String(titleEntry.rottenSeed).startsWith("RR-")) {
+    throw new Error(`Rotten Run title entry did not freeze a visible RR seed: ${titleEntry.rottenSeed}`);
+  }
+  await titlePage.close();
+
+  const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenContract";
+  const page = await browser.open(route, { viewport: { width: 1366, height: 768 } });
+  await page.waitForDataset("rottenScene", "RottenRunScene");
+  const planned = await page.dataset([
+    "scene",
+    "rottenScene",
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenStage",
+    "rottenRouteOptions",
+    "rottenSelectedRoute",
+  ]);
+  assertEqual(planned.scene, "RottenRunScene", "Rotten Run seeded scene");
+  assertEqual(planned.rottenPhase, "route-choice", "Rotten Run initial phase");
+  assertEqual(planned.rottenSeed, "GAUNTLET-ALPHA", "Rotten Run normalized seed");
+  assertEqual(planned.rottenPlanId, "RR1-1C93B57F", "Rotten Run fixture plan ID");
+  assertEqual(planned.rottenStage, "1", "Rotten Run planned stage");
+  assertEqual(
+    planned.rottenRouteOptions,
+    "unfiled-alley|bailiffs-ramp",
+    "Rotten Run Stage 1 route cards",
+  );
+  assertEqual(planned.rottenSelectedRoute, "", "Rotten Run initial route selection");
+
+  const snapshot = await page.evaluate("window.__FOXMAN_ROTTEN__");
+  assertEqual(snapshot.scene, "RottenRunScene", "Rotten Run structured scene");
+  assertEqual(snapshot.seed, "GAUNTLET-ALPHA", "Rotten Run structured seed");
+  assertEqual(snapshot.stages, undefined, "Rotten Run snapshot stays scalar and bounded");
+  assertEqual(snapshot.routeOptions.length, 2, "Rotten Run structured route option count");
+
+  await page.key("2");
+  await page.waitForDataset("rottenPhase", "encounter");
+  await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
+  const selected = await page.dataset([
+    "scene",
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenStage",
+    "rottenRouteOptions",
+    "rottenSelectedRoute",
+    "rottenTraceDigest",
+  ]);
+  assertEqual(selected.rottenPhase, "encounter", "Rotten Run selected phase");
+  assertEqual(selected.rottenSelectedRoute, "bailiffs-ramp", "Rotten Run real 2-key selection");
+
+  const viewport = await page.evaluate(`({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })`);
+  assertEqual(String(viewport.width), "1366", "Rotten Run evidence viewport width");
+  assertEqual(String(viewport.height), "768", "Rotten Run evidence viewport height");
+  await captureEvidence(page, "rotten-contract-gauntlet-alpha-1366x768.png");
+  await page.close();
+
+  return { route: "/ -> R; seeded Rotten Run -> 2", titleEntry, planned, selected, viewport };
+}
+
 async function smokeFirstRoom(browser) {
   const page = await browser.open("/?smokeAuto=1&smoke=room");
   await page.waitForDataset("roomComplete", "true", 12000);
@@ -1348,6 +1427,8 @@ try {
   const results = [];
   if (process.env.FOXMAN_SMOKE_ONLY === "sumpDeath") {
     results.push(await smokeSumpDeathRestart(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenContract") {
+    results.push(await smokeRottenRunContract(browser));
   } else {
     results.push(await smokeTitlePause(browser));
     results.push(await smokeManualOpeningRoute(browser));
@@ -1372,6 +1453,7 @@ try {
     results.push(await smokeSkillBossRoute(browser));
     results.push(await smokeMiniBoss(browser));
     results.push(await smokeBossDeathRestart(browser));
+    results.push(await smokeRottenRunContract(browser));
   }
 
   const payload = { ok: true, results };

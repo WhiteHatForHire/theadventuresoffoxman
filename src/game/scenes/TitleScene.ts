@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { AssetKeys } from "../assets";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
+import { normalizeRottenSeed } from "../rotten/seed";
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -8,6 +9,8 @@ export class TitleScene extends Phaser.Scene {
   }
 
   create(): void {
+    const rottenSeed = normalizeRottenSeed(`RR-${Date.now().toString(36)}`);
+
     this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, AssetKeys.rottenBoroughMood)
       .setDisplaySize(GAME_WIDTH, GAME_HEIGHT)
       .setAlpha(0.76);
@@ -50,15 +53,25 @@ export class TitleScene extends Phaser.Scene {
       lineSpacing: 6,
     });
 
-    this.add.text(76, 595, "Press Enter or click to start", {
+    this.add.rectangle(330, 576, 520, 94, 0x161315, 0.82)
+      .setStrokeStyle(2, 0xa6d34a, 0.84);
+    this.add.text(76, 546, "CAMPAIGN  —  Enter or click", {
       fontFamily: "Menlo, Consolas, monospace",
       fontSize: "18px",
       color: "#a6d34a",
       stroke: "#161315",
       strokeThickness: 5,
     });
+    this.add.text(76, 582, `ROTTEN RUN  —  R   seed ${rottenSeed}`, {
+      fontFamily: "Menlo, Consolas, monospace",
+      fontSize: "16px",
+      color: "#f0c66f",
+      stroke: "#161315",
+      strokeThickness: 5,
+    });
 
     this.input.keyboard?.once("keydown-ENTER", () => this.startRun());
+    this.input.keyboard?.once("keydown-R", () => this.startRottenRun(rottenSeed));
     this.input.once("pointerdown", () => this.startRun());
 
     document.body.dataset.scene = "TitleScene";
@@ -67,5 +80,9 @@ export class TitleScene extends Phaser.Scene {
   private startRun(): void {
     this.scene.start("RunScene");
     this.scene.launch("UIScene");
+  }
+
+  private startRottenRun(seed: string): void {
+    this.scene.start("RottenRunScene", { seed });
   }
 }

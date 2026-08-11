@@ -49,6 +49,12 @@ export class PreloadScene extends Phaser.Scene {
 
   create(): void {
     const smoke = smokeParam();
+    const mode = new URLSearchParams(window.location.search).get("mode");
+
+    if (mode === "rotten" || smoke === "rottenContract") {
+      this.scene.start("RottenRunScene");
+      return;
+    }
 
     if (smoke === "reward" || smoke === "rewardSkill" || smoke === "rewardSkillBoss") {
       this.scene.start("RewardScene");

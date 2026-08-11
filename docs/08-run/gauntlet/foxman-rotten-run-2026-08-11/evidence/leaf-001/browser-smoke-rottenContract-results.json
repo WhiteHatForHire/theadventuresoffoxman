@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "/ -> R; seeded Rotten Run -> 2",
+      "titleEntry": {
+        "scene": "RottenRunScene",
+        "rottenScene": "RottenRunScene",
+        "rottenPhase": "route-choice",
+        "rottenSeed": "RR-MSO6B7TH",
+        "rottenPlanId": "RR1-487D8EF3",
+        "canvasCount": 1
+      },
+      "planned": {
+        "scene": "RottenRunScene",
+        "rottenScene": "RottenRunScene",
+        "rottenPhase": "route-choice",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenStage": "1",
+        "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+        "rottenSelectedRoute": "",
+        "canvasCount": 1
+      },
+      "selected": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "encounter",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenStage": "1",
+        "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenTraceDigest": "37B47681",
+        "canvasCount": 1
+      },
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    }
+  ]
+}

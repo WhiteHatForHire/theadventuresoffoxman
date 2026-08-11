@@ -15,6 +15,7 @@ declare global {
     __FOXMAN_RESTART_BOSS__?: () => void;
     __FOXMAN_RESTART_SECOND__?: () => void;
     __FOXMAN_RESTART_SUMP__?: () => void;
+    __FOXMAN_ROTTEN__?: import("./game/rotten/state").RottenRunDebugSnapshot;
   }
 }
 
