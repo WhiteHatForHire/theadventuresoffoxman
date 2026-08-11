@@ -21,6 +21,10 @@ export type PlayerDebugState = {
   dashCount: number;
 };
 
+export interface PlayerMotorConfig {
+  readonly dashCooldownMs?: number;
+}
+
 export class PlayerMotor {
   private lastGroundedAt = 0;
   private jumpBufferedAt = -Infinity;
@@ -32,7 +36,13 @@ export class PlayerMotor {
   private state: PlayerMovementState = "idle";
   private wasGrounded = false;
 
-  constructor(private readonly body: Phaser.Physics.Arcade.Body) {
+  private readonly dashCooldownMs: number;
+
+  constructor(
+    private readonly body: Phaser.Physics.Arcade.Body,
+    config: PlayerMotorConfig = {},
+  ) {
+    this.dashCooldownMs = config.dashCooldownMs ?? playerMovement.dashCooldownMs;
     this.body.setMaxVelocity(playerMovement.maxRunSpeed, 1200);
     this.body.setDragX(playerMovement.drag);
     this.body.setGravityY(playerMovement.gravityY);
@@ -62,7 +72,7 @@ export class PlayerMotor {
 
     if (input.dashPressed && canDash) {
       this.dashUntil = time + playerMovement.dashDurationMs;
-      this.nextDashAt = time + playerMovement.dashCooldownMs;
+      this.nextDashAt = time + this.dashCooldownMs;
       this.airDashAvailable = false;
       this.dashCount += 1;
       this.jumpBufferedAt = -Infinity;

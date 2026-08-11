@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "task": "LEAF-004",
+  "revision": "REVISION-01",
+  "recordedAt": "2026-08-12T01:59:48+0800",
+  "disposition": "BUILDER_VALIDATION_PASS_AWAITING_FRESH_CRITIC",
+  "selfAccepted": false,
+  "blocker": null,
+  "repository": "/Users/marcusvale/Documents/coding/marcusbrainhq/repos/theadventuresoffoxman",
+  "control": {
+    "head": "126c986774a6e7a39408ddf7c4afbe33d2ed818d",
+    "originMain": "126c986774a6e7a39408ddf7c4afbe33d2ed818d",
+    "acceptedRuntimeProductParent": "7cef4b039c401890ac24fb1a8a27800aa6bb18f7"
+  },
+  "scope": {
+    "authorizedRepoFiles": [
+      "tests/smoke/check-browser-routes.mjs"
+    ],
+    "changedRepoFiles": [
+      "tests/smoke/check-browser-routes.mjs"
+    ],
+    "productRuntimeUnitControlOpsFilesChangedByRevision": [],
+    "nonHarnessCandidateFilesByteIdenticalToCriticSnapshot": 13,
+    "commits": 0,
+    "pushes": 0,
+    "deploys": 0,
+    "packageChanges": 0,
+    "subagents": 0
+  },
+  "patch": {
+    "beforeFileSha256": "d1e5539b6098580aea800a18f8cf9dd3ce2fd2590cb2e1bd6659dce684c04bd0",
+    "afterFileSha256": "7ca1ca8e3bf14e4d9235470e48e1e928181d49e6156dc6c8e1340b331bb0ab3f",
+    "addedLines": 562,
+    "deletedLines": 40,
+    "canonicalRevisionUnifiedDiffSha256": "9b8c9b3337c697cdc77fba1bafc01739e1ccedbf118ff21773a78a67f44d520c",
+    "fullHeadToCurrentHarnessPatchSha256": "edd5aa32420d1236575868e3f0fed6e46498250041d46d5f021f411dfd01bf87"
+  },
+  "repair": {
+    "idempotentActualTargetClose": true,
+    "targetDisappearanceVerified": true,
+    "boundedHttpCloseFallback": true,
+    "pendingCallsRejectedOnSocketCloseOrError": true,
+    "timeoutsMs": {
+      "defaultCdpSend": 12000,
+      "navigation": 15000,
+      "screenshot": 15000,
+      "targetClose": 5000,
+      "devtoolsHttp": 5000
+    },
+    "timeoutContext": [
+      "method",
+      "targetId",
+      "requestedRoute",
+      "currentUrl",
+      "lastKnownDomOrPhase"
+    ],
+    "perRouteTargetProgress": true,
+    "rawKeyTransportChanged": false,
+    "existingProductRoutesOrAssertionsChanged": false,
+    "independentIsolationAssertionAdded": true
+  },
+  "lifecycle": {
+    "before": {
+      "classification": "EXPECTED_RED",
+      "cycles": 6,
+      "baselinePageTargets": 1,
+      "afterClosePageTargets": [2, 3, 4, 5, 6, 7],
+      "closedTargetsStillPresent": 6,
+      "finalPageTargets": 7,
+      "growth": 6,
+      "evidence": "lifecycle-expected-red.json",
+      "sha256": "5b792e3e9841015283502895438c57571c146df142e5ef232ee706f6f0889195"
+    },
+    "after": {
+      "result": "PASS",
+      "attempt": 1,
+      "cycles": 40,
+      "baselinePageTargets": 1,
+      "everyOpenedPageTargets": 2,
+      "everyClosedPageTargets": 1,
+      "maxLeakedTestPages": 0,
+      "finalPageTargets": 1,
+      "finalTestPageTargets": 0,
+      "elapsedMs": 24431,
+      "progressRecords": 123,
+      "evidence": "lifecycle-after/browser-smoke-cdpLifecycle-results.json",
+      "sha256": "cd260d72ae9bbced96dd44b504a64e94d12f8fb5fd5aeefb661c8bdfdafa6b15"
+    }
+  },
+  "isolation": {
+    "literalDomPhaseAssertionRetained": true,
+    "independentTransitionLedger": [
+      {"key": "3", "before": "loadout", "after": "loadout", "effect": "weapon-selected"},
+      {"key": "6", "before": "loadout", "after": "loadout", "effect": "skill-selected"},
+      {"key": "Enter", "before": "loadout", "after": "route-choice"},
+      {"key": "2", "before": "route-choice", "after": "encounter"}
+    ],
+    "noSmokeAutoMaximumCounts": {
+      "weaponAttacks": 0,
+      "weaponHits": 0,
+      "skillUses": 0,
+      "skillHits": 0
+    }
+  },
+  "focusedFirstAttempts": [
+    {"gate": "node --check tests/smoke/check-browser-routes.mjs", "attempt": 1, "result": "PASS"},
+    {"gate": "git diff --check", "attempt": 1, "result": "PASS"},
+    {"gate": "cdpLifecycle", "attempt": 1, "result": "PASS", "elapsedMs": 24431, "sha256": "cd260d72ae9bbced96dd44b504a64e94d12f8fb5fd5aeefb661c8bdfdafa6b15"},
+    {"gate": "rottenIsolation", "attempt": 1, "result": "PASS", "elapsedMs": 7732, "sha256": "94a3f54259840c4e48d3be264af9970db1e4c5a48e050144ddf95b92135dc550"},
+    {"gate": "rottenContract", "attempt": 1, "result": "PASS", "elapsedMs": 3378, "sha256": "336a00937aa71202f0f2776a27a1f074ed4da83eeab9fe6248a1cd6ade4d5f68"},
+    {"gate": "rottenEnemyCycle", "attempt": 1, "result": "PASS", "elapsedMs": 11867, "sha256": "1d1de62814b67aa4fc1f33a71b2bdae1fd2dc94b5ad3837832e637102de0f14f"},
+    {"gate": "rottenEncounter", "attempt": 1, "result": "PASS", "elapsedMs": 42838, "sha256": "6ddefca00f1ffa315fd1c20ec4b6764454b00d7e6e6916449fd28be51a26108f"},
+    {"gate": "rottenStageTwoRoles", "attempt": 1, "result": "PASS", "elapsedMs": 57463, "sha256": "c66cc8be924d3fc04f617ce260dbe15bcfa1330edf6b85abecc85289f2fb2042"},
+    {"gate": "npm test", "attempt": 1, "result": "PASS", "tests": 54, "files": 5},
+    {"gate": "npm run typecheck", "attempt": 1, "result": "PASS"},
+    {"gate": "npm run build", "attempt": 1, "result": "PASS", "modules": 53},
+    {"gate": "npm run smoke", "attempt": 1, "result": "PASS", "surface": "dist"}
+  ],
+  "unfilteredMatrix": {
+    "command": "npm run smoke:browser",
+    "attempts": 1,
+    "retried": false,
+    "result": "PASS",
+    "ok": true,
+    "routeResultCount": 34,
+    "routeResultTotal": 34,
+    "elapsedMs": 500037,
+    "progressRecords": 174,
+    "targetOpenStarts": 57,
+    "targetOpenReady": 57,
+    "verifiedTargetCloses": 57,
+    "everyOpenedPageTargetCount": 2,
+    "everyClosedPageTargetCount": 1,
+    "finalPageTargetCount": 1,
+    "finalTestPageTargetCount": 0,
+    "evidence": "final-unfiltered/browser-smoke-results.json",
+    "sha256": "3c43f992fcbdcb6ecd0bf72852b025fe6a58c39e485e31a57b65df8de2660790",
+    "visuals": {
+      "count": 52,
+      "sortedContentManifestSha256": "63d18a309f9bbca0d761def0e9e15062962859ab1357330bd2b752f4b3a3097c"
+    }
+  },
+  "failures": {
+    "expectedRedObserved": true,
+    "postFixDeterministic": [],
+    "timeoutsTriggered": 0,
+    "note": "No timeout was forced; all real post-fix gates completed within the newly bounded calls."
+  },
+  "cleanup": {
+    "survivingFoxmanPreviewHarnessOrChromeProcesses": 0,
+    "exactOwnedTemporaryProfilesDeleted": [
+      "foxman-chrome-NMZgyR",
+      "foxman-chrome-jKbbpw"
+    ],
+    "temporaryProfileDeletionRecoverable": false,
+    "unrelatedProcessesOrProfilesTouched": false
+  },
+  "recommendedFreshBlindCriticRoute": "Inspect the one-file revision diff and lifecycle before/after evidence, verify the independent isolation transition ledger, then audit the sole unfiltered JSON/progress/visual evidence and decide acceptance without treating the builder receipt as acceptance or rerunning merely to manufacture another green result."
+}

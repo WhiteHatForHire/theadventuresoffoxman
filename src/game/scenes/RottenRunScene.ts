@@ -3,13 +3,15 @@ import { AssetKeys } from "../assets";
 import { Player } from "../entities/Player";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
 import { InputMapper, type InputSnapshot } from "../input/InputMapper";
-import { addPaintedPlatform } from "../levels/PaintedPlatform";
 import { smokeAutoEnabled, smokeParam } from "../smoke";
+import { deriveRottenCombatBuild, type RottenCombatBuild } from "../rotten/build";
 import {
   RottenCombatController,
+  type RottenCombatAutomationProfile,
   type RottenCombatDebugState,
 } from "../rotten/RottenCombatController";
 import { hashDeterministicText } from "../rotten/deterministic";
+import { getRottenEncounterSpec, type RottenEncounterSpec, type RottenEliteVariant } from "../rotten/encounters";
 import {
   ROTTEN_SKILLS,
   ROTTEN_SKILL_ORDER,
@@ -19,9 +21,9 @@ import {
   type RottenWeaponId,
 } from "../rotten/loadout";
 import {
-  applyStageOneRewardInput,
+  applyRottenRewardInput,
   createRottenRunBaseline,
-  createStageOneRewardMarket,
+  createRottenRewardMarket,
   describeRottenMarketChoice,
   retryRottenRunSameSeed,
   ROTTEN_MARKET_HEAL_COST,
@@ -32,7 +34,11 @@ import { buildRottenRunPlan, type RottenRunPlan } from "../rotten/plan";
 import type { RottenRouteDefinition } from "../rotten/routes";
 import type { RottenRunDebugSnapshot, RottenRunPhase } from "../rotten/state";
 import { ROTTEN_UPGRADES, type RottenUpgradeOffer } from "../rotten/upgrades";
-import { STAGE_ONE_ARENA_LAYOUT, STAGE_ONE_WAVES, type StageOneRouteId } from "../rotten/waves";
+import {
+  createRottenArenaPresentation,
+  renderRottenMarketPresentation,
+  renderRottenRoutePresentation,
+} from "./rotten/RottenRunPresentation";
 
 interface RottenRunSceneData {
   seed?: string;
@@ -62,18 +68,22 @@ export class RottenRunScene extends Phaser.Scene {
   private phase: RottenRunPhase = "loadout";
   private compatibilityMode = false;
   private encounterSmoke = false;
+  private combatAutomationProfile: RottenCombatAutomationProfile = "clear";
   private marketHealSmoke = false;
   private marketHealAutomationArmed = false;
   private poorMarketSmoke = false;
+  private stageTwoDeathSmoke = false;
   private reacquisitionSmoke = false;
   private reacquisitionSmokeStage = 0;
   private selectedWeapon: RottenWeaponId | null = null;
   private selectedSkill: RottenSkillId | null = null;
   private selectedRoute: RottenRouteDefinition | null = null;
+  private selectedEncounter?: RottenEncounterSpec;
   private offers: readonly RottenUpgradeOffer[] = [];
   private pureState?: RottenPureRunState;
   private graft = 3;
   private wave: 0 | 1 | 2 = 0;
+  private stageWavesCleared = 0;
   private wavesCleared = 0;
   private readonly spawnHistory: string[] = [];
   private readonly trace: string[] = [];
@@ -82,6 +92,7 @@ export class RottenRunScene extends Phaser.Scene {
   private platforms?: Phaser.Physics.Arcade.StaticGroup;
   private encounterPresentationObjects: Phaser.GameObjects.GameObject[] = [];
   private combat?: RottenCombatController;
+  private combatBuild?: RottenCombatBuild;
   private lastCombatDebug?: RottenCombatDebugState;
   private encounterStartedAt = 0;
   private elapsedActiveMilliseconds = 0;
@@ -93,6 +104,9 @@ export class RottenRunScene extends Phaser.Scene {
   private inputLockedUntil = 0;
   private rewardFeedback = "";
   private rewardFeedbackReason: "" | RottenRewardDecisionResult["reason"] = "";
+  private eliteBountyGraft = 0;
+  private readonly defeatedEliteVariants: RottenEliteVariant[] = [];
+  private readonly keyboardBindings: Array<{ event: string; handler: () => void }> = [];
 
   constructor() {
     super("RottenRunScene");
@@ -103,18 +117,22 @@ export class RottenRunScene extends Phaser.Scene {
     this.phase = "loadout";
     this.compatibilityMode = false;
     this.encounterSmoke = false;
+    this.combatAutomationProfile = "clear";
     this.marketHealSmoke = false;
     this.marketHealAutomationArmed = false;
     this.poorMarketSmoke = false;
+    this.stageTwoDeathSmoke = false;
     this.reacquisitionSmoke = false;
     this.reacquisitionSmokeStage = 0;
     this.selectedWeapon = null;
     this.selectedSkill = null;
     this.selectedRoute = null;
+    this.selectedEncounter = undefined;
     this.offers = [];
     this.pureState = undefined;
     this.graft = 3;
     this.wave = 0;
+    this.stageWavesCleared = 0;
     this.wavesCleared = 0;
     this.spawnHistory.length = 0;
     this.trace.length = 0;
@@ -123,6 +141,7 @@ export class RottenRunScene extends Phaser.Scene {
     this.platforms = undefined;
     this.encounterPresentationObjects = [];
     this.combat = undefined;
+    this.combatBuild = undefined;
     this.lastCombatDebug = undefined;
     this.encounterStartedAt = 0;
     this.elapsedActiveMilliseconds = 0;
@@ -134,6 +153,9 @@ export class RottenRunScene extends Phaser.Scene {
     this.inputLockedUntil = 0;
     this.rewardFeedback = "";
     this.rewardFeedbackReason = "";
+    this.eliteBountyGraft = 0;
+    this.defeatedEliteVariants.length = 0;
+    this.keyboardBindings.length = 0;
   }
 
   create(): void {
@@ -143,9 +165,16 @@ export class RottenRunScene extends Phaser.Scene {
     this.encounterSmoke = smoke === "rottenEncounter"
       || smoke === "rottenMarket"
       || smoke === "rottenMarketHeal"
-      || smoke === "rottenMarketPoor";
+      || smoke === "rottenMarketPoor"
+      || smoke?.startsWith("rottenStageTwo") === true;
+    this.combatAutomationProfile = smoke === "rottenStageTwoRoles"
+      ? "role-proof"
+      : smoke === "rottenStageTwoBuilds"
+        ? "build-proof"
+        : "clear";
     this.marketHealSmoke = smoke === "rottenMarketHeal";
     this.poorMarketSmoke = smoke === "rottenMarketPoor";
+    this.stageTwoDeathSmoke = smoke === "rottenStageTwoRetry";
     this.reacquisitionSmoke = smoke === "rottenReacquire";
     this.plan = buildRottenRunPlan(this.incomingSeed ?? query.get("seed") ?? undefined);
     this.pureState = createRottenRunBaseline(this.plan);
@@ -157,7 +186,7 @@ export class RottenRunScene extends Phaser.Scene {
 
     if (this.compatibilityMode) {
       this.phase = "route-choice";
-      this.renderRouteChoice(true);
+      this.renderCurrentRouteDocket(true);
     } else {
       this.renderLoadout();
     }
@@ -170,7 +199,9 @@ export class RottenRunScene extends Phaser.Scene {
     }
 
     const input = this.encounterSmoke
-      ? this.marketHealSmoke && !this.marketHealAutomationArmed
+      ? this.stageTwoDeathSmoke && this.selectedEncounter?.stage === 2
+        ? ROTTEN_NEUTRAL_INPUT
+        : this.marketHealSmoke && !this.marketHealAutomationArmed
         ? ROTTEN_NEUTRAL_INPUT
         : this.combat.automatedInput(time)
       : this.inputMapper.snapshot();
@@ -223,10 +254,11 @@ export class RottenRunScene extends Phaser.Scene {
   private createKeyboardBindings(): void {
     const keyNames = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN"];
     keyNames.forEach((keyName, index) => {
-      this.input.keyboard?.on(`keydown-${keyName}`, () => this.handleNumber(index + 1));
+      this.bindKeyboard(`keydown-${keyName}`, () => this.handleNumber(index + 1));
     });
-    this.input.keyboard?.on("keydown-ENTER", () => this.confirmLoadout());
-    this.input.keyboard?.on("keyup-R", () => this.retrySameSeed());
+    this.bindKeyboard("keydown-ENTER", () => this.confirmLoadout());
+    this.bindKeyboard("keyup-R", () => this.retrySameSeed());
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdownSceneRuntime, this);
   }
 
   private handleNumber(number: number): void {
@@ -254,7 +286,7 @@ export class RottenRunScene extends Phaser.Scene {
 
     if (
       this.phase === "route-choice"
-      && (this.pureState?.stage ?? 1) === 1
+      && ((this.pureState?.stage ?? 1) === 1 || this.pureState?.stage === 2)
       && (number === 1 || number === 2)
     ) {
       if (this.compatibilityMode) {
@@ -271,7 +303,7 @@ export class RottenRunScene extends Phaser.Scene {
     }
     this.trace.push("loadout:confirmed");
     this.phase = "route-choice";
-    this.renderRouteChoice(false);
+    this.renderCurrentRouteDocket(false);
     this.publishSnapshot();
   }
 
@@ -343,70 +375,29 @@ export class RottenRunScene extends Phaser.Scene {
     }));
   }
 
-  private renderRouteChoice(compatibility: boolean): void {
+  private renderCurrentRouteDocket(compatibility: boolean): void {
     this.clearPhaseUi();
-    const firstStage = this.plan.stages[0];
-    this.track(this.add.text(48, 110, `STAGE 1 — ${firstStage.name.toUpperCase()}`, {
-      fontFamily: "Georgia, serif",
-      fontSize: "28px",
-      color: "#f2e7bc",
-      stroke: "#161315",
-      strokeThickness: 5,
-    }));
-    this.track(this.add.text(48, 150, compatibility
-      ? "Compatibility docket: choose either frozen route with 1 or 2."
-      : `LOADOUT  ${ROTTEN_WEAPONS[this.selectedWeapon!].name.toUpperCase()} + ${ROTTEN_SKILLS[this.selectedSkill!].name.toUpperCase()}  •  CHOOSE 1 OR 2`, {
-      fontFamily: "Menlo, Consolas, monospace",
-      fontSize: "15px",
-      color: "#d4b879",
-    }));
-
-    firstStage.options.forEach((route, index) => {
-      const y = 195 + index * 166;
-      this.track(this.add.rectangle(48, y, 622, 140, 0x251d1c, 0.95)
-        .setOrigin(0, 0)
-        .setStrokeStyle(3, index === 0 ? palette.gold : palette.rust, 0.9));
-      this.track(this.add.text(68, y + 16, `[${index + 1}] ${route.name.toUpperCase()}`, {
-        fontFamily: "Georgia, serif",
-        fontSize: "23px",
-        color: "#f2e7bc",
-      }));
-      const waves = STAGE_ONE_WAVES[route.id as StageOneRouteId];
-      this.track(this.add.text(68, y + 52,
-        `${route.encounterSummary}\nW1 ${waves[0].join(" + ")}  •  W2 ${waves[1].join(" + ")}\n${route.graftReward} GRAFT  •  ${route.marketBias.toUpperCase()} MARKET`, {
-          fontFamily: "Menlo, Consolas, monospace",
-          fontSize: "13px",
-          color: "#d8c89b",
-          lineSpacing: 5,
-        }));
-    });
-
-    this.track(this.add.rectangle(950, 377, 526, 378, 0x171719, 0.91)
-      .setStrokeStyle(2, palette.gold, 0.62));
-    this.track(this.add.text(714, 204, "FROZEN ROUTE PLAN", {
-      fontFamily: "Georgia, serif",
-      fontSize: "22px",
-      color: "#e4d6a2",
-    }));
-    this.plan.stages.slice(1).forEach((stage, index) => {
-      const y = 250 + index * 128;
-      this.track(this.add.text(714, y, `STAGE ${stage.stage} — ${stage.name.toUpperCase()}`, {
-        fontFamily: "Menlo, Consolas, monospace",
-        fontSize: "15px",
-        color: index === 0 ? "#d59776" : "#a6d34a",
-      }));
-      this.track(this.add.text(714, y + 31, stage.options.map((route) => `• ${route.name}`).join("\n"), {
-        fontFamily: "Inter, system-ui, sans-serif",
-        fontSize: "17px",
-        color: "#f2e7bc",
-        lineSpacing: 7,
-      }));
-    });
-    this.track(this.add.text(714, 510, "FINAL BOSS\nCommissioner of Consequences", {
-      fontFamily: "Georgia, serif",
-      fontSize: "19px",
-      color: "#f0c66f",
-      lineSpacing: 6,
+    const stageNumber = this.pureState?.stage ?? 1;
+    const stage = this.plan.stages.find((candidate) => candidate.stage === stageNumber);
+    if (!stage) {
+      throw new Error(`Rotten plan is missing Stage ${stageNumber}.`);
+    }
+    const operative = stageNumber <= 2;
+    const specs = stage.options.map((route) =>
+      operative ? getRottenEncounterSpec(this.plan.seed, route.id) : null
+    ) as [RottenEncounterSpec | null, RottenEncounterSpec | null];
+    const carriedSummary = compatibility
+      ? undefined
+      : stageNumber === 1
+        ? `LOADOUT  ${ROTTEN_WEAPONS[this.selectedWeapon!].name.toUpperCase()} + ${ROTTEN_SKILLS[this.selectedSkill!].name.toUpperCase()}`
+        : this.describeCarriedDocket();
+    this.phaseObjects.push(...renderRottenRoutePresentation(this, {
+      stage,
+      specs,
+      compatibility,
+      operative,
+      carriedSummary,
+      feedback: stageNumber > 1 ? this.rewardFeedback : undefined,
     }));
   }
 
@@ -428,44 +419,67 @@ export class RottenRunScene extends Phaser.Scene {
     if (!this.selectedWeapon || !this.selectedSkill) {
       return;
     }
-    this.selectedRoute = this.plan.stages[0].options[index];
-    this.trace.push(`route:${this.selectedRoute.id}`);
+    const stageNumber = this.pureState?.stage ?? 1;
+    if (stageNumber > 2) {
+      return;
+    }
+    const stage = this.plan.stages.find((candidate) => candidate.stage === stageNumber);
+    if (!stage) {
+      throw new Error(`Rotten plan is missing Stage ${stageNumber}.`);
+    }
+    this.selectedRoute = stage.options[index];
+    this.selectedEncounter = getRottenEncounterSpec(this.plan.seed, this.selectedRoute.id);
+    this.trace.push(`route:${stageNumber}:${this.selectedRoute.id}`);
     this.startEncounter();
   }
 
   private startEncounter(): void {
+    if (!this.selectedEncounter || !this.selectedWeapon || !this.selectedSkill) {
+      return;
+    }
     this.phase = "encounter";
     this.marketHealAutomationArmed = false;
     this.clearPhaseUi();
-    this.encounterPresentationObjects.push(
-      this.add.rectangle(GAME_WIDTH / 2, 646, GAME_WIDTH, 148, 0x09080a, 0.44).setDepth(0.4),
-    );
-    this.platforms = this.physics.add.staticGroup();
-    this.addEncounterPlatform(
-      GAME_WIDTH / 2,
-      STAGE_ONE_ARENA_LAYOUT.floorCenterY,
-      GAME_WIDTH,
-      STAGE_ONE_ARENA_LAYOUT.floorHeight,
-      { accent: "brass" },
-    );
-    this.addEncounterPlatform(690, 490, 300, 32, { accent: "audit", oneWay: true });
+    const arena = createRottenArenaPresentation(this, this.selectedEncounter);
+    this.platforms = arena.platforms;
+    this.encounterPresentationObjects.push(...arena.objects);
 
     this.inputMapper = new InputMapper(this);
-    const player = new Player(this, 200, 500, 6).setDepth(10);
+    const carriedHealth = this.selectedEncounter.stage === 1
+      ? { current: 6, max: 6 }
+      : this.pureState?.health;
+    if (!carriedHealth) {
+      throw new Error("A later Rotten encounter requires carried health.");
+    }
+    this.combatBuild = deriveRottenCombatBuild(
+      this.pureState?.upgrades ?? [],
+      this.selectedWeapon,
+      this.selectedSkill,
+    );
+    const player = new Player(this, 200, 500, carriedHealth.max, {
+      currentHealth: carriedHealth.current,
+      movement: { dashCooldownMs: this.combatBuild.dash.cooldownMs },
+    }).setDepth(10);
     this.combat = new RottenCombatController(
       this,
       player,
       this.platforms,
-      this.selectedWeapon!,
-      this.selectedSkill!,
-      STAGE_ONE_ARENA_LAYOUT.maxFloorBodyBottom,
+      this.combatBuild,
+      arena.maxFloorBodyBottom,
       {
         onWaveCleared: () => this.handleWaveCleared(),
         onPlayerDead: () => this.enterDeadState(),
+        onEliteDefeated: (variant, graft) => {
+          this.eliteBountyGraft += graft;
+          this.graft += graft;
+          this.defeatedEliteVariants.push(variant);
+        },
         onTrace: (event) => this.trace.push(event),
       },
+      this.combatAutomationProfile,
     );
     this.encounterStartedAt = this.time.now;
+    this.stageWavesCleared = 0;
     this.wave = 1;
     this.spawnWave(1);
     if (this.reacquisitionSmoke && this.selectedRoute?.id === "unfiled-alley") {
@@ -505,12 +519,14 @@ export class RottenRunScene extends Phaser.Scene {
   }
 
   private spawnWave(wave: 1 | 2): void {
-    if (!this.combat || !this.selectedRoute) {
+    if (!this.combat || !this.selectedRoute || !this.selectedEncounter) {
       return;
     }
-    const roles = STAGE_ONE_WAVES[this.selectedRoute.id as StageOneRouteId][wave - 1];
-    this.spawnHistory.push(`${wave}:${roles.join(",")}`);
-    this.combat.spawnWave(roles, wave);
+    const spawns = this.selectedEncounter.waves[wave - 1];
+    const roles = spawns.map(({ roleId }) => roleId);
+    const waveKey = this.selectedEncounter.stage === 1 ? String(wave) : `2.${wave}`;
+    this.spawnHistory.push(`${waveKey}:${roles.join(",")}`);
+    this.combat.spawnWave(spawns, wave);
     this.wave = wave;
     this.interwave = false;
     this.publishSnapshot();
@@ -521,10 +537,14 @@ export class RottenRunScene extends Phaser.Scene {
       return;
     }
     this.wavesCleared += 1;
-    this.trace.push(`wave-${this.wave}:cleared`);
+    this.stageWavesCleared += 1;
+    this.lastCombatDebug = this.combat?.debugState(this.time.now);
+    this.trace.push(`wave-${this.selectedEncounter?.stage ?? 1}.${this.wave}:cleared`);
     this.interwave = true;
     this.interwaveText = this.track(this.add.text(GAME_WIDTH / 2, 310,
-      this.wave === 1 ? "WAVE 1 CLEARED\nNEXT DOCKET INCOMING" : "STAGE 1 CLEARED\nREWARD DOCKET OPENING", {
+      this.wave === 1
+        ? `STAGE ${this.selectedEncounter?.stage ?? 1} WAVE 1 CLEARED\nNEXT DOCKET INCOMING`
+        : `STAGE ${this.selectedEncounter?.stage ?? 1} CLEARED\nREWARD DOCKET OPENING`, {
         fontFamily: "Georgia, serif",
         fontSize: "34px",
         color: "#a6d34a",
@@ -553,16 +573,19 @@ export class RottenRunScene extends Phaser.Scene {
       return;
     }
     if (this.combat) {
-      this.lastCombatDebug = this.combat.debugState(this.time.now);
-      this.combat.destroy();
+      this.lastCombatDebug = this.combat.destroy();
       this.combat = undefined;
     }
     this.destroyEncounterPresentation();
+    const clearedStage = this.selectedEncounter?.stage;
+    if (clearedStage !== 1 && clearedStage !== 2) {
+      throw new Error("A Rotten reward requires a completed operative stage.");
+    }
     this.graft += this.selectedRoute.graftReward;
-    if (this.poorMarketSmoke) {
+    if (this.poorMarketSmoke && clearedStage === 1) {
       this.graft = 4;
     }
-    this.trace.push(`graft:+${this.selectedRoute.graftReward}`);
+    this.trace.push(`graft:stage-${clearedStage}:+${this.selectedRoute.graftReward}`);
     const carriedHealth = this.lastCombatDebug
       ? {
         current: this.lastCombatDebug.playerHealth,
@@ -570,16 +593,18 @@ export class RottenRunScene extends Phaser.Scene {
       }
       : null;
     if (!this.selectedWeapon || !this.selectedSkill || !carriedHealth) {
-      throw new Error("Stage 1 reward requires carried loadout and health state.");
+      throw new Error(`Stage ${clearedStage} reward requires carried loadout and health state.`);
     }
-    this.pureState = createStageOneRewardMarket({
+    this.pureState = createRottenRewardMarket({
       plan: this.plan,
-      routeId: this.selectedRoute.id as StageOneRouteId,
+      stage: clearedStage,
+      routeId: this.selectedRoute.id,
       weapon: this.selectedWeapon,
       skill: this.selectedSkill,
       health: carriedHealth,
       graft: this.graft,
       ownedUpgrades: this.pureState?.upgrades ?? [],
+      routeHistory: this.pureState?.routeHistory ?? [],
       trace: this.trace,
     });
     this.offers = this.pureState.market?.offers ?? [];
@@ -598,7 +623,7 @@ export class RottenRunScene extends Phaser.Scene {
     if (!this.pureState) {
       return;
     }
-    const result = applyStageOneRewardInput(this.pureState, number);
+    const result = applyRottenRewardInput(this.pureState, number);
     this.rewardFeedback = result.feedback;
     this.rewardFeedbackReason = result.reason;
     if (!result.accepted) {
@@ -614,146 +639,44 @@ export class RottenRunScene extends Phaser.Scene {
     this.trace.length = 0;
     this.trace.push(...result.state.trace);
     this.selectedRoute = null;
-    this.renderStageTwoDocket();
+    this.selectedEncounter = undefined;
+    this.combatBuild = undefined;
+    this.renderCurrentRouteDocket(false);
     this.publishSnapshot();
   }
 
   private renderRewardChoice(): void {
     this.clearPhaseUi();
-    this.track(this.add.rectangle(GAME_WIDTH / 2, 398, 1_190, 540, 0x171719, 0.94)
-      .setStrokeStyle(3, palette.gold, 0.8)
-      .setDepth(35));
-    this.track(this.add.text(70, 116, "STAGE 1 CLEARED — REWARD DOCKET", {
-      fontFamily: "Georgia, serif",
-      fontSize: "29px",
-      color: "#a6d34a",
-      stroke: "#161315",
-      strokeThickness: 6,
-    }).setDepth(42));
-    this.track(this.add.text(70, 160,
-      `${this.selectedRoute!.name.toUpperCase()} PAID ${this.selectedRoute!.graftReward} GRAFT  •  PURSE ${this.graft}`, {
-        fontFamily: "Menlo, Consolas, monospace",
-        fontSize: "15px",
-        color: "#f0c66f",
-      }).setDepth(42));
-
-    this.offers.forEach((offer, index) => {
-      const x = 70 + index * 390;
-      this.track(this.add.rectangle(x, 215, 360, 260, offer.affordable ? 0x24301d : 0x2a2020, 0.98)
-        .setOrigin(0, 0)
-        .setStrokeStyle(3, offer.affordable ? palette.bile : palette.rust, 0.9)
-        .setDepth(40));
-      this.track(this.add.text(x + 18, 235, `[${index + 1}] ${offer.name.toUpperCase()}`, {
-        fontFamily: "Georgia, serif",
-        fontSize: "21px",
-        color: "#f2e7bc",
-        wordWrap: { width: 324 },
-      }).setDepth(42));
-      this.track(this.add.text(x + 18, 292, offer.effect, {
-        fontFamily: "Inter, system-ui, sans-serif",
-        fontSize: "16px",
-        color: "#d8c89b",
-        wordWrap: { width: 324 },
-        lineSpacing: 4,
-      }).setDepth(42));
-      this.track(this.add.text(x + 18, 422,
-        `${offer.effectivePrice} GRAFT  •  ${offer.affordable ? "AFFORDABLE" : "BANK MORE"}`, {
-          fontFamily: "Menlo, Consolas, monospace",
-          fontSize: "14px",
-          color: offer.affordable ? "#a6d34a" : "#d59776",
-        }).setDepth(42));
-    });
-
-    const health = this.pureState?.health;
-    const healAvailable = Boolean(
-      health
-      && health.current < health.max
-      && this.graft >= ROTTEN_MARKET_HEAL_COST
-    );
-    this.track(this.add.text(70, 520,
-      `[4] HEAL 2 HP — 2 GRAFT  •  ${healAvailable ? "AVAILABLE" : "UNAVAILABLE"}`, {
-      fontFamily: "Georgia, serif",
-      fontSize: "20px",
-      color: healAvailable ? "#9cc7ff" : "#8b7773",
-    }).setDepth(42));
-    this.track(this.add.text(610, 520, "[5] BANK GRAFT — KEEP THE PURSE", {
-      fontFamily: "Georgia, serif",
-      fontSize: "20px",
-      color: "#e4d6a2",
-    }).setDepth(42));
-    this.track(this.add.text(70, 580,
-      this.rewardFeedback || "CHOOSE ONE RECEIPT. THE NEXT DOCKET OPENS AFTER THE STAMP.", {
-        fontFamily: "Menlo, Consolas, monospace",
-        fontSize: "13px",
-        color: this.rewardFeedback ? "#f0c66f" : "#d59776",
-      }).setDepth(42));
-  }
-
-  private renderStageTwoDocket(): void {
-    if (!this.pureState?.health || !this.pureState.market?.acceptedChoice) {
+    if (!this.pureState?.health || !this.pureState.market || !this.selectedRoute) {
       return;
     }
-    this.clearPhaseUi();
-    const stage = this.plan.stages[1];
-    const marketChoice = describeRottenMarketChoice(this.pureState.market.acceptedChoice);
-    const ownedNames = this.pureState.upgrades.length > 0
+    this.phaseObjects.push(...renderRottenMarketPresentation(this, {
+      stage: this.pureState.market.stage,
+      route: this.selectedRoute,
+      offers: this.offers,
+      health: this.pureState.health,
+      graft: this.graft,
+      feedback: this.rewardFeedback,
+      healCost: ROTTEN_MARKET_HEAL_COST,
+    }));
+  }
+
+  private describeCarriedDocket(): string {
+    if (!this.pureState?.health || !this.pureState.weapon || !this.pureState.skill) {
+      return "CARRIED RUN STATE UNAVAILABLE";
+    }
+    const upgrades = this.pureState.upgrades.length > 0
       ? this.pureState.upgrades.map((id) => ROTTEN_UPGRADES[id].name).join(", ")
       : "None yet";
-
-    this.track(this.add.text(48, 104, `STAGE 2 — ${stage.name.toUpperCase()}`, {
-      fontFamily: "Georgia, serif",
-      fontSize: "31px",
-      color: "#f2e7bc",
-      stroke: "#161315",
-      strokeThickness: 6,
-    }).setDepth(42));
-    this.track(this.add.text(48, 148, this.rewardFeedback, {
-      fontFamily: "Menlo, Consolas, monospace",
-      fontSize: "14px",
-      color: "#a6d34a",
-    }).setDepth(42));
-    this.track(this.add.rectangle(48, 182, 1_184, 122, 0x171719, 0.94)
-      .setOrigin(0, 0)
-      .setStrokeStyle(2, palette.gold, 0.74)
-      .setDepth(35));
-    this.track(this.add.text(68, 199,
-      `CARRIED  ${ROTTEN_WEAPONS[this.pureState.weapon!].name.toUpperCase()} + ${ROTTEN_SKILLS[this.pureState.skill!].name.toUpperCase()}`
+    const history = this.pureState.routeHistory.map((entry) =>
+      `S${entry.stage} ${entry.routeId} / ${describeRottenMarketChoice(entry.marketChoice)}`
+    ).join("  •  ");
+    const build = this.pureState.buildSummary;
+    return `CARRIED  ${ROTTEN_WEAPONS[this.pureState.weapon].name.toUpperCase()} + ${ROTTEN_SKILLS[this.pureState.skill].name.toUpperCase()}`
       + `  •  HP ${this.pureState.health.current}/${this.pureState.health.max}  •  PURSE ${this.pureState.graft}\n`
-      + `OWNED  ${ownedNames}\n`
-      + `STAGE 1  ${this.pureState.routeHistory[0].routeId}  •  MARKET ${marketChoice}`, {
-        fontFamily: "Menlo, Consolas, monospace",
-        fontSize: "14px",
-        color: "#e4d6a2",
-        lineSpacing: 7,
-      }).setDepth(42));
-
-    stage.options.forEach((route, index) => {
-      const x = 48 + index * 608;
-      this.track(this.add.rectangle(x, 332, 576, 252, 0x251d1c, 0.96)
-        .setOrigin(0, 0)
-        .setStrokeStyle(3, index === 0 ? palette.gold : palette.rust, 0.92)
-        .setDepth(35));
-      this.track(this.add.text(x + 20, 352, `[${index + 1}] ${route.name.toUpperCase()}`, {
-        fontFamily: "Georgia, serif",
-        fontSize: "24px",
-        color: "#f2e7bc",
-      }).setDepth(42));
-      this.track(this.add.text(x + 20, 401,
-        `${route.encounterSummary}\n\nELITE RISK  ${route.eliteRisk.toUpperCase()}\n`
-        + `REWARD  ${route.graftReward} GRAFT\nMARKET  ${route.marketBias.toUpperCase()}`, {
-          fontFamily: "Menlo, Consolas, monospace",
-          fontSize: "15px",
-          color: "#d8c89b",
-          lineSpacing: 7,
-          wordWrap: { width: 530 },
-        }).setDepth(42));
-    });
-    this.track(this.add.text(48, 620,
-      "THE SUMP DOCKET IS FILED. FOXMAN'S RUN WAITS HERE WITH EVERY BAD DECISION INTACT.", {
-        fontFamily: "Menlo, Consolas, monospace",
-        fontSize: "14px",
-        color: "#d59776",
-      }).setDepth(42));
+      + `ROUTES  ${history}\n`
+      + `OWNED  ${upgrades}  •  BUILD HP+${build.maxHealthBonus} / HEAL ${build.healPerClearedWave} / DISCOUNT ${build.marketDiscount}`
+      + `  •  ELITE BOUNTY ${this.eliteBountyGraft} (${this.defeatedEliteVariants.join(",") || "none"})`;
   }
 
   private enterDeadState(): void {
@@ -796,12 +719,15 @@ export class RottenRunScene extends Phaser.Scene {
     this.selectedWeapon = null;
     this.selectedSkill = null;
     this.selectedRoute = null;
+    this.selectedEncounter = undefined;
+    this.combatBuild = undefined;
     this.offers = [];
     this.pureState = retryRottenRunSameSeed(
       this.pureState ?? createRottenRunBaseline(this.plan),
     );
     this.graft = this.pureState.graft;
     this.wave = 0;
+    this.stageWavesCleared = 0;
     this.wavesCleared = 0;
     this.spawnHistory.length = 0;
     this.trace.length = 0;
@@ -818,6 +744,8 @@ export class RottenRunScene extends Phaser.Scene {
     this.inputLockedUntil = this.time.now + 250;
     this.rewardFeedback = "";
     this.rewardFeedbackReason = "";
+    this.eliteBountyGraft = 0;
+    this.defeatedEliteVariants.length = 0;
     this.renderLoadout();
     this.publishSnapshot();
   }
@@ -826,7 +754,9 @@ export class RottenRunScene extends Phaser.Scene {
     if (!this.hudText || !this.waveText) {
       return;
     }
-    this.waveText.setText(`${this.selectedRoute!.name.toUpperCase()}  •  WAVE ${this.wave}/2`);
+    this.waveText.setText(
+      `STAGE ${this.selectedEncounter?.stage ?? 1}  •  ${this.selectedRoute!.name.toUpperCase()}  •  WAVE ${this.wave}/2`,
+    );
     const weaponStatus = debug.weaponRecovering
       ? `HEAT ${debug.weaponHeat}/4 — RECOVERING`
       : `ATTACKS ${debug.attackCount}  HITS ${debug.attackHitCount}`;
@@ -834,7 +764,8 @@ export class RottenRunScene extends Phaser.Scene {
       `HP ${debug.playerHealth}/${debug.playerMaxHealth}  •  GRAFT ${this.graft}\n`
       + `${ROTTEN_WEAPONS[this.selectedWeapon!].name}: ${weaponStatus}\n`
       + `${ROTTEN_SKILLS[this.selectedSkill!].name}: USES ${debug.skillUseCount}  HITS ${debug.skillHitCount}  ${debug.skillReady ? "READY" : "COOLING"}\n`
-      + `ENEMIES ${debug.livingEnemies}`,
+      + `ENEMIES ${debug.livingEnemies}  •  BUILD +${debug.compoundBonusDamage} COMPOUND / ${debug.grudgeRemainingMs}MS GRUDGE\n`
+      + `SHIELD B${debug.shieldBlockCount}/O${debug.shieldOpenCount}  •  HAZARD T${debug.hazardTelegraphCount}/A${debug.hazardActivationCount}/H${debug.hazardHitCount}/C${debug.hazardClearCount}`,
     );
   }
 
@@ -845,10 +776,10 @@ export class RottenRunScene extends Phaser.Scene {
       RottenRouteDefinition["id"],
     ];
     const debug = this.combat?.debugState(this.time.now) ?? this.lastCombatDebug;
-    const health = pureState.health && (this.phase === "reward-choice" || pureState.stage === 2)
-      ? pureState.health
-      : debug
-        ? { current: debug.playerHealth, max: debug.playerMaxHealth }
+    const health = debug && (this.phase === "encounter" || this.phase === "dead")
+      ? { current: debug.playerHealth, max: debug.playerMaxHealth }
+      : pureState.health && (this.phase === "reward-choice" || pureState.stage >= 2)
+        ? pureState.health
         : null;
     const activeMarket = this.phase === "reward-choice" && pureState.market?.status === "open"
       ? pureState.market
@@ -863,7 +794,7 @@ export class RottenRunScene extends Phaser.Scene {
       planId: this.plan.planId,
       stage: pureState.stage,
       routeOptions,
-      selectedRoute: pureState.stage === 1 ? this.selectedRoute?.id ?? null : null,
+      selectedRoute: this.selectedRoute?.id ?? null,
       weapon: pureState.weapon ?? this.selectedWeapon,
       skill: pureState.skill ?? this.selectedSkill,
       upgrades: [...pureState.upgrades],
@@ -873,16 +804,31 @@ export class RottenRunScene extends Phaser.Scene {
       livingEnemies: this.phase === "reward-choice" || this.phase === "loadout" || this.phase === "route-choice"
         ? 0
         : debug?.livingEnemies ?? 0,
-      eliteCount: 0,
+      eliteCount: debug?.eliteCount ?? 0,
+      currentEliteCount: debug?.currentEliteCount ?? 0,
+      eliteDefeatedCount: debug?.eliteDefeatedCount ?? this.defeatedEliteVariants.length,
+      eliteDefeatedVariants: debug?.eliteDefeatedVariants ?? [...this.defeatedEliteVariants],
+      eliteBountyGraft: this.eliteBountyGraft,
+      eliteArmorBreakCount: debug?.eliteArmorBreakCount ?? 0,
+      eliteEnrageCount: debug?.eliteEnrageCount ?? 0,
       bossHealth: null,
       bossPhase: null,
       elapsedActiveMilliseconds: this.elapsedActiveMilliseconds,
       result: null,
       traceDigest,
       wave: this.wave,
+      stageWavesCleared: this.stageWavesCleared,
       wavesCleared: this.wavesCleared,
       spawnHistory: [...this.spawnHistory],
-      enemyStates: debug?.enemyStates.map(({ role, state, health }) => `${role}:${state}:${health}`) ?? [],
+      enemyStates: debug?.enemyStates.map(({
+        role,
+        state,
+        health: enemyHealth,
+        eliteVariant,
+        armorPips,
+        enraged,
+        shieldState,
+      }) => `${role}:${state}:${enemyHealth}:${eliteVariant ?? "none"}:${armorPips}:${enraged ? 1 : 0}:${shieldState}`) ?? [],
       enemyGeometry: debug?.enemyStates.map(({ role, state, alive, feetY, bodyBottom }) =>
         `${role}:${state}:${alive ? 1 : 0}:${feetY}:${bodyBottom}`) ?? [],
       enemyReacquisition: debug?.enemyStates.map(({
@@ -910,7 +856,32 @@ export class RottenRunScene extends Phaser.Scene {
       weaponRecovering: debug?.weaponRecovering ?? false,
       skillUseCount: debug?.skillUseCount ?? 0,
       skillHitCount: debug?.skillHitCount ?? 0,
+      skillCooldownMs: debug?.skillCooldownMs ?? this.combatBuild?.skillCooldownMs ?? 0,
       skillReady: debug?.skillReady ?? false,
+      grudgeRemainingMs: debug?.grudgeRemainingMs ?? 0,
+      maxGrudgeBonusDamage: debug?.maxGrudgeBonusDamage ?? 0,
+      compoundBonusDamage: debug?.compoundBonusDamage ?? 0,
+      maxCompoundBonusDamage: debug?.maxCompoundBonusDamage ?? 0,
+      maxTotalWeaponBonusDamage: debug?.maxTotalWeaponBonusDamage ?? 0,
+      compoundExpiresInMs: debug?.compoundExpiresInMs ?? 0,
+      dashCooldownMs: debug?.dashCooldownMs ?? this.combatBuild?.dash.cooldownMs ?? 520,
+      dashWakeCount: debug?.dashWakeCount ?? 0,
+      dashWakeHitCount: debug?.dashWakeHitCount ?? 0,
+      deadLetterCount: debug?.deadLetterCount ?? 0,
+      deadLetterHitCount: debug?.deadLetterHitCount ?? 0,
+      waveHealCount: debug?.waveHealCount ?? 0,
+      waveHealRestored: debug?.waveHealRestored ?? 0,
+      shieldBlockCount: debug?.shieldBlockCount ?? 0,
+      shieldFlankHitCount: debug?.shieldFlankHitCount ?? 0,
+      shieldOpenCount: debug?.shieldOpenCount ?? 0,
+      shieldOpenSources: debug?.shieldOpenSources ?? [],
+      hazardTelegraphCount: debug?.hazardTelegraphCount ?? 0,
+      hazardActiveCount: debug?.hazardActiveCount ?? 0,
+      hazardActivationCount: debug?.hazardActivationCount ?? 0,
+      hazardHitCount: debug?.hazardHitCount ?? 0,
+      hazardClearCount: debug?.hazardClearCount ?? 0,
+      hazardExpiryCount: debug?.hazardExpiryCount ?? 0,
+      hazardTeardownCount: debug?.hazardTeardownCount ?? 0,
       offerIds: activeMarket?.offers.map(({ id }) => id) ?? [],
       offerPrices: activeMarket?.offers.map(({ effectivePrice }) => effectivePrice) ?? [],
       healAvailable: Boolean(
@@ -929,9 +900,13 @@ export class RottenRunScene extends Phaser.Scene {
       ),
       rewardFeedback: this.rewardFeedback,
       rewardFeedbackReason: this.rewardFeedbackReason,
-      rewardDecisionCount: pureState.market?.acceptedChoice ? 1 : 0,
+      rewardDecisionCount: Math.min(
+        2,
+        pureState.routeHistory.filter(({ marketChoice: choice }) => Boolean(choice)).length,
+      ) as 0 | 1 | 2,
       combatObjectCount:
         (this.combat ? debug?.combatObjectCount ?? 0 : 0) + this.countEncounterPresentationObjects(),
+      canvasCount: document.querySelectorAll("canvas").length,
     };
 
     window.__FOXMAN_ROTTEN__ = snapshot;
@@ -950,12 +925,19 @@ export class RottenRunScene extends Phaser.Scene {
     document.body.dataset.rottenHp = snapshot.hp ? `${snapshot.hp.current}/${snapshot.hp.max}` : "";
     document.body.dataset.rottenLivingEnemies = String(snapshot.livingEnemies);
     document.body.dataset.rottenEliteCount = String(snapshot.eliteCount);
+    document.body.dataset.rottenCurrentEliteCount = String(snapshot.currentEliteCount);
+    document.body.dataset.rottenEliteDefeatedCount = String(snapshot.eliteDefeatedCount);
+    document.body.dataset.rottenEliteDefeatedVariants = snapshot.eliteDefeatedVariants.join("|");
+    document.body.dataset.rottenEliteBountyGraft = String(snapshot.eliteBountyGraft);
+    document.body.dataset.rottenEliteArmorBreakCount = String(snapshot.eliteArmorBreakCount);
+    document.body.dataset.rottenEliteEnrageCount = String(snapshot.eliteEnrageCount);
     document.body.dataset.rottenBossHealth = snapshot.bossHealth ?? "";
     document.body.dataset.rottenBossPhase = snapshot.bossPhase ?? "";
     document.body.dataset.rottenElapsedActiveMilliseconds = String(snapshot.elapsedActiveMilliseconds);
     document.body.dataset.rottenResult = snapshot.result ?? "";
     document.body.dataset.rottenTraceDigest = snapshot.traceDigest;
     document.body.dataset.rottenWave = String(snapshot.wave);
+    document.body.dataset.rottenStageWavesCleared = String(snapshot.stageWavesCleared);
     document.body.dataset.rottenWavesCleared = String(snapshot.wavesCleared);
     document.body.dataset.rottenSpawnHistory = snapshot.spawnHistory.join("|");
     document.body.dataset.rottenEnemyStates = snapshot.enemyStates.join("|");
@@ -970,7 +952,32 @@ export class RottenRunScene extends Phaser.Scene {
     document.body.dataset.rottenWeaponRecovering = String(snapshot.weaponRecovering);
     document.body.dataset.rottenSkillUseCount = String(snapshot.skillUseCount);
     document.body.dataset.rottenSkillHitCount = String(snapshot.skillHitCount);
+    document.body.dataset.rottenSkillCooldownMs = String(snapshot.skillCooldownMs);
     document.body.dataset.rottenSkillReady = String(snapshot.skillReady);
+    document.body.dataset.rottenGrudgeRemainingMs = String(snapshot.grudgeRemainingMs);
+    document.body.dataset.rottenMaxGrudgeBonusDamage = String(snapshot.maxGrudgeBonusDamage);
+    document.body.dataset.rottenCompoundBonusDamage = String(snapshot.compoundBonusDamage);
+    document.body.dataset.rottenMaxCompoundBonusDamage = String(snapshot.maxCompoundBonusDamage);
+    document.body.dataset.rottenMaxTotalWeaponBonusDamage = String(snapshot.maxTotalWeaponBonusDamage);
+    document.body.dataset.rottenCompoundExpiresInMs = String(snapshot.compoundExpiresInMs);
+    document.body.dataset.rottenDashCooldownMs = String(snapshot.dashCooldownMs);
+    document.body.dataset.rottenDashWakeCount = String(snapshot.dashWakeCount);
+    document.body.dataset.rottenDashWakeHitCount = String(snapshot.dashWakeHitCount);
+    document.body.dataset.rottenDeadLetterCount = String(snapshot.deadLetterCount);
+    document.body.dataset.rottenDeadLetterHitCount = String(snapshot.deadLetterHitCount);
+    document.body.dataset.rottenWaveHealCount = String(snapshot.waveHealCount);
+    document.body.dataset.rottenWaveHealRestored = String(snapshot.waveHealRestored);
+    document.body.dataset.rottenShieldBlockCount = String(snapshot.shieldBlockCount);
+    document.body.dataset.rottenShieldFlankHitCount = String(snapshot.shieldFlankHitCount);
+    document.body.dataset.rottenShieldOpenCount = String(snapshot.shieldOpenCount);
+    document.body.dataset.rottenShieldOpenSources = snapshot.shieldOpenSources.join("|");
+    document.body.dataset.rottenHazardTelegraphCount = String(snapshot.hazardTelegraphCount);
+    document.body.dataset.rottenHazardActiveCount = String(snapshot.hazardActiveCount);
+    document.body.dataset.rottenHazardActivationCount = String(snapshot.hazardActivationCount);
+    document.body.dataset.rottenHazardHitCount = String(snapshot.hazardHitCount);
+    document.body.dataset.rottenHazardClearCount = String(snapshot.hazardClearCount);
+    document.body.dataset.rottenHazardExpiryCount = String(snapshot.hazardExpiryCount);
+    document.body.dataset.rottenHazardTeardownCount = String(snapshot.hazardTeardownCount);
     document.body.dataset.rottenOfferIds = snapshot.offerIds.join("|");
     document.body.dataset.rottenOfferPrices = snapshot.offerPrices.join("|");
     document.body.dataset.rottenHealAvailable = String(snapshot.healAvailable);
@@ -987,6 +994,7 @@ export class RottenRunScene extends Phaser.Scene {
     document.body.dataset.rottenRewardDecisionCount = String(snapshot.rewardDecisionCount);
     document.body.dataset.rottenBuildSummary = JSON.stringify(snapshot.buildSummary);
     document.body.dataset.rottenCombatObjectCount = String(snapshot.combatObjectCount);
+    document.body.dataset.rottenCanvasCount = String(snapshot.canvasCount);
   }
 
   private clearPhaseUi(): void {
@@ -1015,24 +1023,23 @@ export class RottenRunScene extends Phaser.Scene {
     }
   }
 
-  private addEncounterPlatform(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    options: Parameters<typeof addPaintedPlatform>[6],
-  ): void {
-    if (!this.platforms) {
-      return;
+  private bindKeyboard(event: string, handler: () => void): void {
+    this.keyboardBindings.push({ event, handler });
+    this.input.keyboard?.on(event, handler);
+  }
+
+  private releaseKeyboardBindings(): void {
+    for (const { event, handler } of this.keyboardBindings) {
+      this.input.keyboard?.off(event, handler);
     }
-    const existingObjects = new Set(this.children.list);
-    addPaintedPlatform(this, this.platforms, x, y, width, height, options);
-    const platformBodies = new Set(this.platforms.getChildren());
-    for (const object of this.children.list) {
-      if (!existingObjects.has(object) && !platformBodies.has(object)) {
-        this.encounterPresentationObjects.push(object);
-      }
-    }
+    this.keyboardBindings.length = 0;
+  }
+
+  private shutdownSceneRuntime(): void {
+    this.releaseKeyboardBindings();
+    this.combat?.destroy();
+    this.combat = undefined;
+    this.destroyEncounterPresentation();
   }
 
   private destroyEncounterPresentation(): void {

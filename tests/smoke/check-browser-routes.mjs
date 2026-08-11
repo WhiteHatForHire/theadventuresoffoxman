@@ -15,6 +15,30 @@ const chromeCandidates = [
 let devServer;
 let chrome;
 let userDataDir;
+let browser;
+const smokeStartedAt = Date.now();
+const progressEvents = [];
+const cdpSendTimeoutMs = positiveIntegerEnv("FOXMAN_CDP_TIMEOUT_MS", 12_000);
+const cdpNavigationTimeoutMs = positiveIntegerEnv("FOXMAN_CDP_NAVIGATION_TIMEOUT_MS", 15_000);
+const cdpScreenshotTimeoutMs = positiveIntegerEnv("FOXMAN_CDP_SCREENSHOT_TIMEOUT_MS", 15_000);
+const cdpCloseTimeoutMs = positiveIntegerEnv("FOXMAN_CDP_CLOSE_TIMEOUT_MS", 5_000);
+const browserHttpTimeoutMs = positiveIntegerEnv("FOXMAN_BROWSER_HTTP_TIMEOUT_MS", 5_000);
+
+function positiveIntegerEnv(name, fallback) {
+  const value = Number(process.env[name]);
+  return Number.isInteger(value) && value > 0 ? value : fallback;
+}
+
+function recordProgress(kind, details = {}) {
+  const event = {
+    elapsedMs: Date.now() - smokeStartedAt,
+    kind,
+    ...details,
+  };
+  progressEvents.push(event);
+  console.error("[smoke-progress] " + JSON.stringify(event));
+  return event;
+}
 
 async function smokeTitlePause(browser) {
   const page = await browser.open("/");
@@ -148,15 +172,29 @@ async function smokeRottenSmokeIsolation(browser) {
     "rottenTraceDigest",
   ]);
 
-  await page.key("3");
-  await page.waitForDataset("rottenWeapon", "tax-pike");
-  await page.key("6");
-  await page.waitForDataset("rottenSkill", "seized-stamp");
-  await page.key("Enter");
-  await page.waitForDataset("rottenPhase", "route-choice");
-  await page.key("2");
-  await page.waitForDataset("rottenPhase", "encounter");
-  await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
+  const transitionKeys = [
+    "rottenPhase",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenSelectedRoute",
+    "rottenTraceDigest",
+  ];
+  const transitionLedger = [];
+  const pressAndRecordTransition = async (key, waitForTransition) => {
+    const before = await page.dataset(transitionKeys);
+    await page.key(key);
+    await waitForTransition();
+    const after = await page.dataset(transitionKeys);
+    transitionLedger.push({ key, before, after });
+  };
+
+  await pressAndRecordTransition("3", () => page.waitForDataset("rottenWeapon", "tax-pike"));
+  await pressAndRecordTransition("6", () => page.waitForDataset("rottenSkill", "seized-stamp"));
+  await pressAndRecordTransition("Enter", () => page.waitForDataset("rottenPhase", "route-choice"));
+  await pressAndRecordTransition("2", async () => {
+    await page.waitForDataset("rottenPhase", "encounter");
+    await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
+  });
 
   const telemetryKeys = [
     "rottenPhase",
@@ -201,6 +239,7 @@ async function smokeRottenSmokeIsolation(browser) {
     state,
     maximumCounts,
     domInput,
+    transitionLedger,
     samples,
   };
 
@@ -220,6 +259,20 @@ async function smokeRottenSmokeIsolation(browser) {
     domInput.keyEvents.map(({ phase }) => phase),
     ["loadout", "loadout", "route-choice", "encounter"],
     "Rotten isolation DOM key phases",
+  );
+  assertDeepEqual(
+    transitionLedger.map(({ key, before, after }) => ({
+      key,
+      beforePhase: before.rottenPhase,
+      afterPhase: after.rottenPhase,
+    })),
+    [
+      { key: "3", beforePhase: "loadout", afterPhase: "loadout" },
+      { key: "6", beforePhase: "loadout", afterPhase: "loadout" },
+      { key: "Enter", beforePhase: "loadout", afterPhase: "route-choice" },
+      { key: "2", beforePhase: "route-choice", afterPhase: "encounter" },
+    ],
+    "Rotten isolation independent pre/post key transition ledger",
   );
   if (state.rottenPhase !== "encounter" && state.rottenPhase !== "dead") {
     throw new Error(`Rotten isolation left combat unexpectedly: ${JSON.stringify(evidence)}`);
@@ -388,6 +441,1289 @@ async function smokeRottenRunEncounter(browser) {
   };
 }
 
+async function smokeRottenStageTwoTopology(browser) {
+  const cases = [
+    {
+      seed: "GAUNTLET-ALPHA",
+      planId: "RR1-1C93B57F",
+      stageOneRouteKey: "2",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "1",
+      stageTwoRoute: "seized-goods-lift",
+      stageTwoWaves: [
+        "2.1:shield-auditor,clerk",
+        "2.2:shield-auditor,bailiff,clerk",
+      ],
+      expectedGraft: "12",
+      expectedEliteCount: "0",
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-stage-two-lift-1366x768.png",
+    },
+    {
+      seed: "GAUNTLET-ALPHA",
+      planId: "RR1-1C93B57F",
+      stageOneRouteKey: "2",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "late-fee-chapel",
+      stageTwoWaves: [
+        "2.1:clerk,writ-runner",
+        "2.2:shield-auditor,sump-scribe",
+      ],
+      expectedGraft: "14",
+      expectedEliteCount: "1",
+      viewport: { width: 1920, height: 1080 },
+      evidence: "rotten-stage-two-chapel-1920x1080.png",
+    },
+    {
+      seed: "BILE-PROOF",
+      planId: "RR1-91887DBF",
+      stageOneRouteKey: "1",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "bile-registry",
+      stageTwoWaves: [
+        "2.1:bailiff,sump-scribe",
+        "2.2:sump-scribe,clerk,bailiff",
+      ],
+      expectedGraft: "12",
+      expectedEliteCount: "0",
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-stage-two-bile-registry-1366x768.png",
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageTwoTopology`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    await enterRottenStageTwo(page, {
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: "5",
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+    });
+    await installRottenObservationLatch(page);
+    const entered = await page.dataset([
+      "rottenPhase",
+      "rottenSeed",
+      "rottenPlanId",
+      "rottenStage",
+      "rottenRouteOptions",
+      "rottenSelectedRoute",
+      "rottenSpawnHistory",
+      "rottenLivingEnemies",
+      "rottenCombatObjectCount",
+    ]);
+    assertEqual(entered.rottenSeed, testCase.seed, `${testCase.stageTwoRoute} seed`);
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.stageTwoRoute} plan`);
+    assertEqual(entered.rottenStage, "2", `${testCase.stageTwoRoute} entered stage`);
+    assertEqual(entered.rottenSelectedRoute, testCase.stageTwoRoute, `${testCase.stageTwoRoute} real key`);
+    if (!String(entered.rottenSpawnHistory).includes(testCase.stageTwoWaves[0])) {
+      throw new Error(`${testCase.stageTwoRoute} missing Wave 1 roster: ${entered.rottenSpawnHistory}`);
+    }
+    if (Number(entered.rottenCombatObjectCount) <= 0) {
+      throw new Error(`${testCase.stageTwoRoute} did not own live combat objects`);
+    }
+
+    await page.waitForDataset("rottenPhase", "reward-choice", 45_000);
+    const reward = await page.dataset([
+      "rottenPhase",
+      "rottenSeed",
+      "rottenPlanId",
+      "rottenStage",
+      "rottenRouteOptions",
+      "rottenSelectedRoute",
+      "rottenWave",
+      "rottenStageWavesCleared",
+      "rottenWavesCleared",
+      "rottenSpawnHistory",
+      "rottenGraft",
+      "rottenHp",
+      "rottenEliteCount",
+      "rottenCurrentEliteCount",
+      "rottenEliteDefeatedCount",
+      "rottenRouteHistory",
+      "rottenRewardDecisionCount",
+      "rottenCombatObjectCount",
+    ]);
+    assertEqual(reward.rottenStageWavesCleared, "2", `${testCase.stageTwoRoute} stage clears`);
+    assertEqual(reward.rottenWavesCleared, "4", `${testCase.stageTwoRoute} total clears`);
+    for (const roster of testCase.stageTwoWaves) {
+      if (!String(reward.rottenSpawnHistory).includes(roster)) {
+        throw new Error(`${testCase.stageTwoRoute} missing frozen roster ${roster}: ${reward.rottenSpawnHistory}`);
+      }
+    }
+    assertEqual(reward.rottenGraft, testCase.expectedGraft, `${testCase.stageTwoRoute} reward graft`);
+    assertEqual(reward.rottenEliteCount, testCase.expectedEliteCount, `${testCase.stageTwoRoute} elite count`);
+    assertEqual(reward.rottenCurrentEliteCount, "0", `${testCase.stageTwoRoute} current elite cleanup`);
+    assertEqual(reward.rottenRewardDecisionCount, "1", `${testCase.stageTwoRoute} one prior decision`);
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.stageTwoRoute} reward cleanup`);
+    if (!String(reward.rottenRouteHistory).startsWith(`1:${testCase.stageOneRoute}:bank|2:${testCase.stageTwoRoute}:pending`)) {
+      throw new Error(`${testCase.stageTwoRoute} history mismatch: ${reward.rottenRouteHistory}`);
+    }
+    const observed = await readRottenObservationLatch(page);
+    await assertNoMissingTextureGreen(page, `${testCase.stageTwoRoute} presentation`);
+    await captureEvidence(page, testCase.evidence);
+    await page.close();
+    results.push({ ...testCase, entered, reward, observed });
+  }
+
+  return { route: "Rotten Stage 2 all frozen route topologies", cases: results };
+}
+
+async function enterRottenStageTwo(page, {
+  label = "Stage 2 helper",
+  weaponKey,
+  skillKey,
+  stageOneRouteKey,
+  stageOneMarketKey,
+  stageTwoRouteKey,
+}) {
+  await selectRottenBuild(page, weaponKey, skillKey, stageOneRouteKey);
+  try {
+    await page.waitForDataset("rottenPhase", "reward-choice", 40_000);
+  } catch (error) {
+    const stalled = await page.dataset([
+      "rottenPhase",
+      "rottenStage",
+      "rottenSelectedRoute",
+      "rottenHp",
+      "rottenLivingEnemies",
+      "rottenEnemyStates",
+      "rottenAttackCount",
+      "rottenAttackHitCount",
+      "rottenSkillUseCount",
+      "rottenSkillHitCount",
+      "rottenWave",
+      "rottenSpawnHistory",
+      "rottenCombatObjectCount",
+    ]);
+    throw new Error(`${label} did not reach the first market: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 340));
+  const firstMarket = await page.dataset([
+    "rottenStage",
+    "rottenMarketStatus",
+    "rottenRewardDecisionCount",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(firstMarket.rottenStage, "1", "Stage 2 helper first market stage");
+  assertEqual(firstMarket.rottenMarketStatus, "open", "Stage 2 helper first market open");
+  assertEqual(firstMarket.rottenRewardDecisionCount, "0", "Stage 2 helper first decision count");
+  assertEqual(firstMarket.rottenCombatObjectCount, "0", "Stage 2 helper first reward cleanup");
+  await page.key(stageOneMarketKey);
+  await page.waitForDataset("rottenStage", "2", 5_000);
+  await page.waitForDataset("rottenPhase", "route-choice", 5_000);
+  const docket = await page.dataset([
+    "rottenStage",
+    "rottenRouteOptions",
+    "rottenSelectedRoute",
+    "rottenRewardDecisionCount",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(docket.rottenRewardDecisionCount, "1", "Stage 2 helper carried first decision");
+  assertEqual(docket.rottenCombatObjectCount, "0", "Stage 2 helper docket cleanup");
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  await page.key(stageTwoRouteKey);
+  await page.waitForDataset("rottenPhase", "encounter", 5_000);
+  await page.waitForDataset("rottenStage", "2", 5_000);
+  return { firstMarket, docket };
+}
+
+async function smokeRottenStageTwoRoles(browser) {
+  const shieldPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoRoles",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await shieldPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(shieldPage, {
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "1",
+  });
+  await installRottenStageTwoMechanicsLatch(shieldPage);
+  await waitFor(async () => {
+    const live = await shieldPage.dataset(["rottenPhase", "rottenEnemyStates"]);
+    return live.rottenPhase === "encounter"
+      && String(live.rottenEnemyStates).split("|").some((enemy) =>
+        enemy.startsWith("shield-auditor:") && enemy.endsWith(":open"));
+  }, 15_000, 25);
+  await captureEvidence(shieldPage, "rotten-stage-two-shield-open-live-1366x768.png");
+  try {
+    await shieldPage.waitForDataset("rottenPhase", "reward-choice", 45_000);
+  } catch (error) {
+    const stalled = await shieldPage.dataset([
+      ...rottenStageTwoMechanicTruthKeys(),
+      "rottenLivingEnemies",
+      "rottenAttackCount",
+      "rottenAttackHitCount",
+      "rottenSkillUseCount",
+      "rottenWave",
+      "rottenSpawnHistory",
+    ]);
+    throw new Error(`Shield role did not clear after ordered proof: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  const shield = await readRottenStageTwoMechanicsLatch(shieldPage);
+  const shieldReward = await shieldPage.dataset(rottenStageTwoMechanicTruthKeys());
+  if (shield.maxShieldBlockCount < 1) {
+    throw new Error(`Shield Auditor frontal block missing: ${JSON.stringify({ shield, shieldReward })}`);
+  }
+  if (shield.maxShieldFlankHitCount < 1) {
+    throw new Error(`Shield Auditor successful flank missing: ${JSON.stringify({ shield, shieldReward })}`);
+  }
+  if (!shield.shieldOpenSources.includes("skill")) {
+    throw new Error(`Shield Auditor did not record a skill open: ${JSON.stringify(shield)}`);
+  }
+  if (!shield.shieldOpenSources.includes("dash-through")) {
+    throw new Error(`Shield Auditor did not record a dash-through open: ${JSON.stringify(shield)}`);
+  }
+  for (const state of ["closed", "open"]) {
+    if (!shield.shieldStates.includes(state)) {
+      throw new Error(`Shield Auditor did not expose ${state} state: ${JSON.stringify(shield)}`);
+    }
+  }
+  assertEqual(shieldReward.rottenCombatObjectCount, "0", "Shield role reward cleanup");
+  await captureEvidence(shieldPage, "rotten-stage-two-shield-counterplay-1366x768.png");
+  await shieldPage.close();
+
+  const hazardPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageTwoRoles",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await hazardPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(hazardPage, {
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+  });
+  await installRottenStageTwoMechanicsLatch(hazardPage);
+  await waitFor(async () => {
+    const live = await hazardPage.dataset(["rottenPhase", "rottenHazardActiveCount"]);
+    return live.rottenPhase === "encounter" && Number(live.rottenHazardActiveCount) >= 1;
+  }, 15_000, 25);
+  await captureEvidence(hazardPage, "rotten-stage-two-sump-hazard-live-1920x1080.png");
+  await hazardPage.waitForDataset("rottenPhase", "reward-choice", 45_000);
+  const hazard = await readRottenStageTwoMechanicsLatch(hazardPage);
+  const hazardReward = await hazardPage.dataset(rottenStageTwoMechanicTruthKeys());
+  assertAtLeastNumber(hazard.maxHazardTelegraphCount, 1, "Sump Scribe telegraph");
+  assertAtLeastNumber(hazard.maxHazardActiveCount, 1, "Sump Scribe active hazard");
+  assertAtLeastNumber(hazard.maxHazardHitCount, 1, "Sump Scribe legitimate hazard hit");
+  assertAtLeastNumber(hazard.maxHazardExpiryCount, 1, "Sump Scribe hazard expiry");
+  if (!hazard.enemyTells.some((tell) => tell.includes("sump-scribe:windup:BILE MARK!"))) {
+    throw new Error(`Sump Scribe did not expose BILE MARK!: ${JSON.stringify(hazard)}`);
+  }
+  assertEqual(hazardReward.rottenCombatObjectCount, "0", "Sump role reward cleanup");
+  await captureEvidence(hazardPage, "rotten-stage-two-sump-hazard-1920x1080.png");
+  await hazardPage.close();
+
+  const bombPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageTwoRoles",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await bombPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(bombPage, {
+    weaponKey: "4",
+    skillKey: "7",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+  });
+  await installRottenStageTwoMechanicsLatch(bombPage);
+  await waitFor(async () => {
+    const live = await bombPage.dataset([
+      "rottenPhase",
+      "rottenHazardTelegraphCount",
+      "rottenHazardClearCount",
+      "rottenSkillUseCount",
+    ]);
+    return live.rottenPhase === "encounter"
+      && Number(live.rottenHazardTelegraphCount) >= 1
+      && Number(live.rottenHazardClearCount) === 0
+      && Number(live.rottenSkillUseCount) >= 1;
+  }, 15_000, 20);
+  await captureEvidence(bombPage, "rotten-stage-two-bomb-hazard-live-1366x768.png");
+  try {
+    await bombPage.waitForDataset("rottenPhase", "reward-choice", 45_000);
+  } catch (error) {
+    const stalled = await bombPage.dataset([
+      ...rottenStageTwoMechanicTruthKeys(),
+      "rottenLivingEnemies",
+      "rottenSkillReady",
+      "rottenSkillUseCount",
+      "rottenAttackCount",
+      "rottenAttackHitCount",
+      "rottenWave",
+      "rottenSpawnHistory",
+    ]);
+    throw new Error(`Bribe Bomb role proof did not clear: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  const bomb = await readRottenStageTwoMechanicsLatch(bombPage);
+  const bombReward = await bombPage.dataset(rottenStageTwoMechanicTruthKeys());
+  assertAtLeastNumber(bomb.maxHazardClearCount, 1, "Bribe Bomb hazard clear");
+  assertEqual(bombReward.rottenCombatObjectCount, "0", "Bomb role reward cleanup");
+  await captureEvidence(bombPage, "rotten-stage-two-bomb-clears-hazard-1366x768.png");
+  await bombPage.close();
+
+  return {
+    route: "Rotten Stage 2 Shield Auditor and Sump Scribe counterplay",
+    shield: { observation: shield, reward: shieldReward },
+    hazard: { observation: hazard, reward: hazardReward },
+    bomb: { observation: bomb, reward: bombReward },
+  };
+}
+
+async function smokeRottenStageTwoElites(browser) {
+  const cases = [
+    {
+      seed: "ELITE-OVERDUE-PROOF",
+      planId: "RR1-43C9A578",
+      expectedVariant: "gilded",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageTwoRouteKey: "2",
+      expectedStageTwoOptions: "seized-goods-lift|late-fee-chapel",
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-stage-two-gilded-armor-1366x768.png",
+    },
+    {
+      seed: "ELITE-GILDED-PROOF",
+      planId: "RR1-D3B6650A",
+      expectedVariant: "overdue",
+      weaponKey: "1",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageTwoRouteKey: "1",
+      expectedStageTwoOptions: "late-fee-chapel|seized-goods-lift",
+      viewport: { width: 1920, height: 1080 },
+      evidence: "rotten-stage-two-overdue-enrage-1920x1080.png",
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageTwoElites`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    await enterRottenStageTwo(page, {
+      weaponKey: testCase.weaponKey,
+      skillKey: testCase.skillKey,
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: "5",
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+    });
+    await installRottenEliteLatch(page);
+    const entered = await page.dataset([
+      "rottenSeed",
+      "rottenPlanId",
+      "rottenRouteOptions",
+      "rottenSelectedRoute",
+      "rottenCurrentEliteCount",
+      "rottenEnemyStates",
+      "rottenCombatObjectCount",
+    ]);
+    assertEqual(entered.rottenSeed, testCase.seed, `${testCase.expectedVariant} seed`);
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.expectedVariant} plan`);
+    assertEqual(entered.rottenRouteOptions, testCase.expectedStageTwoOptions, `${testCase.expectedVariant} routes`);
+    assertEqual(entered.rottenSelectedRoute, "late-fee-chapel", `${testCase.expectedVariant} chapel route`);
+    assertEqual(entered.rottenCurrentEliteCount, "1", `${testCase.expectedVariant} current elite`);
+    if (!String(entered.rottenEnemyStates).includes(`:${testCase.expectedVariant}:`)) {
+      throw new Error(`${testCase.expectedVariant} treatment missing at spawn: ${entered.rottenEnemyStates}`);
+    }
+    await captureEvidence(page, testCase.evidence);
+
+    if (testCase.expectedVariant === "overdue") {
+      await waitFor(async () => {
+        const observed = await readRottenEliteLatch(page);
+        return observed.sawAliveEnraged;
+      }, 20_000, 40);
+      await captureEvidence(page, "rotten-stage-two-overdue-live-enrage-1920x1080.png");
+    }
+
+    await page.waitForDataset("rottenPhase", "reward-choice", 45_000);
+    const observation = await readRottenEliteLatch(page);
+    const reward = await page.dataset([
+      "rottenPhase",
+      "rottenHp",
+      "rottenGraft",
+      "rottenEliteCount",
+      "rottenCurrentEliteCount",
+      "rottenEliteDefeatedCount",
+      "rottenEliteDefeatedVariants",
+      "rottenEliteBountyGraft",
+      "rottenEliteArmorBreakCount",
+      "rottenEliteEnrageCount",
+      "rottenSpawnHistory",
+      "rottenCombatObjectCount",
+    ]);
+    assertEqual(reward.rottenGraft, "14", `${testCase.expectedVariant} base plus bounty graft`);
+    assertEqual(reward.rottenEliteCount, "1", `${testCase.expectedVariant} total elite`);
+    assertEqual(reward.rottenCurrentEliteCount, "0", `${testCase.expectedVariant} current elite cleanup`);
+    assertEqual(reward.rottenEliteDefeatedCount, "1", `${testCase.expectedVariant} defeat count`);
+    assertEqual(reward.rottenEliteDefeatedVariants, testCase.expectedVariant, `${testCase.expectedVariant} defeated variant`);
+    assertEqual(reward.rottenEliteBountyGraft, "1", `${testCase.expectedVariant} bounty`);
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.expectedVariant} reward cleanup`);
+    if (!observation.baseRoleWindups.includes("writ-runner")) {
+      throw new Error(`${testCase.expectedVariant} hid the base writ-runner tell: ${JSON.stringify(observation)}`);
+    }
+    if (testCase.expectedVariant === "gilded") {
+      assertEqual(reward.rottenEliteArmorBreakCount, "1", "gilded single armor absorption");
+      assertEqual(String(observation.maxArmorPips), "1", "gilded visible armor pip");
+      assertEqual(reward.rottenEliteEnrageCount, "0", "gilded no enrage");
+    } else {
+      assertEqual(reward.rottenEliteArmorBreakCount, "0", "overdue no armor pip");
+      assertEqual(reward.rottenEliteEnrageCount, "1", "overdue once-only enrage");
+      assertEqual(String(observation.sawAliveEnraged), "true", "overdue live enrage state");
+    }
+    await page.close();
+    results.push({ ...testCase, entered, observation, reward });
+  }
+
+  return { route: "Rotten Stage 2 deterministic gilded and overdue elites", cases: results };
+}
+
+async function smokeRottenStageTwoBuilds(browser) {
+  const cases = [
+    {
+      upgradeId: "compound-interest",
+      archetype: "Knife/Belch/Compound",
+      seed: "BUILD-PROOF-1",
+      planId: "RR1-7F26E13F",
+      weaponKey: "1",
+      skillKey: "5",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "bile-registry",
+      proofKey: "rottenMaxCompoundBonusDamage",
+      proofMinimum: 2,
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      upgradeId: "hangover-hide",
+      archetype: "Pike/Stamp/Hangover",
+      seed: "BUILD-PROOF-2",
+      planId: "RR1-A1F7D62F",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "bile-registry",
+      proofKey: "rottenHp",
+      proofExpected: "8/8",
+      viewport: { width: 1920, height: 1080 },
+    },
+    {
+      upgradeId: "dead-letter",
+      archetype: "Spitter/Bomb/Dead Letter",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "4",
+      skillKey: "7",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "1",
+      stageTwoRoute: "bile-registry",
+      proofKey: "rottenDeadLetterHitCount",
+      proofMinimum: 1,
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      upgradeId: "petty-grudge",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "3",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "seized-goods-lift",
+      proofKey: "rottenMaxGrudgeBonusDamage",
+      proofMinimum: 1,
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      upgradeId: "counterfeit-soles",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "1",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "seized-goods-lift",
+      proofKey: "rottenDashWakeHitCount",
+      proofMinimum: 1,
+      viewport: { width: 1920, height: 1080 },
+    },
+    {
+      upgradeId: "red-tape-tourniquet",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "seized-goods-lift",
+      proofKey: "rottenWaveHealRestored",
+      proofMinimum: 1,
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      upgradeId: "spite-reserve",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "1",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "seized-goods-lift",
+      proofKey: "rottenSkillCooldownMs",
+      proofExpected: "1008",
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      upgradeId: "graft-dividend",
+      seed: "DIVIDEND-CHAPEL-1",
+      planId: "RR1-D66285FF",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "1",
+      stageTwoRoute: "late-fee-chapel",
+      proofKey: "rottenEliteBountyGraft",
+      proofExpected: "2",
+      viewport: { width: 1920, height: 1080 },
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageTwoBuilds`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    await enterRottenStageTwo(page, {
+      label: testCase.upgradeId,
+      weaponKey: testCase.weaponKey,
+      skillKey: testCase.skillKey,
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: testCase.stageOneMarketKey,
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+    });
+    const entered = await page.dataset([
+      "rottenSeed",
+      "rottenPlanId",
+      "rottenStage",
+      "rottenSelectedRoute",
+      "rottenWeapon",
+      "rottenSkill",
+      "rottenUpgrades",
+      "rottenHp",
+      "rottenDashCooldownMs",
+      "rottenSkillCooldownMs",
+      "rottenCombatObjectCount",
+    ]);
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.upgradeId} plan`);
+    assertEqual(entered.rottenSelectedRoute, testCase.stageTwoRoute, `${testCase.upgradeId} Stage 2 route`);
+    assertEqual(entered.rottenUpgrades, testCase.upgradeId, `${testCase.upgradeId} carried ownership`);
+    try {
+      if (testCase.proofExpected !== undefined) {
+        await page.waitForDataset(testCase.proofKey, testCase.proofExpected, 25_000);
+      } else {
+        await waitFor(async () => {
+          const state = await page.dataset([testCase.proofKey]);
+          return Number(state[testCase.proofKey]) >= testCase.proofMinimum;
+        }, 25_000, 40);
+      }
+    } catch (error) {
+      const stalled = await page.dataset([
+        "rottenPhase",
+        "rottenHp",
+        "rottenEnemyStates",
+        "rottenAttackCount",
+        "rottenAttackHitCount",
+        "rottenSkillUseCount",
+        "rottenSkillHitCount",
+        "rottenCompoundBonusDamage",
+        "rottenMaxCompoundBonusDamage",
+        "rottenMaxGrudgeBonusDamage",
+        "rottenDashWakeHitCount",
+        "rottenDeadLetterHitCount",
+        "rottenWaveHealRestored",
+        "rottenCombatObjectCount",
+      ]);
+      throw new Error(`${testCase.upgradeId} build proof stalled: ${JSON.stringify(stalled)}; ${error}`);
+    }
+    await captureEvidence(
+      page,
+      `rotten-stage-two-build-${testCase.upgradeId}-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+    await page.waitForDataset("rottenPhase", "reward-choice", 45_000);
+    const reward = await page.dataset([
+      "rottenPhase",
+      "rottenSeed",
+      "rottenPlanId",
+      "rottenSelectedRoute",
+      "rottenWeapon",
+      "rottenSkill",
+      "rottenUpgrades",
+      "rottenHp",
+      "rottenGraft",
+      "rottenAttackHitCount",
+      "rottenSkillHitCount",
+      "rottenSkillCooldownMs",
+      "rottenMaxGrudgeBonusDamage",
+      "rottenMaxCompoundBonusDamage",
+      "rottenMaxTotalWeaponBonusDamage",
+      "rottenDashCooldownMs",
+      "rottenDashWakeCount",
+      "rottenDashWakeHitCount",
+      "rottenDeadLetterCount",
+      "rottenDeadLetterHitCount",
+      "rottenWaveHealCount",
+      "rottenWaveHealRestored",
+      "rottenEliteBountyGraft",
+      "rottenEliteDefeatedCount",
+      "rottenOfferIds",
+      "rottenOfferPrices",
+      "rottenCombatObjectCount",
+    ]);
+    const [currentHp, maxHp] = parseHealth(reward.rottenHp, `${testCase.upgradeId} reward HP`);
+    assertAtLeastNumber(currentHp, 2, `${testCase.upgradeId} meaningful HP margin`);
+    assertAtLeastNumber(reward.rottenAttackHitCount, 1, `${testCase.upgradeId} weapon hits`);
+    assertAtLeastNumber(reward.rottenSkillHitCount, 1, `${testCase.upgradeId} skill hits`);
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.upgradeId} reward cleanup`);
+
+    switch (testCase.upgradeId) {
+      case "hangover-hide":
+        assertEqual(String(maxHp), "8", "Hangover Stage 2 max HP");
+        break;
+      case "petty-grudge":
+        assertEqual(reward.rottenMaxGrudgeBonusDamage, "1", "Petty Grudge resolved weapon bonus");
+        break;
+      case "counterfeit-soles":
+        assertEqual(reward.rottenDashCooldownMs, "340", "Counterfeit dash cooldown");
+        assertAtLeastNumber(reward.rottenDashWakeCount, 1, "Counterfeit wake count");
+        assertAtLeastNumber(reward.rottenDashWakeHitCount, 1, "Counterfeit wake hit");
+        break;
+      case "compound-interest":
+        assertEqual(reward.rottenMaxCompoundBonusDamage, "2", "Compound capped bonus");
+        assertEqual(reward.rottenMaxTotalWeaponBonusDamage, "2", "Compound actual total bonus");
+        break;
+      case "red-tape-tourniquet":
+        assertEqual(reward.rottenWaveHealCount, "2", "Tourniquet per-wave events");
+        assertAtLeastNumber(reward.rottenWaveHealRestored, 1, "Tourniquet actual restoration");
+        break;
+      case "spite-reserve":
+        assertEqual(reward.rottenSkillCooldownMs, "1008", "Spite Reserve rounded cooldown");
+        break;
+      case "dead-letter":
+        assertAtLeastNumber(reward.rottenDeadLetterCount, 1, "Dead Letter projectile pierce emissions");
+        assertAtLeastNumber(reward.rottenDeadLetterHitCount, 1, "Dead Letter projectile pierce hits");
+        break;
+      case "graft-dividend":
+        assertEqual(reward.rottenEliteBountyGraft, "2", "Dividend doubled elite bounty");
+        assertEqual(reward.rottenEliteDefeatedCount, "1", "Dividend elite defeat");
+        assertEqual(reward.rottenGraft, "9", "Dividend carried purse plus base and double bounty");
+        assertEqual(reward.rottenOfferIds, "spite-reserve|hangover-hide|compound-interest", "Dividend later offers");
+        assertEqual(reward.rottenOfferPrices, "4|4|5", "Dividend later market discount");
+        break;
+    }
+    await page.close();
+    results.push({ ...testCase, entered, reward });
+  }
+
+  return { route: "Rotten Stage 2 all eight carried build effects", cases: results };
+}
+
+async function smokeRottenStageTwoMarket(browser) {
+  const purchasePage = await browser.open(
+    "/?mode=rotten&seed=DIVIDEND-CHAPEL-1&smokeAuto=1&smoke=rottenStageTwoMarket",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await purchasePage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(purchasePage, {
+    label: "Stage 2 Dividend purchase",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "2",
+    stageTwoRouteKey: "1",
+  });
+  const purchaseBefore = await waitForOpenRottenStageTwoMarket(
+    purchasePage,
+    "Stage 2 Dividend purchase",
+  );
+  assertEqual(purchaseBefore.rottenPlanId, "RR1-D66285FF", "Stage 2 purchase plan");
+  assertEqual(purchaseBefore.rottenSelectedRoute, "late-fee-chapel", "Stage 2 purchase route");
+  assertEqual(purchaseBefore.rottenGraft, "9", "Stage 2 purchase purse with elite bounty");
+  assertEqual(purchaseBefore.rottenHp, "5/6", "Stage 2 purchase honest carried HP");
+  assertEqual(purchaseBefore.rottenUpgrades, "graft-dividend", "Stage 2 purchase prior ownership");
+  assertEqual(
+    purchaseBefore.rottenOfferIds,
+    "spite-reserve|hangover-hide|compound-interest",
+    "Stage 2 purchase deterministic eligible offers",
+  );
+  assertEqual(purchaseBefore.rottenOfferPrices, "4|4|5", "Stage 2 purchase Dividend prices");
+  assertEqual(purchaseBefore.rottenEliteBountyGraft, "2", "Stage 2 purchase elite bounty carry");
+  assertEqual(purchaseBefore.rottenEliteDefeatedCount, "1", "Stage 2 purchase elite carry");
+  assertEqual(
+    purchaseBefore.rottenRouteHistory,
+    "1:bailiffs-ramp:upgrade:graft-dividend|2:late-fee-chapel:pending",
+    "Stage 2 purchase pending two-entry history",
+  );
+  const purchaseTruth = pickDataset(purchaseBefore, rottenStageTwoMarketTruthKeys());
+  await purchasePage.key("6");
+  await purchasePage.waitForDataset("rottenRewardFeedbackReason", "invalid-input", 2_000);
+  const purchaseInvalid = await purchasePage.dataset(rottenStageTwoMarketTruthKeys());
+  assertDeepEqual(
+    pickDataset(purchaseInvalid, rottenStageTwoMarketTruthKeys()),
+    purchaseTruth,
+    "Stage 2 invalid input strict no-op",
+  );
+  await captureEvidence(purchasePage, "rotten-stage-two-market-purchase-open-1920x1080.png");
+  await purchasePage.key("1");
+  await purchasePage.waitForDataset("rottenStage", "3", 5_000);
+  const purchase = await assertRottenStageThreeDocket(purchasePage, {
+    label: "Stage 2 purchase",
+    expectedRoutes: "garnish-gallery|collection-parade",
+    expectedHistory:
+      "1:bailiffs-ramp:upgrade:graft-dividend|2:late-fee-chapel:upgrade:spite-reserve",
+    evidence: "rotten-stage-three-after-purchase-1920x1080.png",
+  });
+  assertEqual(purchase.rottenGraft, "5", "Stage 2 purchase payment");
+  assertEqual(purchase.rottenHp, "5/6", "Stage 2 purchase carried HP");
+  assertEqual(
+    purchase.rottenUpgrades,
+    "graft-dividend|spite-reserve",
+    "Stage 2 purchase carried ownership",
+  );
+  assertEqual(purchase.rottenMarketChoice, "upgrade:spite-reserve", "Stage 2 purchase choice");
+  assertEqual(
+    purchase.rottenMarketTraceEvent,
+    "market:2:late-fee-chapel:upgrade:spite-reserve:spent-4",
+    "Stage 2 purchase trace",
+  );
+  assertEqual(purchase.rottenEliteBountyGraft, "2", "Stage 3 elite bounty carry");
+  const purchaseBuild = JSON.parse(purchase.rottenBuildSummary);
+  assertEqual(String(purchaseBuild.marketDiscount), "1", "Stage 3 Dividend build carry");
+  assertEqual(
+    String(purchaseBuild.activeSkillCooldownReduced),
+    "true",
+    "Stage 3 purchased build carry",
+  );
+  await purchasePage.close();
+
+  const healPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoMarket",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await healPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(healPage, {
+    label: "Stage 2 heal",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "1",
+  });
+  const healBefore = await waitForOpenRottenStageTwoMarket(healPage, "Stage 2 heal");
+  assertEqual(healBefore.rottenPlanId, "RR1-1C93B57F", "Stage 2 heal GA plan");
+  assertEqual(healBefore.rottenSelectedRoute, "seized-goods-lift", "Stage 2 heal route");
+  assertEqual(healBefore.rottenHp, "5/6", "Stage 2 heal actual damaged HP");
+  assertEqual(healBefore.rottenGraft, "12", "Stage 2 heal purse");
+  assertEqual(healBefore.rottenHealAvailable, "true", "Stage 2 heal available");
+  await captureEvidence(healPage, "rotten-stage-two-market-heal-open-1366x768.png");
+  await healPage.key("4");
+  await healPage.waitForDataset("rottenStage", "3", 5_000);
+  const heal = await assertRottenStageThreeDocket(healPage, {
+    label: "Stage 2 heal",
+    expectedRoutes: "collection-parade|garnish-gallery",
+    expectedHistory: "1:bailiffs-ramp:bank|2:seized-goods-lift:heal:1",
+    evidence: "rotten-stage-three-after-heal-1366x768.png",
+  });
+  assertEqual(heal.rottenGraft, "10", "Stage 2 heal payment");
+  assertEqual(heal.rottenHp, "6/6", "Stage 2 heal restored exact missing HP");
+  assertEqual(heal.rottenMarketChoice, "heal:1", "Stage 2 heal choice");
+  assertEqual(
+    heal.rottenMarketTraceEvent,
+    "market:2:seized-goods-lift:heal:1:spent-2",
+    "Stage 2 heal trace",
+  );
+  await healPage.close();
+
+  const bankPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoMarket",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await bankPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(bankPage, {
+    label: "Stage 2 bank",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "1",
+    stageTwoRouteKey: "1",
+  });
+  const bankBefore = await waitForOpenRottenStageTwoMarket(bankPage, "Stage 2 bank");
+  assertEqual(bankBefore.rottenGraft, "5", "Stage 2 bank purse after Stage 1 purchase");
+  assertEqual(bankBefore.rottenUpgrades, "dead-letter", "Stage 2 bank carried upgrade");
+  assertEqual(
+    bankBefore.rottenOfferIds,
+    "counterfeit-soles|compound-interest|petty-grudge",
+    "Stage 2 bank ownership-excluding offers",
+  );
+  assertEqual(bankBefore.rottenOfferPrices, "4|6|5", "Stage 2 bank offer prices");
+  const bankTruth = pickDataset(bankBefore, rottenStageTwoMarketTruthKeys());
+  await bankPage.key("2");
+  await bankPage.waitForDataset("rottenRewardFeedbackReason", "unaffordable", 2_000);
+  const unaffordable = await bankPage.dataset(rottenStageTwoMarketTruthKeys());
+  assertDeepEqual(
+    pickDataset(unaffordable, rottenStageTwoMarketTruthKeys()),
+    bankTruth,
+    "Stage 2 unaffordable purchase strict no-op",
+  );
+  await bankPage.key("5");
+  await bankPage.waitForDataset("rottenStage", "3", 5_000);
+  const bank = await assertRottenStageThreeDocket(bankPage, {
+    label: "Stage 2 bank",
+    expectedRoutes: "collection-parade|garnish-gallery",
+    expectedHistory: "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:bank",
+    evidence: "rotten-stage-three-after-bank-1366x768.png",
+  });
+  assertEqual(bank.rottenGraft, "5", "Stage 2 bank preserves purse");
+  assertEqual(bank.rottenUpgrades, "dead-letter", "Stage 2 bank preserves ownership");
+  assertEqual(bank.rottenMarketChoice, "bank", "Stage 2 bank choice");
+  assertEqual(
+    bank.rottenMarketTraceEvent,
+    "market:2:seized-goods-lift:bank:spent-0",
+    "Stage 2 bank trace",
+  );
+  await bankPage.close();
+
+  const fullPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageTwoMarket",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await fullPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(fullPage, {
+    label: "Stage 2 full-health no-op",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+  });
+  const fullBefore = await waitForOpenRottenStageTwoMarket(fullPage, "Stage 2 full-health no-op");
+  assertEqual(fullBefore.rottenSelectedRoute, "bile-registry", "Stage 2 full-health route");
+  assertEqual(fullBefore.rottenHp, "6/6", "Stage 2 full-health honest state");
+  assertEqual(fullBefore.rottenHealAvailable, "false", "Stage 2 full-health unavailable heal");
+  const fullTruth = pickDataset(fullBefore, rottenStageTwoMarketTruthKeys());
+  await fullPage.key("4");
+  await fullPage.waitForDataset("rottenRewardFeedbackReason", "full-health", 2_000);
+  const fullHealth = await fullPage.dataset(rottenStageTwoMarketTruthKeys());
+  assertDeepEqual(
+    pickDataset(fullHealth, rottenStageTwoMarketTruthKeys()),
+    fullTruth,
+    "Stage 2 full-health heal strict no-op",
+  );
+  await captureEvidence(fullPage, "rotten-stage-two-market-full-health-no-op-1920x1080.png");
+  await fullPage.key("5");
+  await fullPage.waitForDataset("rottenStage", "3", 5_000);
+  const fullBank = await assertRottenStageThreeDocket(fullPage, {
+    label: "Stage 2 full-health bank",
+    expectedRoutes: "appeal-furnace|collection-parade",
+    expectedHistory: "1:bailiffs-ramp:bank|2:bile-registry:bank",
+    evidence: "rotten-stage-three-bile-bank-1920x1080.png",
+  });
+  assertEqual(fullBank.rottenHp, "6/6", "Stage 2 full-health bank carried HP");
+  assertEqual(fullBank.rottenGraft, "12", "Stage 2 full-health bank carried purse");
+  await fullPage.close();
+
+  return {
+    route: "Rotten Stage 2 purchase, heal, bank, no-ops, and inert Stage 3 docket",
+    purchase: { before: purchaseBefore, invalid: purchaseInvalid, after: purchase },
+    heal: { before: healBefore, after: heal },
+    bank: { before: bankBefore, unaffordable, after: bank },
+    fullHealth: { before: fullBefore, rejected: fullHealth, after: fullBank },
+  };
+}
+
+function rottenStageTwoMarketTruthKeys() {
+  return [
+    ...rottenMarketTruthKeys(),
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenEliteBountyGraft",
+    "rottenEliteDefeatedCount",
+    "rottenEliteDefeatedVariants",
+    "rottenBuildSummary",
+  ];
+}
+
+async function waitForOpenRottenStageTwoMarket(page, label) {
+  try {
+    await page.waitForDataset("rottenPhase", "reward-choice", 45_000);
+    await page.waitForDataset("rottenStage", "2", 2_000);
+    await page.waitForDataset("rottenMarketStatus", "open", 2_000);
+  } catch (error) {
+    const stalled = await page.dataset(rottenStageTwoMarketTruthKeys());
+    throw new Error(`${label} did not open the Stage 2 market: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 340));
+  const state = await page.dataset(rottenStageTwoMarketTruthKeys());
+  assertEqual(state.rottenRewardDecisionCount, "1", `${label} prior decision count`);
+  assertEqual(state.rottenMarketStage, "2", `${label} market stage`);
+  assertEqual(state.rottenOfferIds.split("|").filter(Boolean).length, 3, `${label} offer count`);
+  assertEqual(new Set(state.rottenOfferIds.split("|")).size, 3, `${label} unique offers`);
+  assertEqual(state.rottenOfferPrices.split("|").filter(Boolean).length, 3, `${label} price count`);
+  assertEqual(state.rottenCombatObjectCount, "0", `${label} reward cleanup`);
+  assertEqual(state.canvasCount, 1, `${label} canvas count`);
+  return state;
+}
+
+async function assertRottenStageThreeDocket(page, {
+  label,
+  expectedRoutes,
+  expectedHistory,
+  evidence,
+}) {
+  await page.waitForDataset("rottenPhase", "route-choice", 2_000);
+  await new Promise((resolve) => setTimeout(resolve, 180));
+  const state = await page.dataset([
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  assertEqual(state.rottenStage, "3", `${label} Stage 3 number`);
+  assertEqual(state.rottenRouteOptions, expectedRoutes, `${label} planned Stage 3 routes`);
+  assertEqual(state.rottenSelectedRoute, "", `${label} Stage 3 route remains unselected`);
+  assertEqual(state.rottenRouteHistory, expectedHistory, `${label} two-entry history`);
+  assertEqual(state.rottenRewardDecisionCount, "2", `${label} two decisions`);
+  assertEqual(state.rottenMarketStatus, "resolved", `${label} market resolved`);
+  assertEqual(state.rottenMarketStage, "2", `${label} resolved market provenance`);
+  assertEqual(state.rottenOfferIds, "", `${label} no active offers`);
+  assertEqual(state.rottenLivingEnemies, "0", `${label} no Stage 3 enemies`);
+  assertEqual(state.rottenCombatObjectCount, "0", `${label} no Stage 3 combat objects`);
+  assertEqual(state.canvasCount, 1, `${label} one canvas`);
+  await assertNoMissingTextureGreen(page, `${label} Stage 3 docket`);
+  await captureEvidence(page, evidence);
+
+  const inertTruth = pickDataset(state, [
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  for (const key of ["1", "2", "5"]) {
+    await page.key(key);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 180));
+  const afterLateInput = await page.dataset([
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  assertDeepEqual(
+    pickDataset(afterLateInput, [
+      ...rottenStageTwoMarketTruthKeys(),
+      "rottenRewardFeedback",
+      "rottenRewardFeedbackReason",
+    ]),
+    inertTruth,
+    `${label} repeated and late Stage 3 inputs are inert`,
+  );
+  return afterLateInput;
+}
+
+async function smokeRottenStageTwoRetry(browser) {
+  const page = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoRetry",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await page.waitForDataset("rottenPhase", "loadout");
+  const initial = await page.dataset([
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenStage",
+    "rottenRouteOptions",
+    "rottenGraft",
+    "rottenTraceDigest",
+    "rottenCombatObjectCount",
+  ]);
+  await enterRottenStageTwo(page, {
+    label: "Stage 2 death/retry",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "1",
+    stageTwoRouteKey: "2",
+  });
+  const entered = await page.dataset([
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenStageWavesCleared",
+  ]);
+  assertEqual(entered.rottenStage, "2", "Stage 2 retry entered stage");
+  assertEqual(entered.rottenSelectedRoute, "late-fee-chapel", "Stage 2 retry route");
+  assertEqual(entered.rottenUpgrades, "dead-letter", "Stage 2 retry carried upgrade");
+  assertEqual(
+    entered.rottenRouteHistory,
+    "1:bailiffs-ramp:upgrade:dead-letter",
+    "Stage 2 retry carried history",
+  );
+  if (Number(entered.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Stage 2 retry did not enter live combat: ${JSON.stringify(entered)}`);
+  }
+  try {
+    await page.waitForDataset("rottenPhase", "dead", 30_000);
+  } catch (error) {
+    const stalled = await page.dataset([
+      ...rottenStageTwoMarketTruthKeys(),
+      "rottenEnemyStates",
+      "rottenEnemyTell",
+      "rottenStageWavesCleared",
+    ]);
+    throw new Error(`Stage 2 retry did not reach an actual death: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  const dead = await page.dataset([
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenStageWavesCleared",
+    "rottenEnemyStates",
+  ]);
+  assertEqual(dead.rottenStage, "2", "Stage 2 retry death stage");
+  assertEqual(dead.rottenPhase, "dead", "Stage 2 retry death phase");
+  assertEqual(dead.rottenHp, "0/6", "Stage 2 retry actual death HP");
+  assertEqual(dead.rottenUpgrades, "dead-letter", "Stage 2 retry death ownership");
+  assertEqual(dead.rottenRewardDecisionCount, "1", "Stage 2 retry prior market decision");
+  if (!String(dead.rottenSpawnHistory).includes("2.1:clerk,writ-runner")) {
+    throw new Error(`Stage 2 retry missing live Stage 2 spawn: ${dead.rottenSpawnHistory}`);
+  }
+  if (Number(dead.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Stage 2 death did not retain owned objects before R: ${dead.rottenCombatObjectCount}`);
+  }
+  await captureEvidence(page, "rotten-stage-two-death-before-retry-1366x768.png");
+
+  await page.key("r");
+  const retryKeys = [
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenStageWavesCleared",
+    "rottenEliteCount",
+  ];
+  const retried = await waitForTwoAnimationFramesOfTruth(
+    page,
+    retryKeys,
+    (state) => state.rottenPhase === "loadout"
+      && state.rottenStage === "1"
+      && state.rottenRouteOptions === "unfiled-alley|bailiffs-ramp"
+      && state.rottenSelectedRoute === ""
+      && state.rottenWeapon === ""
+      && state.rottenSkill === ""
+      && state.rottenWave === "0"
+      && state.rottenStageWavesCleared === "0"
+      && state.rottenWavesCleared === "0"
+      && state.rottenSpawnHistory === ""
+      && state.rottenGraft === "3"
+      && state.rottenUpgrades === ""
+      && state.rottenRouteHistory === ""
+      && state.rottenMarketStatus === ""
+      && state.rottenMarketChoice === ""
+      && state.rottenRewardDecisionCount === "0"
+      && state.rottenOfferIds === ""
+      && state.rottenHp === ""
+      && state.rottenEliteCount === "0"
+      && state.rottenEliteDefeatedCount === "0"
+      && state.rottenEliteBountyGraft === "0"
+      && state.rottenCombatObjectCount === "0",
+    8_000,
+  );
+  assertEqual(retried.rottenSeed, initial.rottenSeed, "Stage 2 retry same seed");
+  assertEqual(retried.rottenPlanId, initial.rottenPlanId, "Stage 2 retry same plan");
+  assertEqual(retried.rottenTraceDigest, initial.rottenTraceDigest, "Stage 2 retry baseline trace");
+  assertEqual(retried.rottenMarketStage, "", "Stage 2 retry market provenance reset");
+  assertEqual(retried.rottenMarketRoute, "", "Stage 2 retry market route reset");
+  assertEqual(retried.rottenEliteDefeatedVariants, "", "Stage 2 retry elite variants reset");
+  const retryBuild = JSON.parse(retried.rottenBuildSummary);
+  assertEqual(String(retryBuild.weaponPatternRepeatOrPierce), "false", "Stage 2 retry build reset");
+  assertEqual(String(retryBuild.marketDiscount), "0", "Stage 2 retry discount reset");
+  assertEqual(retried.canvasCount, 1, "Stage 2 retry one canvas");
+  await assertNoMissingTextureGreen(page, "Stage 2 retry clean loadout");
+  await captureEvidence(page, "rotten-stage-two-retry-clean-1366x768.png");
+  await page.key("r");
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  const afterInertR = await page.dataset(retryKeys);
+  assertDeepEqual(afterInertR, retried, "Stage 2 post-retry R is inert");
+  await page.close();
+
+  return {
+    route: "Rotten Stage 2 actual death to one-key same-seed clean retry",
+    initial,
+    entered,
+    dead,
+    retried,
+  };
+}
+
+async function installRottenEliteLatch(page) {
+  await page.evaluate(`(() => {
+    const observation = {
+      variants: [],
+      maxArmorPips: 0,
+      sawArmorBroken: false,
+      sawAliveEnraged: false,
+      baseRoleWindups: [],
+      maxArmorBreakCount: 0,
+      maxEnrageCount: 0,
+      tells: [],
+    };
+    window.__FOXMAN_ROTTEN_ELITE_OBSERVATION__ = observation;
+    const sample = () => {
+      const data = document.body.dataset;
+      observation.maxArmorBreakCount = Math.max(
+        observation.maxArmorBreakCount,
+        Number(data.rottenEliteArmorBreakCount ?? 0),
+      );
+      observation.maxEnrageCount = Math.max(
+        observation.maxEnrageCount,
+        Number(data.rottenEliteEnrageCount ?? 0),
+      );
+      for (const entry of String(data.rottenEnemyStates ?? "").split("|").filter(Boolean)) {
+        const [role, state, health, variant, armorPips, enraged] = entry.split(":");
+        if (state === "windup" && !observation.baseRoleWindups.includes(role)) {
+          observation.baseRoleWindups.push(role);
+        }
+        if (variant !== "none") {
+          if (!observation.variants.includes(variant)) observation.variants.push(variant);
+          observation.maxArmorPips = Math.max(observation.maxArmorPips, Number(armorPips));
+          if (Number(armorPips) === 0) observation.sawArmorBroken = true;
+          if (enraged === "1" && Number(health) > 0) observation.sawAliveEnraged = true;
+        }
+      }
+      const tell = data.rottenEnemyTell ?? "";
+      if (tell && !observation.tells.includes(tell)) observation.tells.push(tell);
+      if (data.rottenPhase !== "reward-choice" && data.rottenPhase !== "dead") {
+        requestAnimationFrame(sample);
+      }
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenEliteLatch(page) {
+  return page.evaluate(`({
+    ...window.__FOXMAN_ROTTEN_ELITE_OBSERVATION__,
+    variants: [...window.__FOXMAN_ROTTEN_ELITE_OBSERVATION__.variants],
+    baseRoleWindups: [...window.__FOXMAN_ROTTEN_ELITE_OBSERVATION__.baseRoleWindups],
+    tells: [...window.__FOXMAN_ROTTEN_ELITE_OBSERVATION__.tells],
+  })`);
+}
+
+function rottenStageTwoMechanicTruthKeys() {
+  return [
+    "rottenPhase",
+    "rottenStage",
+    "rottenSelectedRoute",
+    "rottenHp",
+    "rottenEnemyStates",
+    "rottenEnemyTell",
+    "rottenShieldBlockCount",
+    "rottenShieldFlankHitCount",
+    "rottenShieldOpenCount",
+    "rottenShieldOpenSources",
+    "rottenHazardTelegraphCount",
+    "rottenHazardActiveCount",
+    "rottenHazardActivationCount",
+    "rottenHazardHitCount",
+    "rottenHazardClearCount",
+    "rottenHazardExpiryCount",
+    "rottenHazardTeardownCount",
+    "rottenSkillHitCount",
+    "rottenCombatObjectCount",
+  ];
+}
+
+async function installRottenStageTwoMechanicsLatch(page) {
+  await page.evaluate(`(() => {
+    const observation = {
+      maxShieldBlockCount: 0,
+      maxShieldFlankHitCount: 0,
+      maxShieldOpenCount: 0,
+      shieldOpenSources: [],
+      shieldStates: [],
+      shieldHealthSamples: [],
+      maxHazardTelegraphCount: 0,
+      maxHazardActiveCount: 0,
+      maxHazardActivationCount: 0,
+      maxHazardHitCount: 0,
+      maxHazardClearCount: 0,
+      maxHazardExpiryCount: 0,
+      maxHazardTeardownCount: 0,
+      maxSkillHitCount: 0,
+      enemyTells: [],
+    };
+    window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__ = observation;
+    const sample = () => {
+      const data = document.body.dataset;
+      const number = (key) => Number(data[key] ?? 0);
+      observation.maxShieldBlockCount = Math.max(observation.maxShieldBlockCount, number("rottenShieldBlockCount"));
+      observation.maxShieldFlankHitCount = Math.max(observation.maxShieldFlankHitCount, number("rottenShieldFlankHitCount"));
+      observation.maxShieldOpenCount = Math.max(observation.maxShieldOpenCount, number("rottenShieldOpenCount"));
+      observation.maxHazardTelegraphCount = Math.max(observation.maxHazardTelegraphCount, number("rottenHazardTelegraphCount"));
+      observation.maxHazardActiveCount = Math.max(observation.maxHazardActiveCount, number("rottenHazardActiveCount"));
+      observation.maxHazardActivationCount = Math.max(observation.maxHazardActivationCount, number("rottenHazardActivationCount"));
+      observation.maxHazardHitCount = Math.max(observation.maxHazardHitCount, number("rottenHazardHitCount"));
+      observation.maxHazardClearCount = Math.max(observation.maxHazardClearCount, number("rottenHazardClearCount"));
+      observation.maxHazardExpiryCount = Math.max(observation.maxHazardExpiryCount, number("rottenHazardExpiryCount"));
+      observation.maxHazardTeardownCount = Math.max(observation.maxHazardTeardownCount, number("rottenHazardTeardownCount"));
+      observation.maxSkillHitCount = Math.max(observation.maxSkillHitCount, number("rottenSkillHitCount"));
+      for (const source of String(data.rottenShieldOpenSources ?? "").split("|").filter(Boolean)) {
+        if (!observation.shieldOpenSources.includes(source)) observation.shieldOpenSources.push(source);
+      }
+      for (const entry of String(data.rottenEnemyStates ?? "").split("|").filter(Boolean)) {
+        const [role, state, health, eliteVariant, armorPips, enraged, shieldState] = entry.split(":");
+        if (role === "shield-auditor") {
+          if (!observation.shieldStates.includes(shieldState)) observation.shieldStates.push(shieldState);
+          const healthSample = [state, health, shieldState].join(":");
+          if (!observation.shieldHealthSamples.includes(healthSample)) observation.shieldHealthSamples.push(healthSample);
+        }
+      }
+      const tell = data.rottenEnemyTell ?? "";
+      if (tell && !observation.enemyTells.includes(tell)) observation.enemyTells.push(tell);
+      if (data.rottenPhase !== "reward-choice" && data.rottenPhase !== "dead") {
+        requestAnimationFrame(sample);
+      }
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenStageTwoMechanicsLatch(page) {
+  return page.evaluate(`({ ...window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__,
+    shieldOpenSources: [...window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__.shieldOpenSources],
+    shieldStates: [...window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__.shieldStates],
+    shieldHealthSamples: [...window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__.shieldHealthSamples],
+    enemyTells: [...window.__FOXMAN_ROTTEN_STAGE_TWO_MECHANICS__.enemyTells],
+  })`);
+}
+
 async function smokeRottenMarketPurchase(browser) {
   const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenMarket";
 
@@ -447,10 +1783,10 @@ async function smokeRottenMarketPurchase(browser) {
   await captureEvidence(purchasePage, "rotten-market-purchase-accepted-1366x768.png");
   await captureEvidence(purchasePage, "rotten-stage-two-docket-1366x768.png");
   const purchaseTruth = pickDataset(purchase, rottenMarketTruthKeys());
-  await purchasePage.key("1");
+  await purchasePage.key("3");
   await new Promise((resolve) => setTimeout(resolve, 120));
-  const repeatedPurchase = await purchasePage.dataset(rottenMarketTruthKeys());
-  assertDeepEqual(repeatedPurchase, purchaseTruth, "Rotten resolved market repeat input no-op");
+  const latePurchase = await purchasePage.dataset(rottenMarketTruthKeys());
+  assertDeepEqual(latePurchase, purchaseTruth, "Rotten resolved market late input no-op");
   await purchasePage.close();
 
   return {
@@ -458,7 +1794,7 @@ async function smokeRottenMarketPurchase(browser) {
     purchaseArming,
     purchaseBefore,
     purchase,
-    repeatedPurchase,
+    latePurchase,
   };
 }
 
@@ -1573,6 +2909,8 @@ async function captureEvidence(page, fileName) {
   const screenshot = await page.send("Page.captureScreenshot", {
     format: "png",
     fromSurface: true,
+  }, {
+    timeoutMs: cdpScreenshotTimeoutMs,
   });
   writeFileSync(join(evidenceDir, fileName), Buffer.from(screenshot.data, "base64"));
 }
@@ -2367,57 +3705,211 @@ async function launchChrome() {
   });
 
   const [port] = readFileSync(portFile, "utf8").trim().split("\n");
-  return new Browser(Number(port));
+  const browser = new Browser(Number(port));
+  await browser.captureBaseline();
+  return browser;
+}
+
+async function fetchWithTimeout(url, options, timeoutMs, label) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(label + " failed within " + timeoutMs + "ms: " + reason);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 class Browser {
   constructor(port) {
     this.port = port;
+    this.baselineTargetIds = new Set();
+  }
+
+  async captureBaseline() {
+    const targets = await this.listPageTargets();
+    this.baselineTargetIds = new Set(targets.map(({ id }) => id));
+    recordProgress("browser-baseline", {
+      pageTargetCount: targets.length,
+      baselineTargetIds: [...this.baselineTargetIds],
+    });
+  }
+
+  async listPageTargets() {
+    const response = await fetchWithTimeout(
+      "http://127.0.0.1:" + this.port + "/json/list",
+      {},
+      browserHttpTimeoutMs,
+      "Chrome /json/list",
+    );
+    if (!response.ok) {
+      throw new Error(
+        "Chrome /json/list failed: " + response.status + " " + response.statusText,
+      );
+    }
+    const targets = await response.json();
+    return targets.filter(({ type }) => type === "page");
+  }
+
+  async targetSnapshot() {
+    const targets = await this.listPageTargets();
+    const testTargets = targets.filter(({ id }) => !this.baselineTargetIds.has(id));
+    return {
+      pageTargetCount: targets.length,
+      testPageTargetCount: testTargets.length,
+      targetIds: targets.map(({ id }) => id),
+      testTargetIds: testTargets.map(({ id }) => id),
+    };
+  }
+
+  async safeTargetSnapshot() {
+    try {
+      return await this.targetSnapshot();
+    } catch (error) {
+      return {
+        targetSnapshotError: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  async targetExists(targetId) {
+    return (await this.listPageTargets()).some(({ id }) => id === targetId);
+  }
+
+  async closeTargetViaHttp(targetId) {
+    const response = await fetchWithTimeout(
+      "http://127.0.0.1:" + this.port + "/json/close/" + encodeURIComponent(targetId),
+      {},
+      browserHttpTimeoutMs,
+      "Chrome /json/close target=" + targetId,
+    );
+    if (!response.ok) {
+      throw new Error(
+        "Chrome /json/close failed for target=" + targetId + ": "
+          + response.status + " " + response.statusText,
+      );
+    }
+  }
+
+  async waitForTargetGone(targetId, timeoutMs = cdpCloseTimeoutMs) {
+    const started = Date.now();
+    while (Date.now() - started < timeoutMs) {
+      if (!await this.targetExists(targetId)) {
+        return true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    return !await this.targetExists(targetId);
   }
 
   async open(path, options = {}) {
     const url = new URL(path, baseUrl).toString();
     const initialUrl = options.viewport ? "about:blank" : url;
-    const response = await fetch(
-      `http://127.0.0.1:${this.port}/json/new?${encodeURIComponent(initialUrl)}`,
+    recordProgress("target-open-start", {
+      route: url,
+      ...await this.safeTargetSnapshot(),
+    });
+    const response = await fetchWithTimeout(
+      "http://127.0.0.1:" + this.port + "/json/new?" + encodeURIComponent(initialUrl),
       { method: "PUT" },
+      browserHttpTimeoutMs,
+      "Chrome /json/new route=" + url,
     );
 
     if (!response.ok) {
-      throw new Error(`Failed to open ${url}: ${response.status} ${response.statusText}`);
+      throw new Error("Failed to open " + url + ": " + response.status + " " + response.statusText);
     }
 
     const target = await response.json();
-    const page = new CdpPage(target.webSocketDebuggerUrl, target.id);
-    await page.ready();
-    if (options.viewport) {
-      await page.send("Emulation.setDeviceMetricsOverride", {
-        ...options.viewport,
-        deviceScaleFactor: 1,
-        mobile: true,
+    const page = new CdpPage({
+      browser: this,
+      webSocketUrl: target.webSocketDebuggerUrl,
+      targetId: target.id,
+      route: url,
+    });
+    try {
+      await page.ready();
+      if (options.viewport) {
+        await page.send("Emulation.setDeviceMetricsOverride", {
+          ...options.viewport,
+          deviceScaleFactor: 1,
+          mobile: true,
+        });
+        await page.send("Page.navigate", { url }, {
+          timeoutMs: cdpNavigationTimeoutMs,
+        });
+      }
+      recordProgress("target-open-ready", {
+        route: url,
+        targetId: target.id,
+        ...await this.safeTargetSnapshot(),
       });
-      await page.send("Page.navigate", { url });
+      return page;
+    } catch (error) {
+      try {
+        await page.close();
+      } catch (closeError) {
+        recordProgress("target-open-cleanup-failed", {
+          route: url,
+          targetId: target.id,
+          error: closeError instanceof Error ? closeError.message : String(closeError),
+        });
+      }
+      throw error;
     }
-    return page;
   }
 }
 
 class CdpPage {
-  constructor(webSocketUrl, targetId) {
+  constructor({ browser, webSocketUrl, targetId, route }) {
+    this.browser = browser;
     this.targetId = targetId;
+    this.route = route;
+    this.currentUrl = route;
     this.nextId = 1;
     this.pending = new Map();
     this.errors = [];
+    this.lastKnownContext = {};
+    this.closing = false;
+    this.closed = false;
+    this.socketClosed = false;
+    this.closePromise = null;
     this.ws = new WebSocket(webSocketUrl);
+    let openedSettled = false;
     this.opened = new Promise((resolve, reject) => {
-      this.ws.addEventListener("open", resolve, { once: true });
-      this.ws.addEventListener("error", reject, { once: true });
+      this.ws.addEventListener("open", () => {
+        openedSettled = true;
+        resolve();
+      }, { once: true });
+      this.ws.addEventListener("error", (event) => {
+        if (!openedSettled) {
+          openedSettled = true;
+          reject(this.cdpError("WebSocket.open", this.socketEventDetail("error", event)));
+        }
+      }, { once: true });
+      this.ws.addEventListener("close", (event) => {
+        if (!openedSettled) {
+          openedSettled = true;
+          reject(this.cdpError("WebSocket.open", this.socketEventDetail("close", event)));
+        }
+      }, { once: true });
     });
+    this.opened.catch(() => {});
     this.ws.addEventListener("message", (event) => this.onMessage(event));
+    this.ws.addEventListener("error", (event) => {
+      this.rejectPending(this.socketEventDetail("error", event));
+    });
+    this.ws.addEventListener("close", (event) => {
+      this.socketClosed = true;
+      this.rejectPending(this.socketEventDetail("close", event));
+    });
   }
 
   async ready() {
-    await this.opened;
     await this.send("Page.enable");
     await this.send("Runtime.enable");
     await this.send("Log.enable");
@@ -2425,32 +3917,207 @@ class CdpPage {
   }
 
   async close() {
-    this.ws.close();
+    if (!this.closePromise) {
+      this.closePromise = this.closeTarget();
+    }
+    return this.closePromise;
   }
 
-  async send(method, params = {}) {
-    await this.opened;
-    const id = this.nextId++;
-    const response = new Promise((resolve, reject) => {
-      this.pending.set(id, { resolve, reject });
+  async closeTarget() {
+    if (this.closed) {
+      return;
+    }
+
+    this.closing = true;
+    let closeCommandError;
+    let targetGone = false;
+
+    try {
+      targetGone = !await this.browser.targetExists(this.targetId);
+    } catch (error) {
+      closeCommandError = error;
+    }
+
+    if (!targetGone && this.ws.readyState === WebSocket.OPEN) {
+      try {
+        await this.send("Target.closeTarget", { targetId: this.targetId }, {
+          timeoutMs: cdpCloseTimeoutMs,
+          allowWhileClosing: true,
+        });
+      } catch (error) {
+        closeCommandError = error;
+      }
+    }
+
+    try {
+      targetGone = await this.browser.waitForTargetGone(this.targetId);
+    } catch (error) {
+      closeCommandError ??= error;
+    }
+
+    if (!targetGone) {
+      try {
+        await this.browser.closeTargetViaHttp(this.targetId);
+        targetGone = await this.browser.waitForTargetGone(this.targetId);
+      } catch (error) {
+        closeCommandError ??= error;
+      }
+    }
+
+    if (!targetGone) {
+      const reason = closeCommandError instanceof Error
+        ? closeCommandError.message
+        : String(closeCommandError ?? "target remained in /json/list");
+      throw this.cdpError("Target.closeTarget", "target did not disappear: " + reason);
+    }
+
+    this.closed = true;
+    this.rejectPending("target closed and disappeared from /json/list");
+    if (
+      this.ws.readyState === WebSocket.OPEN
+      || this.ws.readyState === WebSocket.CONNECTING
+    ) {
+      this.ws.close();
+    }
+    await this.waitForSocketClose(1_000);
+    recordProgress("target-close-complete", {
+      route: this.route,
+      targetId: this.targetId,
+      ...await this.browser.safeTargetSnapshot(),
     });
-    this.ws.send(JSON.stringify({ id, method, params }));
-    return response;
+  }
+
+  async waitForSocketClose(timeoutMs) {
+    if (this.socketClosed || this.ws.readyState === WebSocket.CLOSED) {
+      return;
+    }
+    await new Promise((resolve) => {
+      const timer = setTimeout(resolve, timeoutMs);
+      this.ws.addEventListener("close", () => {
+        clearTimeout(timer);
+        resolve();
+      }, { once: true });
+    });
+  }
+
+  async send(method, params = {}, options = {}) {
+    const timeoutMs = options.timeoutMs ?? cdpSendTimeoutMs;
+    const deadline = Date.now() + timeoutMs;
+    if (this.closed) {
+      throw this.cdpError(method, "target is already closed");
+    }
+    if (this.closing && !options.allowWhileClosing) {
+      throw this.cdpError(method, "target is closing");
+    }
+    if (method === "Page.navigate" && typeof params.url === "string") {
+      this.currentUrl = params.url;
+    }
+    await this.awaitOpened(deadline, method, timeoutMs);
+    if (this.ws.readyState !== WebSocket.OPEN) {
+      throw this.cdpError(method, "websocket is not open");
+    }
+
+    const id = this.nextId++;
+    const remainingMs = deadline - Date.now();
+    if (remainingMs <= 0) {
+      throw this.cdpError(method, "timeout after " + timeoutMs + "ms");
+    }
+
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(this.cdpError(method, "timeout after " + timeoutMs + "ms"));
+      }, remainingMs);
+      this.pending.set(id, { resolve, reject, timer, method });
+      try {
+        this.ws.send(JSON.stringify({ id, method, params }));
+      } catch (error) {
+        clearTimeout(timer);
+        this.pending.delete(id);
+        const reason = error instanceof Error ? error.message : String(error);
+        reject(this.cdpError(method, "websocket send failed: " + reason));
+      }
+    });
+  }
+
+  async awaitOpened(deadline, method, timeoutMs) {
+    const remainingMs = deadline - Date.now();
+    if (remainingMs <= 0) {
+      throw this.cdpError(method, "timeout after " + timeoutMs + "ms opening websocket");
+    }
+    let timer;
+    try {
+      await Promise.race([
+        this.opened,
+        new Promise((_, reject) => {
+          timer = setTimeout(() => {
+            reject(this.cdpError(
+              method,
+              "timeout after " + timeoutMs + "ms opening websocket",
+            ));
+          }, remainingMs);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  rejectPending(detail) {
+    for (const { resolve: _resolve, reject, timer, method } of this.pending.values()) {
+      clearTimeout(timer);
+      reject(this.cdpError(method, detail));
+    }
+    this.pending.clear();
+  }
+
+  socketEventDetail(kind, event) {
+    const code = "code" in event ? event.code : "";
+    const reason = "reason" in event ? event.reason : "";
+    const message = "message" in event ? event.message : "";
+    return "websocket " + kind + " code=" + code + " reason=" + reason + " message=" + message;
+  }
+
+  cdpError(method, detail) {
+    return new Error(
+      "CDP " + detail
+        + "; method=" + method
+        + "; target=" + this.targetId
+        + "; route=" + this.route
+        + "; url=" + this.currentUrl
+        + "; lastKnownDOM=" + JSON.stringify(this.lastKnownContext),
+    );
   }
 
   onMessage(event) {
-    const message = JSON.parse(event.data);
+    let message;
+    try {
+      message = JSON.parse(event.data);
+    } catch (error) {
+      this.errors.push(
+        "Malformed CDP message: " + (error instanceof Error ? error.message : String(error)),
+      );
+      return;
+    }
 
     if (message.id && this.pending.has(message.id)) {
       const pending = this.pending.get(message.id);
       this.pending.delete(message.id);
+      clearTimeout(pending.timer);
 
       if (message.error) {
-        pending.reject(new Error(`${message.error.message}: ${message.error.data ?? ""}`));
+        pending.reject(this.cdpError(
+          pending.method,
+          message.error.message + ": " + (message.error.data ?? ""),
+        ));
       } else {
         pending.resolve(message.result);
       }
       return;
+    }
+
+    if (message.method === "Page.frameNavigated" && message.params.frame?.url) {
+      this.currentUrl = message.params.frame.url;
     }
 
     if (message.method === "Runtime.exceptionThrown") {
@@ -2492,7 +4159,7 @@ class CdpPage {
     });
 
     if (result.exceptionDetails) {
-      throw new Error(result.exceptionDetails.text);
+      throw this.cdpError("Runtime.evaluate", result.exceptionDetails.text);
     }
 
     return result.result.value;
@@ -2500,18 +4167,41 @@ class CdpPage {
 
   async dataset(keys) {
     const keyList = JSON.stringify(keys);
-    return this.evaluate(`(() => {
+    const value = await this.evaluate(`(() => {
       const d = document.body.dataset;
       const out = {};
       for (const key of ${keyList}) out[key] = d[key];
       out.canvasCount = document.querySelectorAll("canvas").length;
       return out;
     })()`);
+    this.updateLastKnownContext(value);
+    return value;
+  }
+
+  updateLastKnownContext(value) {
+    if (!value || typeof value !== "object") {
+      return;
+    }
+    for (const key of [
+      "scene",
+      "rottenScene",
+      "rottenPhase",
+      "rottenStage",
+      "rottenSelectedRoute",
+      "rottenLivingEnemies",
+      "rottenCombatObjectCount",
+      "canvasCount",
+    ]) {
+      if (key in value) {
+        this.lastKnownContext[key] = value[key];
+      }
+    }
   }
 
   async waitForDataset(key, expected, timeoutMs = 5000) {
     await waitFor(async () => {
       const value = await this.evaluate(`document.body.dataset.${key}`);
+      this.lastKnownContext[key] = value;
       return value === expected;
     }, timeoutMs, 100);
 
@@ -2562,6 +4252,55 @@ class CdpPage {
       type: type === "keyDown" ? "rawKeyDown" : type,
     });
   }
+}
+
+async function smokeCdpLifecycle(browserInstance) {
+  const baseline = await browserInstance.targetSnapshot();
+  assertEqual(
+    baseline.testPageTargetCount,
+    0,
+    "CDP lifecycle baseline leaked test targets",
+  );
+  const closes = [];
+
+  for (let iteration = 1; iteration <= 40; iteration += 1) {
+    const page = await browserInstance.open("about:blank?foxmanLifecycle=" + iteration);
+    const opened = await browserInstance.targetSnapshot();
+    assertEqual(
+      opened.testPageTargetCount,
+      1,
+      "CDP lifecycle opened target count iteration " + iteration,
+    );
+    const targetId = page.targetId;
+    await page.close();
+    const closed = await browserInstance.targetSnapshot();
+    assertEqual(
+      closed.pageTargetCount,
+      baseline.pageTargetCount,
+      "CDP lifecycle baseline page count iteration " + iteration,
+    );
+    assertEqual(
+      closed.testPageTargetCount,
+      0,
+      "CDP lifecycle leaked test target iteration " + iteration,
+    );
+    closes.push({
+      iteration,
+      targetId,
+      openedPageTargetCount: opened.pageTargetCount,
+      closedPageTargetCount: closed.pageTargetCount,
+      leakedTestTargets: closed.testPageTargetCount,
+    });
+  }
+
+  const final = await browserInstance.targetSnapshot();
+  assertEqual(final.testPageTargetCount, 0, "CDP lifecycle final leaked test targets");
+  return {
+    route: "CDP target lifecycle: 40 open/close cycles",
+    baseline,
+    closes,
+    final,
+  };
 }
 
 async function waitFor(predicate, timeoutMs, intervalMs, tick = () => {}) {
@@ -2615,10 +4354,16 @@ function assertAtMostNumber(actual, expected, label) {
 
 try {
   await ensureServer();
-  const browser = await launchChrome();
+  browser = await launchChrome();
+  recordProgress("run-start", {
+    filter: process.env.FOXMAN_SMOKE_ONLY ?? "unfiltered",
+    baseUrl,
+  });
 
   const results = [];
-  if (process.env.FOXMAN_SMOKE_ONLY === "sumpDeath") {
+  if (process.env.FOXMAN_SMOKE_ONLY === "cdpLifecycle") {
+    results.push(await smokeCdpLifecycle(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "sumpDeath") {
     results.push(await smokeSumpDeathRestart(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "dash") {
     results.push(await smokeDashRoute(browser));
@@ -2645,6 +4390,18 @@ try {
     results.push(await smokeRottenMarketRejected(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarket") {
     results.push(await smokeRottenRunMarket(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoTopology") {
+    results.push(await smokeRottenStageTwoTopology(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoRoles") {
+    results.push(await smokeRottenStageTwoRoles(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoElites") {
+    results.push(await smokeRottenStageTwoElites(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoBuilds") {
+    results.push(await smokeRottenStageTwoBuilds(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoMarket") {
+    results.push(await smokeRottenStageTwoMarket(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoRetry") {
+    results.push(await smokeRottenStageTwoRetry(browser));
   } else {
     results.push(await smokeRottenSmokeIsolation(browser));
     results.push(await smokeRottenRunRetry(browser));
@@ -2674,9 +4431,36 @@ try {
     results.push(await smokeRottenRunContract(browser));
     results.push(await smokeRottenRunEncounter(browser));
     results.push(await smokeRottenRunMarket(browser));
+    results.push(await smokeRottenStageTwoTopology(browser));
+    results.push(await smokeRottenStageTwoRoles(browser));
+    results.push(await smokeRottenStageTwoElites(browser));
+    results.push(await smokeRottenStageTwoBuilds(browser));
+    results.push(await smokeRottenStageTwoMarket(browser));
+    results.push(await smokeRottenStageTwoRetry(browser));
   }
 
-  const payload = { ok: true, results };
+  const finalTargetSnapshot = await browser.targetSnapshot();
+  assertEqual(
+    finalTargetSnapshot.testPageTargetCount,
+    0,
+    "browser smoke final leaked test targets",
+  );
+  recordProgress("run-complete", {
+    filter: process.env.FOXMAN_SMOKE_ONLY ?? "unfiltered",
+    resultCount: results.length,
+    ...finalTargetSnapshot,
+  });
+  const payload = {
+    ok: true,
+    results,
+    diagnostics: {
+      elapsedMs: Date.now() - smokeStartedAt,
+      filter: process.env.FOXMAN_SMOKE_ONLY ?? "unfiltered",
+      baselinePageTargetCount: browser.baselineTargetIds.size,
+      finalTargetSnapshot,
+      progress: progressEvents,
+    },
+  };
   if (evidenceDir) {
     mkdirSync(evidenceDir, { recursive: true });
     const resultFile = process.env.FOXMAN_SMOKE_ONLY
@@ -2688,6 +4472,45 @@ try {
     );
   }
   console.log(JSON.stringify(payload, null, 2));
+} catch (error) {
+  const targetSnapshot = browser
+    ? await browser.safeTargetSnapshot()
+    : { browserLaunched: false };
+  const message = error instanceof Error ? error.message : String(error);
+  recordProgress("run-failure", {
+    filter: process.env.FOXMAN_SMOKE_ONLY ?? "unfiltered",
+    error: message,
+    ...targetSnapshot,
+  });
+  if (evidenceDir) {
+    try {
+      mkdirSync(evidenceDir, { recursive: true });
+      const failureFile = process.env.FOXMAN_SMOKE_ONLY
+        ? `browser-smoke-${process.env.FOXMAN_SMOKE_ONLY}-failure.json`
+        : "browser-smoke-failure.json";
+      writeFileSync(
+        join(evidenceDir, failureFile),
+        `${JSON.stringify({
+          ok: false,
+          error: message,
+          stack: error instanceof Error ? error.stack : undefined,
+          diagnostics: {
+            elapsedMs: Date.now() - smokeStartedAt,
+            filter: process.env.FOXMAN_SMOKE_ONLY ?? "unfiltered",
+            targetSnapshot,
+            progress: progressEvents,
+          },
+        }, null, 2)}\n`,
+      );
+    } catch (writeError) {
+      console.error(
+        "[smoke-progress] failed to write failure diagnostics: "
+          + (writeError instanceof Error ? writeError.message : String(writeError)),
+      );
+    }
+  }
+  console.error("[smoke-progress] terminal failure: " + (error instanceof Error ? error.stack : message));
+  throw error;
 } finally {
   if (chrome) {
     chrome.kill("SIGTERM");

@@ -1,0 +1,1867 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "CDP target lifecycle: 40 open/close cycles",
+      "baseline": {
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      "closes": [
+        {
+          "iteration": 1,
+          "targetId": "D716EF99F847CDCCAAA5255AD7AE91F0",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 2,
+          "targetId": "E72F2A749082DBDD9367C9018188F0C9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 3,
+          "targetId": "89A56E57448FD0697DA0893670754A5C",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 4,
+          "targetId": "10D2D4D1459E6C61B2972060F3C05DFB",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 5,
+          "targetId": "9150E971F74DB094320CB0F97966A9B0",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 6,
+          "targetId": "069E5FA5E6BE2EF1124815C9CC6B4BA9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 7,
+          "targetId": "C7DAC7C51F70B73210B7D8650E14AD79",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 8,
+          "targetId": "9CF1FF2CAEBBBBB5D02713F4873A17C4",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 9,
+          "targetId": "87FD1D50C6F251627E67107AEAB2CA4C",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 10,
+          "targetId": "005AAA29F7D70476335D69EEF01C2B70",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 11,
+          "targetId": "7B32D2D96DCCD601AD9E1EEEE0EADFF7",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 12,
+          "targetId": "01C02DA4A7C6FAE8F6F0CF417045C8A9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 13,
+          "targetId": "9DC3B617C9C0C8CFC8B9FE4C7345D65F",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 14,
+          "targetId": "58DE07DDB4FD2F13626C8A30F859AEC8",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 15,
+          "targetId": "8E868ACE32A046B52EA305C3CA9232C8",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 16,
+          "targetId": "B9D4809F986BED639D90929F310650C9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 17,
+          "targetId": "7D4FC52EC2B9FC17EA931E7E486BE8C6",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 18,
+          "targetId": "3852B8D633833C81B77CDE1E2D098CEA",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 19,
+          "targetId": "B38E65992F292DDA9B330B3CC816B2E9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 20,
+          "targetId": "7CD3EA21FE5403C52AC49BBF8709CFF8",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 21,
+          "targetId": "096731DA2CEEF4BEAA4E26453D94E2F4",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 22,
+          "targetId": "1001739310725F5A1431F626FF28AE94",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 23,
+          "targetId": "F67E8AFD4912E6707BF0938FA3CBB87F",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 24,
+          "targetId": "D9893A5A1530FE5AB77E19DA937DBCDF",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 25,
+          "targetId": "2E66F4294A45924DD6F1C94AA2283481",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 26,
+          "targetId": "967346CDB4FABFACEBB3475818D584FC",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 27,
+          "targetId": "EE862598E6A9A6AC4E3EBED8930F8F7E",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 28,
+          "targetId": "66AE29B34F30B5FE2AF37859BD1C3ABB",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 29,
+          "targetId": "5A73883CAEA087466C9020156BD0B5D3",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 30,
+          "targetId": "55477A01420A2E95AD543F674BDE8863",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 31,
+          "targetId": "DC6ACF87F62111A261EEDC44A32AF1FF",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 32,
+          "targetId": "199A3B9CEA3A4E2BBD2F923EF5BB86A9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 33,
+          "targetId": "AC272CD40B5DD48F800F1FC7E6065AC7",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 34,
+          "targetId": "6CEFDFF1959AA246C2AA61474946A4B9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 35,
+          "targetId": "1F4B0EA2025FD2B762969105FADAF4BF",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 36,
+          "targetId": "BFD6B6DFCB791E19840480A83A0A75A1",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 37,
+          "targetId": "3E058449776EE8DB7BCD8BE2F2E0D9D9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 38,
+          "targetId": "9CC822B89E4B01255A8FBD5772C97614",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 39,
+          "targetId": "D3FBD54AF27FF79F5CBA2E8E8C39F8B9",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        },
+        {
+          "iteration": 40,
+          "targetId": "93955555EADED0E889C337558BBCF3F7",
+          "openedPageTargetCount": 2,
+          "closedPageTargetCount": 1,
+          "leakedTestTargets": 0
+        }
+      ],
+      "final": {
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      }
+    }
+  ],
+  "diagnostics": {
+    "elapsedMs": 23186,
+    "filter": "cdpLifecycle",
+    "baselinePageTargetCount": 1,
+    "finalTargetSnapshot": {
+      "pageTargetCount": 1,
+      "testPageTargetCount": 0,
+      "targetIds": [
+        "3BECEE606B9EA15328C7E0948047DF3C"
+      ],
+      "testTargetIds": []
+    },
+    "progress": [
+      {
+        "elapsedMs": 1019,
+        "kind": "browser-baseline",
+        "pageTargetCount": 1,
+        "baselineTargetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ]
+      },
+      {
+        "elapsedMs": 1019,
+        "kind": "run-start",
+        "filter": "cdpLifecycle",
+        "baseUrl": "http://127.0.0.1:4177"
+      },
+      {
+        "elapsedMs": 1120,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=1",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 1689,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=1",
+        "targetId": "D716EF99F847CDCCAAA5255AD7AE91F0",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "D716EF99F847CDCCAAA5255AD7AE91F0",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "D716EF99F847CDCCAAA5255AD7AE91F0"
+        ]
+      },
+      {
+        "elapsedMs": 1696,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=1",
+        "targetId": "D716EF99F847CDCCAAA5255AD7AE91F0",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 1697,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=2",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 2232,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=2",
+        "targetId": "E72F2A749082DBDD9367C9018188F0C9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "E72F2A749082DBDD9367C9018188F0C9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "E72F2A749082DBDD9367C9018188F0C9"
+        ]
+      },
+      {
+        "elapsedMs": 2237,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=2",
+        "targetId": "E72F2A749082DBDD9367C9018188F0C9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 2239,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=3",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 2774,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=3",
+        "targetId": "89A56E57448FD0697DA0893670754A5C",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "89A56E57448FD0697DA0893670754A5C",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "89A56E57448FD0697DA0893670754A5C"
+        ]
+      },
+      {
+        "elapsedMs": 2779,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=3",
+        "targetId": "89A56E57448FD0697DA0893670754A5C",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 2779,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=4",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 3310,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=4",
+        "targetId": "10D2D4D1459E6C61B2972060F3C05DFB",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "10D2D4D1459E6C61B2972060F3C05DFB",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "10D2D4D1459E6C61B2972060F3C05DFB"
+        ]
+      },
+      {
+        "elapsedMs": 3316,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=4",
+        "targetId": "10D2D4D1459E6C61B2972060F3C05DFB",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 3345,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=5",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 3885,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=5",
+        "targetId": "9150E971F74DB094320CB0F97966A9B0",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "9150E971F74DB094320CB0F97966A9B0",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "9150E971F74DB094320CB0F97966A9B0"
+        ]
+      },
+      {
+        "elapsedMs": 3892,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=5",
+        "targetId": "9150E971F74DB094320CB0F97966A9B0",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 3892,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=6",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 4463,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=6",
+        "targetId": "069E5FA5E6BE2EF1124815C9CC6B4BA9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "069E5FA5E6BE2EF1124815C9CC6B4BA9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "069E5FA5E6BE2EF1124815C9CC6B4BA9"
+        ]
+      },
+      {
+        "elapsedMs": 4472,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=6",
+        "targetId": "069E5FA5E6BE2EF1124815C9CC6B4BA9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 4474,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=7",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 5032,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=7",
+        "targetId": "C7DAC7C51F70B73210B7D8650E14AD79",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "C7DAC7C51F70B73210B7D8650E14AD79",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "C7DAC7C51F70B73210B7D8650E14AD79"
+        ]
+      },
+      {
+        "elapsedMs": 5040,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=7",
+        "targetId": "C7DAC7C51F70B73210B7D8650E14AD79",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 5041,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=8",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 5603,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=8",
+        "targetId": "9CF1FF2CAEBBBBB5D02713F4873A17C4",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "9CF1FF2CAEBBBBB5D02713F4873A17C4",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "9CF1FF2CAEBBBBB5D02713F4873A17C4"
+        ]
+      },
+      {
+        "elapsedMs": 5611,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=8",
+        "targetId": "9CF1FF2CAEBBBBB5D02713F4873A17C4",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 5612,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 6175,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=9",
+        "targetId": "87FD1D50C6F251627E67107AEAB2CA4C",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "87FD1D50C6F251627E67107AEAB2CA4C",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "87FD1D50C6F251627E67107AEAB2CA4C"
+        ]
+      },
+      {
+        "elapsedMs": 6181,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=9",
+        "targetId": "87FD1D50C6F251627E67107AEAB2CA4C",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 6182,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=10",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 6748,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=10",
+        "targetId": "005AAA29F7D70476335D69EEF01C2B70",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "005AAA29F7D70476335D69EEF01C2B70",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "005AAA29F7D70476335D69EEF01C2B70"
+        ]
+      },
+      {
+        "elapsedMs": 6755,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=10",
+        "targetId": "005AAA29F7D70476335D69EEF01C2B70",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 6756,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=11",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 7322,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=11",
+        "targetId": "7B32D2D96DCCD601AD9E1EEEE0EADFF7",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "7B32D2D96DCCD601AD9E1EEEE0EADFF7",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "7B32D2D96DCCD601AD9E1EEEE0EADFF7"
+        ]
+      },
+      {
+        "elapsedMs": 7329,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=11",
+        "targetId": "7B32D2D96DCCD601AD9E1EEEE0EADFF7",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 7331,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=12",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 7879,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=12",
+        "targetId": "01C02DA4A7C6FAE8F6F0CF417045C8A9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "01C02DA4A7C6FAE8F6F0CF417045C8A9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "01C02DA4A7C6FAE8F6F0CF417045C8A9"
+        ]
+      },
+      {
+        "elapsedMs": 7889,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=12",
+        "targetId": "01C02DA4A7C6FAE8F6F0CF417045C8A9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 7891,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=13",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 8426,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=13",
+        "targetId": "9DC3B617C9C0C8CFC8B9FE4C7345D65F",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "9DC3B617C9C0C8CFC8B9FE4C7345D65F",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "9DC3B617C9C0C8CFC8B9FE4C7345D65F"
+        ]
+      },
+      {
+        "elapsedMs": 8432,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=13",
+        "targetId": "9DC3B617C9C0C8CFC8B9FE4C7345D65F",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 8432,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=14",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 8967,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=14",
+        "targetId": "58DE07DDB4FD2F13626C8A30F859AEC8",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "58DE07DDB4FD2F13626C8A30F859AEC8",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "58DE07DDB4FD2F13626C8A30F859AEC8"
+        ]
+      },
+      {
+        "elapsedMs": 8971,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=14",
+        "targetId": "58DE07DDB4FD2F13626C8A30F859AEC8",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 8972,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=15",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 9504,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=15",
+        "targetId": "8E868ACE32A046B52EA305C3CA9232C8",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "8E868ACE32A046B52EA305C3CA9232C8",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "8E868ACE32A046B52EA305C3CA9232C8"
+        ]
+      },
+      {
+        "elapsedMs": 9510,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=15",
+        "targetId": "8E868ACE32A046B52EA305C3CA9232C8",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 9511,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=16",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 10046,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=16",
+        "targetId": "B9D4809F986BED639D90929F310650C9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "B9D4809F986BED639D90929F310650C9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "B9D4809F986BED639D90929F310650C9"
+        ]
+      },
+      {
+        "elapsedMs": 10050,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=16",
+        "targetId": "B9D4809F986BED639D90929F310650C9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 10051,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=17",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 10603,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=17",
+        "targetId": "7D4FC52EC2B9FC17EA931E7E486BE8C6",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "7D4FC52EC2B9FC17EA931E7E486BE8C6",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "7D4FC52EC2B9FC17EA931E7E486BE8C6"
+        ]
+      },
+      {
+        "elapsedMs": 10610,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=17",
+        "targetId": "7D4FC52EC2B9FC17EA931E7E486BE8C6",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 10611,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=18",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 11144,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=18",
+        "targetId": "3852B8D633833C81B77CDE1E2D098CEA",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "3852B8D633833C81B77CDE1E2D098CEA",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "3852B8D633833C81B77CDE1E2D098CEA"
+        ]
+      },
+      {
+        "elapsedMs": 11149,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=18",
+        "targetId": "3852B8D633833C81B77CDE1E2D098CEA",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 11151,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=19",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 11688,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=19",
+        "targetId": "B38E65992F292DDA9B330B3CC816B2E9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "B38E65992F292DDA9B330B3CC816B2E9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "B38E65992F292DDA9B330B3CC816B2E9"
+        ]
+      },
+      {
+        "elapsedMs": 11692,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=19",
+        "targetId": "B38E65992F292DDA9B330B3CC816B2E9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 11693,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=20",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 12229,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=20",
+        "targetId": "7CD3EA21FE5403C52AC49BBF8709CFF8",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "7CD3EA21FE5403C52AC49BBF8709CFF8",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "7CD3EA21FE5403C52AC49BBF8709CFF8"
+        ]
+      },
+      {
+        "elapsedMs": 12236,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=20",
+        "targetId": "7CD3EA21FE5403C52AC49BBF8709CFF8",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 12237,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=21",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 12777,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=21",
+        "targetId": "096731DA2CEEF4BEAA4E26453D94E2F4",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "096731DA2CEEF4BEAA4E26453D94E2F4",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "096731DA2CEEF4BEAA4E26453D94E2F4"
+        ]
+      },
+      {
+        "elapsedMs": 12782,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=21",
+        "targetId": "096731DA2CEEF4BEAA4E26453D94E2F4",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 12783,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=22",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 13335,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=22",
+        "targetId": "1001739310725F5A1431F626FF28AE94",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "1001739310725F5A1431F626FF28AE94",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "1001739310725F5A1431F626FF28AE94"
+        ]
+      },
+      {
+        "elapsedMs": 13341,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=22",
+        "targetId": "1001739310725F5A1431F626FF28AE94",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 13342,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=23",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 13874,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=23",
+        "targetId": "F67E8AFD4912E6707BF0938FA3CBB87F",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "F67E8AFD4912E6707BF0938FA3CBB87F",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "F67E8AFD4912E6707BF0938FA3CBB87F"
+        ]
+      },
+      {
+        "elapsedMs": 13882,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=23",
+        "targetId": "F67E8AFD4912E6707BF0938FA3CBB87F",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 13883,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=24",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 14419,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=24",
+        "targetId": "D9893A5A1530FE5AB77E19DA937DBCDF",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "D9893A5A1530FE5AB77E19DA937DBCDF",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "D9893A5A1530FE5AB77E19DA937DBCDF"
+        ]
+      },
+      {
+        "elapsedMs": 14426,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=24",
+        "targetId": "D9893A5A1530FE5AB77E19DA937DBCDF",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 14426,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=25",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 14962,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=25",
+        "targetId": "2E66F4294A45924DD6F1C94AA2283481",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "2E66F4294A45924DD6F1C94AA2283481",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "2E66F4294A45924DD6F1C94AA2283481"
+        ]
+      },
+      {
+        "elapsedMs": 14969,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=25",
+        "targetId": "2E66F4294A45924DD6F1C94AA2283481",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 14971,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=26",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 15515,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=26",
+        "targetId": "967346CDB4FABFACEBB3475818D584FC",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "967346CDB4FABFACEBB3475818D584FC",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "967346CDB4FABFACEBB3475818D584FC"
+        ]
+      },
+      {
+        "elapsedMs": 15523,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=26",
+        "targetId": "967346CDB4FABFACEBB3475818D584FC",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 15524,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=27",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 16065,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=27",
+        "targetId": "EE862598E6A9A6AC4E3EBED8930F8F7E",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "EE862598E6A9A6AC4E3EBED8930F8F7E",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "EE862598E6A9A6AC4E3EBED8930F8F7E"
+        ]
+      },
+      {
+        "elapsedMs": 16071,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=27",
+        "targetId": "EE862598E6A9A6AC4E3EBED8930F8F7E",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 16072,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=28",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 16606,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=28",
+        "targetId": "66AE29B34F30B5FE2AF37859BD1C3ABB",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "66AE29B34F30B5FE2AF37859BD1C3ABB",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "66AE29B34F30B5FE2AF37859BD1C3ABB"
+        ]
+      },
+      {
+        "elapsedMs": 16611,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=28",
+        "targetId": "66AE29B34F30B5FE2AF37859BD1C3ABB",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 16613,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=29",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 17153,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=29",
+        "targetId": "5A73883CAEA087466C9020156BD0B5D3",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "5A73883CAEA087466C9020156BD0B5D3",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "5A73883CAEA087466C9020156BD0B5D3"
+        ]
+      },
+      {
+        "elapsedMs": 17208,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=29",
+        "targetId": "5A73883CAEA087466C9020156BD0B5D3",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 17209,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=30",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 17753,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=30",
+        "targetId": "55477A01420A2E95AD543F674BDE8863",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "55477A01420A2E95AD543F674BDE8863",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "55477A01420A2E95AD543F674BDE8863"
+        ]
+      },
+      {
+        "elapsedMs": 17759,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=30",
+        "targetId": "55477A01420A2E95AD543F674BDE8863",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 17760,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=31",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 18298,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=31",
+        "targetId": "DC6ACF87F62111A261EEDC44A32AF1FF",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "DC6ACF87F62111A261EEDC44A32AF1FF",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "DC6ACF87F62111A261EEDC44A32AF1FF"
+        ]
+      },
+      {
+        "elapsedMs": 18304,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=31",
+        "targetId": "DC6ACF87F62111A261EEDC44A32AF1FF",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 18305,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=32",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 18839,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=32",
+        "targetId": "199A3B9CEA3A4E2BBD2F923EF5BB86A9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "199A3B9CEA3A4E2BBD2F923EF5BB86A9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "199A3B9CEA3A4E2BBD2F923EF5BB86A9"
+        ]
+      },
+      {
+        "elapsedMs": 18846,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=32",
+        "targetId": "199A3B9CEA3A4E2BBD2F923EF5BB86A9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 18847,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=33",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 19391,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=33",
+        "targetId": "AC272CD40B5DD48F800F1FC7E6065AC7",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "AC272CD40B5DD48F800F1FC7E6065AC7",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "AC272CD40B5DD48F800F1FC7E6065AC7"
+        ]
+      },
+      {
+        "elapsedMs": 19398,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=33",
+        "targetId": "AC272CD40B5DD48F800F1FC7E6065AC7",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 19398,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=34",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 19938,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=34",
+        "targetId": "6CEFDFF1959AA246C2AA61474946A4B9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "6CEFDFF1959AA246C2AA61474946A4B9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "6CEFDFF1959AA246C2AA61474946A4B9"
+        ]
+      },
+      {
+        "elapsedMs": 19943,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=34",
+        "targetId": "6CEFDFF1959AA246C2AA61474946A4B9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 19944,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=35",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 20479,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=35",
+        "targetId": "1F4B0EA2025FD2B762969105FADAF4BF",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "1F4B0EA2025FD2B762969105FADAF4BF",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "1F4B0EA2025FD2B762969105FADAF4BF"
+        ]
+      },
+      {
+        "elapsedMs": 20484,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=35",
+        "targetId": "1F4B0EA2025FD2B762969105FADAF4BF",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 20485,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=36",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 21017,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=36",
+        "targetId": "BFD6B6DFCB791E19840480A83A0A75A1",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "BFD6B6DFCB791E19840480A83A0A75A1",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "BFD6B6DFCB791E19840480A83A0A75A1"
+        ]
+      },
+      {
+        "elapsedMs": 21021,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=36",
+        "targetId": "BFD6B6DFCB791E19840480A83A0A75A1",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 21022,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=37",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 21556,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=37",
+        "targetId": "3E058449776EE8DB7BCD8BE2F2E0D9D9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "3E058449776EE8DB7BCD8BE2F2E0D9D9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "3E058449776EE8DB7BCD8BE2F2E0D9D9"
+        ]
+      },
+      {
+        "elapsedMs": 21561,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=37",
+        "targetId": "3E058449776EE8DB7BCD8BE2F2E0D9D9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 21561,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=38",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 22097,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=38",
+        "targetId": "9CC822B89E4B01255A8FBD5772C97614",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "9CC822B89E4B01255A8FBD5772C97614",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "9CC822B89E4B01255A8FBD5772C97614"
+        ]
+      },
+      {
+        "elapsedMs": 22101,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=38",
+        "targetId": "9CC822B89E4B01255A8FBD5772C97614",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 22103,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=39",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 22637,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=39",
+        "targetId": "D3FBD54AF27FF79F5CBA2E8E8C39F8B9",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "D3FBD54AF27FF79F5CBA2E8E8C39F8B9",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "D3FBD54AF27FF79F5CBA2E8E8C39F8B9"
+        ]
+      },
+      {
+        "elapsedMs": 22642,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=39",
+        "targetId": "D3FBD54AF27FF79F5CBA2E8E8C39F8B9",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 22643,
+        "kind": "target-open-start",
+        "route": "about:blank?foxmanLifecycle=40",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 23179,
+        "kind": "target-open-ready",
+        "route": "about:blank?foxmanLifecycle=40",
+        "targetId": "93955555EADED0E889C337558BBCF3F7",
+        "pageTargetCount": 2,
+        "testPageTargetCount": 1,
+        "targetIds": [
+          "93955555EADED0E889C337558BBCF3F7",
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": [
+          "93955555EADED0E889C337558BBCF3F7"
+        ]
+      },
+      {
+        "elapsedMs": 23183,
+        "kind": "target-close-complete",
+        "route": "about:blank?foxmanLifecycle=40",
+        "targetId": "93955555EADED0E889C337558BBCF3F7",
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      },
+      {
+        "elapsedMs": 23186,
+        "kind": "run-complete",
+        "filter": "cdpLifecycle",
+        "resultCount": 1,
+        "pageTargetCount": 1,
+        "testPageTargetCount": 0,
+        "targetIds": [
+          "3BECEE606B9EA15328C7E0948047DF3C"
+        ],
+        "testTargetIds": []
+      }
+    ]
+  }
+}

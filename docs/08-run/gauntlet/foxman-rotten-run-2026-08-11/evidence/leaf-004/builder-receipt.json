@@ -1,0 +1,164 @@
+{
+  "leafId": "LEAF-004",
+  "status": "passed",
+  "selfAccepted": false,
+  "promotionStatus": "pending_fresh_blind_critic",
+  "generatedAt": "2026-08-11T16:14:16Z",
+  "decisionIdsFollowed": [
+    "RR-DEC-001", "RR-DEC-002", "RR-DEC-003", "RR-DEC-004",
+    "RR-DEC-005", "RR-DEC-006", "RR-DEC-007", "RR-DEC-008",
+    "RR-DEC-009", "RR-DEC-010", "RR-DEC-011", "RR-DEC-012",
+    "RR-DEC-013", "RR-DEC-014", "RR-DEC-015", "RR-DEC-016",
+    "RR-DEC-017", "RR-DEC-018"
+  ],
+  "repository": "/Users/marcusvale/Documents/coding/marcusbrainhq/repos/theadventuresoffoxman",
+  "acceptedRuntimeParent": "7cef4b039c401890ac24fb1a8a27800aa6bb18f7",
+  "controlHeadBefore": "126c986774a6e7a39408ddf7c4afbe33d2ed818d",
+  "controlHeadAfter": "126c986774a6e7a39408ddf7c4afbe33d2ed818d",
+  "originMain": "126c986774a6e7a39408ddf7c4afbe33d2ed818d",
+  "acceptedPlanFixture": {
+    "seed": "GAUNTLET-ALPHA",
+    "planId": "RR1-1C93B57F",
+    "stage1": "unfiled-alley|bailiffs-ramp",
+    "stage2": "seized-goods-lift|late-fee-chapel",
+    "stage3": "collection-parade|garnish-gallery"
+  },
+  "filesChanged": [
+    "src/game/combat/Health.ts",
+    "src/game/entities/Player.ts",
+    "src/game/movement/PlayerMotor.ts",
+    "src/game/rotten/RottenCombatController.ts",
+    "src/game/rotten/RottenEnemy.ts",
+    "src/game/rotten/build.ts",
+    "src/game/rotten/encounters.ts",
+    "src/game/rotten/enemyRoles.ts",
+    "src/game/rotten/market.ts",
+    "src/game/rotten/state.ts",
+    "src/game/scenes/RottenRunScene.ts",
+    "src/game/scenes/rotten/RottenRunPresentation.ts",
+    "tests/smoke/check-browser-routes.mjs",
+    "tests/unit/rotten-run-stage-two.test.ts"
+  ],
+  "hashes": {
+    "trackedPatchSha256": "d6483f470c96ee464c730d51ee20ebe088f9c633367b21d4e37c6f69389130fc",
+    "authorizedContentAggregateSha256": "16da759c6f1c89d6b988ade79b1cf8e3ab446c631748586e63f16a3511df1085",
+    "finalUnfilteredJsonSha256": "7050b57b2221818e75e89590e8bd1d5d77916f0279ee4c8728c3da6cf7195ab6",
+    "files": {
+      "src/game/combat/Health.ts": "a17163dac3e8c9e8d7bf8f94e07696678b12bc7bb3c7e61386cd96236c041abd",
+      "src/game/entities/Player.ts": "fc347b1e9a5eadcdfb2b2d8f7453c2766121e0c36fddd5dac6d0d2b2a633184a",
+      "src/game/movement/PlayerMotor.ts": "684c98737d35dbae21f26b15ac25f57d27c20ab4c8c13bb478f5589c84978b7a",
+      "src/game/rotten/RottenCombatController.ts": "4889714f08890398a58c916faa20625a72b559ee48e9000ee2780ae4e743b095",
+      "src/game/rotten/RottenEnemy.ts": "86399a7759e43f71d67c1cdf3411b6353cc26f9915337f1fbf6fe14bdfe9d426",
+      "src/game/rotten/build.ts": "dcbc7908632ac2d71893f8d600d405848a04e538b97b02e1badbde01b7578c7e",
+      "src/game/rotten/encounters.ts": "6f7a8ec3f16cafcd87e8d4af43c8d635c73d89b79d5e02fb033ce8f4d1b49626",
+      "src/game/rotten/enemyRoles.ts": "ca6936e27e84e28622d4ce2451ba79a42281b6f8f88f8a25ba2238c1797525a4",
+      "src/game/rotten/market.ts": "844dd8e31579b69ba38bb7106966b2ecc351d1b56ca40c65026dac7b18bf8f9a",
+      "src/game/rotten/state.ts": "2cf52071533aeb1c2230adcde2a0deffadf04a865156edf7b4a6b394e7342bfa",
+      "src/game/scenes/RottenRunScene.ts": "d1c6c0d684dc6602b5a896e87e8cdd9fc8b594214bd7e9a9a879009d95e7ae66",
+      "src/game/scenes/rotten/RottenRunPresentation.ts": "4bcd3a09a0f1d8350297f2f01513653ff6ce958793440a9c6a2c40a00e8c06c2",
+      "tests/smoke/check-browser-routes.mjs": "d1e5539b6098580aea800a18f8cf9dd3ce2fd2590cb2e1bd6659dce684c04bd0",
+      "tests/unit/rotten-run-stage-two.test.ts": "6ea7fbbb254ebd16970fc0ef345d78f64e761f45456d1267bf4d9a516b961493"
+    },
+    "evidence": {
+      "expectedRed": "8bbeb67e9836628e745da9a7f9071e2d461f26ed434a88695b0bb87b7f3c850a",
+      "pureGates": "0634f1e4421a0f2dfdb8b563c87bf00f6ab6fd6a1842ec1af3488944dc046bb8",
+      "topology": "06dd410be6ded15ccd06110c7bce12242056b45a155eb4c25b3fd568bb4153d7",
+      "roles": "82240ff3e422afc2e7e8fbd6fbadced841218626c0b3661b33d24b4e7e0f19ab",
+      "elites": "74fedf32ea7d7368ae2126794443367bdb68d491b202ef7042cc7b49b60f1951",
+      "builds": "08dd4d6ccda57071f5a6609877b28036109daf42c09a161268966869229e465a",
+      "market": "534f36eaaa09f0a82976ca41c8fcf034caaa06c61a1467d65e991472fd150786",
+      "retry": "b8afbabd53a2df6289e32a891d8eddafd55e10a842d6bffe106574d47a0ce9b8",
+      "finalUnfiltered": "7050b57b2221818e75e89590e8bd1d5d77916f0279ee4c8728c3da6cf7195ab6"
+    }
+  },
+  "checksRun": [
+    "mandatory pre-runtime focused pure test: one expected-red attempt",
+    "focused new pure test: 12/12 pass",
+    "focused Rotten pure regression: 31/31 pass",
+    "npm test: 54/54 pass",
+    "npm run typecheck: pass after one deterministic type repair",
+    "npm run build: pass",
+    "npm run smoke: pass including all 23 campaign routes",
+    "focused accepted Rotten browser regressions: pass",
+    "focused Stage 2 topology/roles/elites/builds/market/retry: pass",
+    "visual review at 1366x768 and 1920x1080: pass",
+    "final unfiltered npm run smoke:browser: exactly one attempt, 34/34 pass",
+    "git diff --check and exact scope audit: pass"
+  ],
+  "finalMatrix": {
+    "attempts": 1,
+    "ok": true,
+    "routeCount": 34,
+    "sha256": "7050b57b2221818e75e89590e8bd1d5d77916f0279ee4c8728c3da6cf7195ab6",
+    "retried": false,
+    "parallelReplacement": false
+  },
+  "focusedAttemptLedger": {
+    "topology": "passed first attempt",
+    "roles": "nine diagnosed deterministic failures; attempt 10 passed; later live-frame evidence rerun passed",
+    "elites": "passed first attempt",
+    "builds": "five diagnosed deterministic failures; attempt 6 passed",
+    "marketStage3": "passed first attempt",
+    "retry": "passed first attempt",
+    "legacyMarket": "obsolete late-key postcondition diagnosed; temporary lock reverted; corrected fixture passed"
+  },
+  "mechanicProof": {
+    "shield": {"blocks": 2, "flankHits": 1, "opens": 4, "sources": ["skill", "dash-through"]},
+    "scribeStamp": {"telegraphs": 2, "activations": 2, "peakActive": 1, "hits": 1, "expiries": 1, "teardown": 1},
+    "scribeBomb": {"telegraphs": 3, "activations": 3, "clears": 1, "hits": 2, "skillHits": 2, "teardown": 2},
+    "gilded": {"armorPips": 1, "armorBreaks": 1, "bounty": 1},
+    "overdue": {"aliveEnrages": 1, "bounty": 1},
+    "builds": {
+      "compound-interest": {"maxBonus": 2, "rewardHp": "3/6"},
+      "hangover-hide": {"carriedHp": "8/8", "rewardHp": "8/8"},
+      "dead-letter": {"emissions": 7, "hits": 5, "rewardHp": "4/6"},
+      "petty-grudge": {"maxBonus": 1, "rewardHp": "3/6"},
+      "counterfeit-soles": {"dashCooldownMs": 340, "wakes": 4, "wakeHits": 2, "rewardHp": "4/6"},
+      "red-tape-tourniquet": {"waveHealEvents": 2, "restoredHp": 1, "rewardHp": "6/6"},
+      "spite-reserve": {"skillCooldownMs": 1008, "rewardHp": "4/6"},
+      "graft-dividend": {"eliteBounty": 2, "marketDiscount": 1, "rewardHp": "5/6"}
+    }
+  },
+  "evidencePaths": [
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/expected-red.txt",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/pure-gates.txt",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-topology/browser-smoke-rottenStageTwoTopology-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-roles/browser-smoke-rottenStageTwoRoles-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-elites/browser-smoke-rottenStageTwoElites-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-builds/browser-smoke-rottenStageTwoBuilds-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-market/browser-smoke-rottenStageTwoMarket-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/focused-stage-two-retry/browser-smoke-rottenStageTwoRetry-results.json",
+    "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-004-builder/final-unfiltered/browser-smoke-results.json"
+  ],
+  "scopeAudit": {
+    "authorizedFiles": 14,
+    "trackedModified": 11,
+    "untrackedNew": 3,
+    "insertionsIncludingNewFiles": 3988,
+    "deletions": 406,
+    "forbiddenFilesChanged": [],
+    "campaignSceneChanged": false,
+    "assetChanged": false,
+    "packageChanged": false,
+    "planOrSchemaChanged": false,
+    "controlOrOpsChanged": false
+  },
+  "cleanup": {
+    "foxmanPreviewProcesses": 0,
+    "foxmanSmokeProcesses": 0,
+    "foxmanBrowserProcesses": 0,
+    "commitCreated": false,
+    "pushed": false,
+    "deployed": false,
+    "newPackageInstalled": false,
+    "note": "Port 43139 was cwd-verified as an unrelated carpet-front task and left untouched."
+  },
+  "budgetUsed": {
+    "explicitBudget": null,
+    "tokenUsage": "not exposed to builder",
+    "cost": "not exposed to builder",
+    "evidenceSizeApproxMiB": 69
+  },
+  "blocker": null,
+  "recommendedNextAction": "Run the sole fresh blind critic on a fresh production artifact at 1366x768 and 1920x1080, directly operating shield, hazard, both elite variants, all eight build effects, Stage 2 market, inert Stage 3, and Stage 2 death/retry while recording exact seed, plan, route, and build."
+}

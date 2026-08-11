@@ -6,9 +6,15 @@ import { Health } from "../combat/Health";
 import type { InputSnapshot } from "../input/InputMapper";
 import {
   PlayerMotor,
+  type PlayerMotorConfig,
   type PlayerDebugState,
   type PlayerMovementState,
 } from "../movement/PlayerMotor";
+
+export interface PlayerConfig {
+  readonly currentHealth?: number;
+  readonly movement?: PlayerMotorConfig;
+}
 
 export type PlayerSurvivalDebugState = PlayerDebugState & {
   health: number;
@@ -30,9 +36,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private readonly dashTrails = new Set<Phaser.GameObjects.Image>();
   private readonly audio = new AudioBus();
 
-  constructor(scene: Phaser.Scene, x: number, y: number, maxHealth = 5) {
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    maxHealth = 5,
+    config: PlayerConfig = {},
+  ) {
     super(scene, x, y, AssetKeys.foxmanPrototype);
-    this.health = new Health(maxHealth);
+    this.health = new Health(maxHealth, config.currentHealth ?? maxHealth);
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -46,7 +58,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     body.setSize(72, 150);
     body.setOffset(86, 234);
 
-    this.motor = new PlayerMotor(body);
+    this.motor = new PlayerMotor(body, config.movement);
   }
 
   update(time: number, input: InputSnapshot, attacking = false): void {

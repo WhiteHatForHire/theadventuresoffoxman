@@ -1,7 +1,7 @@
 import { summarizeRottenBuild, type RottenBuildSummary } from "./build";
 import type { RottenSkillId, RottenWeaponId } from "./loadout";
 import type { RottenRunPlan } from "./plan";
-import type { RottenRouteId } from "./routes";
+import type { RottenRouteId, RottenStageNumber } from "./routes";
 import type { RottenRunPhase } from "./state";
 import {
   getRottenUpgradeOffers,
@@ -45,26 +45,29 @@ export type RottenMarketChoice =
   | RottenBankMarketChoice;
 
 export interface RottenRouteHistoryEntry {
-  readonly stage: 1;
-  readonly routeId: StageOneRouteId;
+  readonly stage: 1 | 2;
+  readonly routeId: RottenRouteId;
   readonly marketChoice: RottenMarketChoice | null;
 }
 
-export interface RottenStageOneMarketState {
+export interface RottenMarketState {
   readonly status: "open" | "resolved";
-  readonly stage: 1;
-  readonly routeId: StageOneRouteId;
+  readonly stage: 1 | 2;
+  readonly routeId: RottenRouteId;
   readonly offers: readonly [RottenUpgradeOffer, RottenUpgradeOffer, RottenUpgradeOffer];
   readonly acceptedChoice: RottenMarketChoice | null;
   readonly traceEvent: string | null;
 }
+
+/** Kept as a source-compatible name for the accepted Stage 1 surface. */
+export type RottenStageOneMarketState = RottenMarketState;
 
 export interface RottenPureRunState {
   readonly plan: RottenRunPlan;
   readonly seed: string;
   readonly planId: string;
   readonly phase: RottenRunPhase;
-  readonly stage: 1 | 2;
+  readonly stage: RottenStageNumber;
   readonly routeOptions: readonly [RottenRouteId, RottenRouteId];
   readonly weapon: RottenWeaponId | null;
   readonly skill: RottenSkillId | null;
@@ -73,19 +76,26 @@ export interface RottenPureRunState {
   readonly upgrades: readonly RottenUpgradeId[];
   readonly buildSummary: RottenBuildSummary;
   readonly routeHistory: readonly RottenRouteHistoryEntry[];
-  readonly market: RottenStageOneMarketState | null;
+  readonly market: RottenMarketState | null;
   readonly trace: readonly string[];
 }
 
-export interface CreateStageOneRewardMarketInput {
+export interface CreateRottenRewardMarketInput {
   readonly plan: RottenRunPlan;
-  readonly routeId: StageOneRouteId;
+  readonly stage: 1 | 2;
+  readonly routeId: RottenRouteId;
   readonly weapon: RottenWeaponId;
   readonly skill: RottenSkillId;
   readonly health: RottenHealthState;
   readonly graft: number;
   readonly ownedUpgrades: readonly RottenUpgradeId[];
+  readonly routeHistory: readonly RottenRouteHistoryEntry[];
   readonly trace: readonly string[];
+}
+
+export interface CreateStageOneRewardMarketInput
+  extends Omit<CreateRottenRewardMarketInput, "stage" | "routeId" | "routeHistory"> {
+  readonly routeId: StageOneRouteId;
 }
 
 export type RottenRewardRejectionReason =
@@ -138,42 +148,87 @@ export function createStageOneRewardMarket({
   ownedUpgrades,
   trace,
 }: CreateStageOneRewardMarketInput): RottenPureRunState {
-  validateRewardOpening(plan, routeId, health, graft, ownedUpgrades);
+  return createRottenRewardMarket({
+    plan,
+    stage: 1,
+    routeId,
+    weapon,
+    skill,
+    health,
+    graft,
+    ownedUpgrades,
+    routeHistory: [],
+    trace,
+  });
+}
+
+export function createRottenRewardMarket({
+  plan,
+  stage,
+  routeId,
+  weapon,
+  skill,
+  health,
+  graft,
+  ownedUpgrades,
+  routeHistory,
+  trace,
+}: CreateRottenRewardMarketInput): RottenPureRunState {
+  validateRewardOpening(
+    plan,
+    stage,
+    routeId,
+    health,
+    graft,
+    ownedUpgrades,
+    routeHistory,
+  );
   const offers = getRottenUpgradeOffers({
     seed: plan.seed,
-    stage: 1,
+    stage,
     routeId,
     graft,
     ownedUpgrades,
   });
+  const market: RottenMarketState = {
+    status: "open",
+    stage,
+    routeId,
+    offers,
+    acceptedChoice: null,
+    traceEvent: null,
+  };
 
   return {
     plan,
     seed: plan.seed,
     planId: plan.planId,
     phase: "reward-choice",
-    stage: 1,
-    routeOptions: routeIdsForStage(plan, 1),
+    stage,
+    routeOptions: routeIdsForStage(plan, stage),
     weapon,
     skill,
     health: { ...health },
     graft,
     upgrades: [...ownedUpgrades],
     buildSummary: summarizeRottenBuild(ownedUpgrades),
-    routeHistory: [{ stage: 1, routeId, marketChoice: null }],
-    market: {
-      status: "open",
-      stage: 1,
-      routeId,
-      offers,
-      acceptedChoice: null,
-      traceEvent: null,
-    },
+    routeHistory: [
+      ...routeHistory.map((entry) => ({ ...entry })),
+      { stage, routeId, marketChoice: null },
+    ],
+    market,
     trace: [...trace, `offers:${offers.map(({ id }) => id).join(",")}`],
   };
 }
 
 export function applyStageOneRewardInput(
+  state: RottenPureRunState,
+  input: number,
+): RottenRewardDecisionResult {
+  return applyRottenRewardInput(state, input);
+}
+
+export function applyRottenRewardInput(
   state: RottenPureRunState,
   input: number,
 ): RottenRewardDecisionResult {
@@ -286,9 +341,10 @@ function accept(
   upgrades: readonly RottenUpgradeId[],
   feedback: string,
 ): RottenRewardDecisionResult {
-  const traceEvent = traceEventForChoice(state.market!, choice);
-  const market: RottenStageOneMarketState = {
-    ...state.market!,
+  const marketBefore = state.market!;
+  const traceEvent = traceEventForChoice(marketBefore, choice);
+  const market: RottenMarketState = {
+    ...marketBefore,
     status: "resolved",
     acceptedChoice: choice,
     traceEvent,
@@ -298,6 +354,7 @@ function accept(
       ? { ...entry, marketChoice: choice }
       : entry
   );
+  const nextStage = (market.stage + 1) as 2 | 3;
 
   return {
     accepted: true,
@@ -306,8 +363,8 @@ function accept(
     state: {
       ...state,
       phase: "route-choice",
-      stage: 2,
-      routeOptions: routeIdsForStage(state.plan, 2),
+      stage: nextStage,
+      routeOptions: routeIdsForStage(state.plan, nextStage),
       health,
       graft,
       upgrades: [...upgrades],
@@ -328,7 +385,7 @@ function reject(
 }
 
 function traceEventForChoice(
-  market: RottenStageOneMarketState,
+  market: RottenMarketState,
   choice: RottenMarketChoice,
 ): string {
   const prefix = `market:${market.stage}:${market.routeId}`;
@@ -343,7 +400,7 @@ function traceEventForChoice(
 
 function routeIdsForStage(
   plan: RottenRunPlan,
-  stage: 1 | 2,
+  stage: RottenStageNumber,
 ): readonly [RottenRouteId, RottenRouteId] {
   const planned = plan.stages.find((candidate) => candidate.stage === stage);
   if (!planned) {
@@ -354,14 +411,23 @@ function routeIdsForStage(
 
 function validateRewardOpening(
   plan: RottenRunPlan,
-  routeId: StageOneRouteId,
+  stage: 1 | 2,
+  routeId: RottenRouteId,
   health: RottenHealthState,
   graft: number,
   ownedUpgrades: readonly RottenUpgradeId[],
+  routeHistory: readonly RottenRouteHistoryEntry[],
 ): void {
-  const validRoute = plan.stages[0]?.options.some((route) => route.id === routeId);
+  const plannedStage = plan.stages.find((candidate) => candidate.stage === stage);
+  const validRoute = plannedStage?.options.some((route) => route.id === routeId);
   if (!validRoute) {
-    throw new Error(`Stage 1 route ${routeId} is not in the deterministic plan.`);
+    throw new Error(`Stage ${stage} route ${routeId} is not in the deterministic plan.`);
+  }
+  if (routeHistory.length !== stage - 1) {
+    throw new Error(`Stage ${stage} reward requires ${stage - 1} prior route decisions.`);
+  }
+  if (routeHistory.some(({ marketChoice }) => marketChoice === null)) {
+    throw new Error("A later Rotten market requires every prior choice to be resolved.");
   }
   if (
     !Number.isInteger(health.current)
