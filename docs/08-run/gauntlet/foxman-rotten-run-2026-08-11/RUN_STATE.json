@@ -4,30 +4,30 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "leaf-003-builder-preparation",
+  "currentGate": "integration-review-after-leaf-003",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 961573,
-  "usageCoverage": "Platform goal telemetry through LEAF-002 promotion and LEAF-003 framing; descendant-specific breakdown remains unavailable.",
+  "knownTokensUsed": 1507324,
+  "usageCoverage": "Platform goal telemetry through LEAF-003 promotion and integration-review framing; descendant-specific breakdown remains unavailable.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": "LEAF-003",
-  "lastAcceptedCommit": "0c29d6aa51658e774924efe3714788a9371d76d0",
-  "promotedLeaves": ["LEAF-001", "LEAF-002"],
+  "activeLeaf": null,
+  "lastAcceptedCommit": "23e309e6dce71f039c4eab2508816a584bd53354",
+  "promotedLeaves": ["LEAF-001", "LEAF-002", "LEAF-003"],
   "lastCriticVerdict": {
-    "leaf": "LEAF-002",
+    "leaf": "LEAF-003",
     "verdict": "pass",
-    "largestGap": "Focused encounter observation was transiently nondeterministic twice before passing; manual retry and the first full 26-route matrix did not reproduce a gameplay reset defect.",
-    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-002/critic-receipt.md"
+    "largestGap": "No product gap remained after two tests-only dash-observation revisions. The final blind critic passed the exact candidate through direct purchase/heal/bank/reset play and a first-attempt 27-route matrix.",
+    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-003/critic-receipt.md"
   },
   "reviewGate": {
-    "status": "leaf-002-passed",
+    "status": "leaf-003-passed-integration-review-required",
     "completedReviews": [
-      "Initial blind review: revise enemy frame/floor anchoring",
-      "Fresh blind re-review: revise offscreen living-enemy reacquisition"
+      "Initial LEAF-003 blind review: direct market product passed; revise timing-fragile campaign dash sampling and remove broken one-off key probes",
+      "Fresh LEAF-003 re-review after revision 01: direct market product passed; revise dash wait so displacement and peak evidence resolve coherently"
     ],
-    "interruptedReview": "leaf-002-recritic2 produced fresh automated enemy-cycle evidence but no manual verdict; both real-browser connectors returned Transport closed before interaction, then Codex was force-quit.",
-    "finalReview": "leaf-002-recritic3 passed a fresh production artifact through real in-app Browser play at both viewports and a first-attempt 26-route regression.",
-    "largestResidualGap": "Stabilize focused reset/tell observation in LEAF-003; do not change gameplay unless the issue reproduces under stable observation or real play."
+    "interruptedReview": "Two critic turns stalled only during receipt/connector cleanup after their REVISE findings were already delivered; the lead preserved their evidence, stopped exact servers, and recorded recovery receipts before each repair.",
+    "finalReview": "leaf-003-recritic2 passed a frozen external production artifact through real in-app Browser purchase/heal/bank/reset play at both viewports, focused gates, and a first-attempt 27-route regression.",
+    "largestResidualGap": "The protocol-mandated integration review after three promoted leaves must pass before LEAF-004 Stage 2 combat begins."
   },
   "candidate": null,
   "baseline": {
@@ -46,6 +46,6 @@
     "resolvedAt": "2026-08-11T09:12:00Z",
     "resolution": "A replacement fresh critic passed the real browser artifact and LEAF-002 was promoted at 0c29d6a."
   },
-  "updatedAt": "2026-08-11T09:16:10Z",
-  "nextSafeAction": "Commit and push the LEAF-002 promotion truth and bounded LEAF-003 brief, verify clean main at the new control head, then launch exactly one LEAF-003 builder with no commit/push or control-file authority."
+  "updatedAt": "2026-08-11T12:32:36Z",
+  "nextSafeAction": "Commit and push the LEAF-003 promotion/control checkpoint, verify clean main, then launch exactly one fresh read-only integration reviewer across promoted LEAF-001 through LEAF-003. Do not start LEAF-004 before that review passes."
 }

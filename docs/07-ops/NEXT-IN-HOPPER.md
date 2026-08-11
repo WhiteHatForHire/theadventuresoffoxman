@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active — LEAF-001 and LEAF-002 accepted; LEAF-003 reward market and Stage 2 docket next
+**Status:** Active — LEAF-001 through LEAF-003 accepted; mandatory integration review next
 **Priority:** P0
 **Type:** Product / Runtime / QA
 
@@ -53,12 +53,14 @@ Execute the bounded run at
 
 ### Immediate Gate
 
-- Make the Stage 1 reward docket transactional through one deterministic choice:
-  offer, heal, or bank.
-- Carry graft, HP, loadout, route history, and owned upgrades into the fixed
-  Stage 2 route-choice surface without claiming Stage 2 combat is complete.
-- Stabilize the focused encounter reset/tell snapshots and preserve the accepted
-  26-route campaign-plus-Rotten matrix.
+- Run one fresh read-only integration review across the accepted mode shell,
+  Stage 1 combat, reward transaction, and Stage 2 handoff.
+- Verify cross-system state/trace ownership, input controls, cleanup,
+  campaign regression, performance, readability/accessibility, and evidence
+  provenance on the real browser artifact.
+- Preserve the accepted `27/27` matrix and direct purchase/heal/bank/reset truth.
+- On `PASS`, frame the bounded Stage 2 combat leaf. On `REVISE`, repair only the
+  largest integration gap before any new content begins.
 
 ## 2. Foxman Case Study Screenshot And Annotation Pass
 

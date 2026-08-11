@@ -32,6 +32,41 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-11 - Rotten Run Reward Market And Stage 2 Docket Accepted
+
+**Type:** App / Product / State / QA / Ops
+**Source:** Codex builder + fresh blind critics
+**Related Files:**
+
+- `src/game/rotten/build.ts`
+- `src/game/rotten/market.ts`
+- `src/game/rotten/state.ts`
+- `src/game/rotten/upgrades.ts`
+- `src/game/scenes/RottenRunScene.ts`
+- `tests/unit/rotten-run-market.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-003/`
+
+**Summary:**
+
+Made the Stage 1 reward docket a pure deterministic one-choice transaction with
+upgrade purchase, honest damaged healing, banking, strict no-op rejection,
+unique ownership, Graft Dividend timing, Hangover Hide immediate HP, route
+history, trace, and a complete eight-upgrade carried-build summary. The accepted
+choice now reaches the exact seed-planned Stage 2 route docket with truthful HP,
+graft, loadout, upgrades, and history while deliberately stopping before Stage
+2 selection or combat. Focused encounter evidence passed 10/10 consecutively;
+two blind reviews drove tests-only dash-observation repairs; the final fresh
+critic passed direct purchase/heal/bank/reset play at both desktop viewports,
+42/42 unit tests, and the first 27/27 campaign-plus-Rotten browser matrix. The
+accepted baseline is commit `23e309e`.
+
+**Follow-Ups:**
+
+- [ ] Pass the mandatory integration review across promoted LEAF-001 through LEAF-003.
+- [ ] Frame Stage 2 combat only after the integration gate passes.
+- [ ] Keep Stage 3, boss, results, settings, records, and three-build proof in later bounded leaves.
+
 ## 2026-08-11 - Rotten Run Playable Stage 1 Combat Accepted
 
 **Type:** App / Product / Gameplay / QA / Ops
@@ -62,8 +97,8 @@ campaign remains unchanged.
 
 **Follow-Ups:**
 
-- [ ] Make reward purchase, heal, and bank choices transactional and carry the build to Stage 2.
-- [ ] Stabilize focused encounter reset/tell snapshot timing without changing gameplay unless a real defect reproduces.
+- [x] Make reward purchase, heal, and bank choices transactional and carry the build to Stage 2.
+- [x] Stabilize focused encounter reset/tell snapshot timing without changing gameplay unless a real defect reproduces.
 - [ ] Keep later-stage combat, elites, boss, results, settings, and records in their own bounded leaves.
 
 ## 2026-08-11 - Rotten Run Deterministic Mode Shell Accepted

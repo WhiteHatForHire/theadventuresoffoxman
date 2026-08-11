@@ -54,7 +54,7 @@ Status: active
 
 ## Open Questions
 
-- None blocking `LEAF-003`.
+- None blocking the post-LEAF-003 integration review. `LEAF-004` remains gated on that review.
 
 ### RR-DEC-006 - Additive Pure Core And Separate Scene
 
@@ -128,6 +128,15 @@ Status: active
 **Affected surfaces:** Rotten browser polling and evidence capture only.
 **Constraints:** require retry reset truth across two animation frames and latch a tell once observed; run the focused encounter ten consecutive times before LEAF-003 review; do not alter gameplay reset/tell timing unless a stable harness or real browser reproduces a product defect.
 
+### RR-DEC-014 - Three-Leaf Integration Review Before Stage 2 Combat
+
+**Status:** approved
+**Owner:** lead via Gauntlet Loop protocol
+**Date:** 2026-08-11
+**Rationale:** LEAF-001 through LEAF-003 now form one connected deterministic shell, Stage 1 combat loop, reward transaction, and Stage 2 handoff. Cross-system coherence must be reviewed before another runtime layer compounds any seam or regression.
+**Affected surfaces:** promoted Rotten Run flow, campaign entry/regression, input transport, state/trace ownership, cleanup, performance, accessibility/readability, evidence provenance, and the LEAF-004 boundary.
+**Constraints:** use one fresh read-only integration reviewer on the accepted `23e309e` baseline; run the real browser artifact and accepted deterministic/full-matrix gates; do not build Stage 2 combat until the review passes; if it returns `REVISE`, repair only the largest integration gap before re-review.
+
 ## Promotion Notes
 
 - `LEAF-001` accepted by a fresh blind critic with no largest gap.
@@ -136,3 +145,6 @@ Status: active
 - `LEAF-002` accepted after two `REVISE` repairs and one interrupted review; the final fresh critic issued `PASS` on the real production artifact.
 - Accepted product commit: `0c29d6a`.
 - Evidence: `evidence/leaf-002/critic-receipt.md`, focused contract/encounter/enemy-cycle results, the 26-route full result, and direct-browser captures beside them.
+- `LEAF-003` accepted after two tests-only `REVISE` repairs to make dash observation coherent; the final fresh critic issued `PASS` on the exact candidate with direct purchase/heal/bank/reset play at both viewports.
+- Accepted product commit: `23e309e`.
+- Evidence: `evidence/leaf-003/critic-receipt.md`, focused dash/contract/encounter/enemy-cycle/market results, the 27-route full result, ten-run stability summary, and direct-browser captures beside them.

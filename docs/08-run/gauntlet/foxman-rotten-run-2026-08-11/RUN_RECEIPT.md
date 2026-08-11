@@ -240,3 +240,76 @@ Continue. Platform goal telemetry reports `961573` tokens, far below the first a
 `Commit and push this promotion/control checkpoint, verify clean main, then launch exactly one bounded LEAF-003 builder from the accepted head.`
 
 Prerequisites: staged control/ops diff passes JSON and whitespace checks; builder receives no commit, push, ops, or Gauntlet-control authority.
+
+## Checkpoint 6 - LEAF-003 Promoted; Three-Leaf Integration Review Required
+
+Updated: `2026-08-11T12:32:36Z`
+
+### Accepted Product Truth
+
+- Stage 1 now ends in one pure deterministic reward transaction: keys `1-3` buy a displayed upgrade, `4` buys the bounded heal, and `5` banks. Invalid, unaffordable, disabled, and repeated choices do not mutate durable run truth.
+- HP, graft, loadout, owned upgrades, route history, market choice, build summary, and trace carry into the seed-planned Stage 2 docket. `GAUNTLET-ALPHA` resolves to `seized-goods-lift|late-fee-chapel` in order.
+- The Stage 2 docket is an honest stopping boundary: it renders the real route summaries and carried build but accepts no Stage 2 selection and creates no fake encounter, elite, enemy, or completion claim.
+- The browser-independent market owns prices, eligibility, affordability, payment, heal clamp, Hangover Hide immediate HP, Graft Dividend later-market discount, one-choice enforcement, retry baseline, trace, and Stage 2 transition. Phaser remains the input/presentation orchestrator.
+- The accepted campaign remains reachable through Enter and all 23 campaign routes remain regression truth.
+
+### Builder And Stability Evidence
+
+- Test-first implementation added pure market/build modules, nine focused market tests, scene wiring, truthful debug state, and the Stage 2 docket within exactly seven authorized files.
+- Unit/type/build/dist gates passed: `42/42` tests, clean TypeScript, 52-module production build, and built-asset smoke.
+- Focused encounter stability passed `10/10` consecutively with no retries after two-frame reset/tell latching and a frame-held real `J` proof. Every pass preserved clean retry truth, role cycles, two-edge reacquisition, both accepted loadout clears, deterministic offers, and zero stale combat objects.
+- Builder's first full browser matrix passed `27/27` before blind review.
+
+### Blind Review And Revision Ledger
+
+| Review | Verdict | Preserved largest gap | Bounded disposition |
+| --- | --- | --- | --- |
+| Initial fresh blind critic | `REVISE` | Product market passed directly, but the accepted campaign dash smoke sampled velocity too late (`30` despite independent peak `620`), and an unrequested key-release diagnostic could die during its live-combat wait | Removed both one-off diagnostic branches and latched the real dash peak without changing product timing or the `>=500` bar. |
+| Fresh revision-01 recritic | `REVISE` | Product market again passed directly; the dash wait could resolve at player X `254` before immediately asserting X `>=260` | Added X `>=260` to the same coherent wait predicate; no sleep, threshold reduction, or product edit. |
+| Final fresh revision-02 critic | `PASS` | None | Promoted after exact candidate/hash verification. |
+
+- The final critic built a frozen external artifact, passed `42/42` units, typecheck, build, dist, focused dash/contract/enemy-cycle/encounter/market, and its first and only full matrix `27/27`.
+- Final dash evidence resolved coherently at X `264`, peak `620`, dash count `1`, trail count `3`, cue count `1`.
+- Direct in-app Browser play at 1366x768 and 1920x1080 proved Campaign Enter, open deterministic reward, Dead Letter purchase (`7 -> 0` graft), repeated-input no-op, reload reset, honest damage/heal (`5/6 -> 6/6` for 2 graft), bank (`7 -> 7`), exact Stage 2 carry, one canvas, 12 observed resources, and zero warning/error logs or visual-green artifacts.
+- Two earlier critic turns stalled only during receipt/connector cleanup after delivering their `REVISE` verdicts. The lead preserved all evidence, stopped exact critic servers, and wrote explicit external recovery receipts before each repair; neither red was overwritten or retried to green.
+
+### Lead Promotion
+
+- Re-read the final receipt, verified the frozen candidate diff SHA-256 `ceae0489076f1532414830db3b8d5cd70ba36b26b79b51a90866618e005e3dd6`, confirmed the final full result SHA-256 `3145eb2ad4a468df9d2c7d8211c7bae7adc75d0693891b9771eff467d0bab2b4`, and imported compact project-local evidence under `evidence/leaf-003/`.
+- Re-ran `npm test` (`42/42`), `npm run typecheck`, `npm run build`, `npm run smoke`, JSON result validation, receipt terminator validation, and `git diff --check`; all passed.
+- Staged only the seven authorized candidate files and LEAF-003 evidence.
+- Committed and pushed accepted product baseline `23e309e6dce71f039c4eab2508816a584bd53354`; local `main` and `origin/main` matched at push.
+
+### Integration Boundary
+
+- `LEAF-001`, `LEAF-002`, and `LEAF-003` are now promoted.
+- Gauntlet Loop protocol requires an integration review after every three promoted leaves or gate boundary.
+- `RR-DEC-014` freezes the next action as one fresh read-only integration review of the accepted connected flow. `LEAF-004` Stage 2 combat cannot start until that review passes.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-019` | `RR-STEP-018` | builder | Implement deterministic market, carried build, Stage 2 docket, and stabilized evidence | Pass | bounded turn | descendant exact unavailable | source/tests plus builder external receipt |
+| `RR-STEP-020` | `RR-STEP-019` | fresh blind critic | Review real artifact and required matrix | `REVISE` | bounded turn | descendant exact unavailable | preserved external critic recovery receipt |
+| `RR-STEP-021` | `RR-STEP-020` | builder | Repair dash peak observation and remove broken diagnostics | Pass | bounded turn | descendant exact unavailable | revision-01 receipt and first-attempt matrix |
+| `RR-STEP-022` | `RR-STEP-021` | fresh blind recritic | Review revision 01 | `REVISE` | bounded turn | descendant exact unavailable | preserved external recritic recovery receipt |
+| `RR-STEP-023` | `RR-STEP-022` | builder | Make dash displacement and peak wait coherent | Pass | bounded turn | descendant exact unavailable | revision-02 receipt and first-attempt matrix |
+| `RR-STEP-024` | `RR-STEP-023` | final fresh blind critic | Review frozen revision-02 artifact at both viewports | `PASS` | bounded turn | descendant exact unavailable | `evidence/leaf-003/critic-receipt.md` |
+| `RR-STEP-025` | `RR-STEP-024` | lead | Verify, import evidence, commit, and push LEAF-003 | Pass | `~6m` | included below | commit `23e309e`, origin matched |
+| `RR-STEP-026` | `RR-STEP-025` | lead | Run Shipping Update and freeze integration gate | Pass | checkpoint | `1507324 / 1250000000` platform goal telemetry | state, ops, and `RR-DEC-014` |
+
+### Token Decision
+
+Continue. Platform goal telemetry reports `1507324` tokens, far below the first autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### External Actions
+
+- Pushed accepted product commit `23e309e` to `origin/main`.
+- No public deployment, domain, paid service, credential change, destructive history action, or campaign deletion occurred.
+
+### Next Safe Action
+
+`Commit and push this promotion/control checkpoint, verify clean main, then launch exactly one fresh read-only integration reviewer on the accepted 23e309e product baseline.`
+
+Prerequisites: JSON and whitespace checks pass; `main` equals `origin/main`; no builder or product edit starts before the integration verdict.
