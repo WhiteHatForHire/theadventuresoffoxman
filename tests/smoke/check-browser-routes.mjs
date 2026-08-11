@@ -48,7 +48,7 @@ async function smokeRottenRunContract(browser) {
     "rottenPlanId",
   ]);
   assertEqual(titleEntry.scene, "RottenRunScene", "Rotten Run title entry scene");
-  assertEqual(titleEntry.rottenPhase, "route-choice", "Rotten Run title entry phase");
+  assertEqual(titleEntry.rottenPhase, "loadout", "Rotten Run title entry phase");
   if (!String(titleEntry.rottenSeed).startsWith("RR-")) {
     throw new Error(`Rotten Run title entry did not freeze a visible RR seed: ${titleEntry.rottenSeed}`);
   }
@@ -111,6 +111,480 @@ async function smokeRottenRunContract(browser) {
   await page.close();
 
   return { route: "/ -> R; seeded Rotten Run -> 2", titleEntry, planned, selected, viewport };
+}
+
+async function smokeRottenRunEncounter(browser) {
+  const enemyCycles = await smokeRottenEnemyAnchoring(browser);
+  const reacquisition = await smokeRottenEnemyReacquisition(browser);
+  const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenEncounter";
+  const page = await browser.open(route, { viewport: { width: 1366, height: 768 } });
+  await page.send("Page.bringToFront");
+  await page.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await page.waitForDataset("rottenPhase", "loadout");
+  const loadout = await page.dataset([
+    "scene",
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenTraceDigest",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(loadout.scene, "RottenRunScene", "Rotten encounter loadout scene");
+  assertEqual(loadout.rottenSeed, "GAUNTLET-ALPHA", "Rotten encounter seed");
+  assertEqual(loadout.rottenPlanId, "RR1-1C93B57F", "Rotten encounter plan ID");
+  assertEqual(loadout.rottenCombatObjectCount, "0", "Rotten loadout combat objects");
+  await captureEvidence(page, "rotten-encounter-loadout-1366x768.png");
+
+  await page.key("3");
+  await page.waitForDataset("rottenWeapon", "tax-pike");
+  await page.key("6");
+  await page.waitForDataset("rottenSkill", "seized-stamp");
+  await page.key("Enter");
+  await page.waitForDataset("rottenPhase", "route-choice");
+  await page.key("2");
+  await page.waitForDataset("rottenPhase", "encounter");
+  await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
+
+  await waitFor(
+    async () => Boolean(await page.evaluate("document.body.dataset.rottenEnemyTell")),
+    12_000,
+    80,
+  );
+  await page.waitForDataset("rottenScene", "RottenRunScene");
+  const activeCombat = await page.dataset([
+    "rottenPhase",
+    "rottenWave",
+    "rottenLivingEnemies",
+    "rottenEnemyStates",
+    "rottenEnemyTell",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenCombatObjectCount",
+  ]);
+  if (!String(activeCombat.rottenEnemyTell).includes("windup")) {
+    throw new Error(`Rotten encounter did not expose a readable windup tell: ${activeCombat.rottenEnemyTell}`);
+  }
+  if (Number(activeCombat.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Rotten encounter did not expose live owned objects: ${activeCombat.rottenCombatObjectCount}`);
+  }
+  await captureEvidence(page, "rotten-encounter-readable-tell-1366x768.png");
+  await assertNoMissingTextureGreen(page, "Rotten Run active encounter");
+
+  await page.waitForDataset("rottenPhase", "reward-choice", 30_000);
+  const reward = await page.dataset([
+    "scene",
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenSelectedRoute",
+    "rottenWave",
+    "rottenWavesCleared",
+    "rottenSpawnHistory",
+    "rottenLivingEnemies",
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenWeaponStyle",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenGraft",
+    "rottenOfferIds",
+    "rottenHp",
+    "rottenTraceDigest",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(reward.scene, "RottenRunScene", "Rotten reward scene");
+  assertEqual(reward.rottenWeapon, "tax-pike", "Rotten real-key weapon");
+  assertEqual(reward.rottenSkill, "seized-stamp", "Rotten real-key skill");
+  assertEqual(reward.rottenSelectedRoute, "bailiffs-ramp", "Rotten real-key route");
+  assertEqual(reward.rottenWave, "2", "Rotten completed wave number");
+  assertEqual(reward.rottenWavesCleared, "2", "Rotten completed wave count");
+  assertEqual(
+    reward.rottenSpawnHistory,
+    "1:bailiff,bailiff|2:bailiff,writ-runner",
+    "Rotten seeded Stage 1 spawn history",
+  );
+  assertEqual(reward.rottenLivingEnemies, "0", "Rotten reward living enemies");
+  assertAtLeastNumber(reward.rottenAttackCount, 1, "Rotten production weapon attacks");
+  assertAtLeastNumber(reward.rottenAttackHitCount, 1, "Rotten production weapon hits");
+  assertEqual(reward.rottenWeaponStyle, "spacing", "Rotten Tax Pike style");
+  assertAtLeastNumber(reward.rottenSkillUseCount, 1, "Rotten production skill uses");
+  assertAtLeastNumber(reward.rottenSkillHitCount, 1, "Rotten production skill hits");
+  assertEqual(reward.rottenGraft, "7", "Rotten route graft award");
+  assertEqual(
+    reward.rottenOfferIds,
+    "dead-letter|petty-grudge|spite-reserve",
+    "Rotten deterministic offer fixture",
+  );
+  assertEqual(reward.rottenCombatObjectCount, "0", "Rotten reward stale combat objects");
+  if (reward.rottenTraceDigest === loadout.rottenTraceDigest) {
+    throw new Error("Rotten encounter trace digest did not change after decisions and combat");
+  }
+  if (!String(reward.rottenHp).endsWith("/6") || Number(String(reward.rottenHp).split("/")[0]) < 1) {
+    throw new Error(`Rotten encounter did not leave Foxman alive: ${reward.rottenHp}`);
+  }
+  await assertNoMissingTextureGreen(page, "Rotten Run reward docket");
+  await captureEvidence(page, "rotten-encounter-reward-1366x768.png");
+  await page.close();
+
+  const spitterBombPage = await browser.open(route, { viewport: { width: 1920, height: 1080 } });
+  await selectRottenBuild(spitterBombPage, "4", "7", "2");
+  await spitterBombPage.waitForDataset("rottenPhase", "reward-choice", 30_000);
+  const spitterBomb = await spitterBombPage.dataset([
+    "rottenPhase",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenSelectedRoute",
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(spitterBomb.rottenWeapon, "receipt-spitter", "Rotten contrasting weapon");
+  assertEqual(spitterBomb.rottenSkill, "bribe-bomb", "Rotten contrasting skill");
+  assertAtLeastNumber(spitterBomb.rottenAttackHitCount, 1, "Rotten Receipt Spitter hits");
+  assertAtLeastNumber(spitterBomb.rottenSkillHitCount, 1, "Rotten Bribe Bomb hits");
+  assertEqual(spitterBomb.rottenCombatObjectCount, "0", "Rotten contrasting build cleanup");
+  await captureEvidence(spitterBombPage, "rotten-encounter-spitter-bomb-1920x1080.png");
+  await spitterBombPage.close();
+
+  return {
+    route: "Rotten Run real 3/6/Enter/2 combat",
+    enemyCycles,
+    reacquisition,
+    loadout,
+    activeCombat,
+    reward,
+    spitterBomb,
+  };
+}
+
+async function smokeRottenEnemyReacquisition(browser) {
+  const page = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenReacquire",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await selectRottenBuild(page, "4", "6", "1");
+  await page.waitForDataset("rottenSelectedRoute", "unfiled-alley");
+  const started = Date.now();
+  let runner;
+  let maxFeetY = Number.NEGATIVE_INFINITY;
+  let maxBodyBottom = Number.NEGATIVE_INFINITY;
+  const reacquisitionDurations = [];
+
+  while (Date.now() - started < 5_000) {
+    const state = await page.dataset([
+      "rottenPhase",
+      "rottenEnemyGeometry",
+      "rottenEnemyReacquisition",
+      "rottenEnemyTell",
+    ]);
+    const geometry = parseRottenEnemyGeometry(state.rottenEnemyGeometry)
+      .find((enemy) => enemy.role === "writ-runner" && enemy.alive);
+    if (geometry) {
+      maxFeetY = Math.max(maxFeetY, geometry.feetY);
+      maxBodyBottom = Math.max(maxBodyBottom, geometry.bodyBottom);
+      if (geometry.feetY > 587 || geometry.bodyBottom > 583) {
+        throw new Error(
+          `Rotten reacquiring writ-runner fell below floor: feet=${geometry.feetY}, `
+          + `bodyBottom=${geometry.bodyBottom}`,
+        );
+      }
+    }
+    runner = parseRottenEnemyReacquisition(state.rottenEnemyReacquisition)
+      .find((enemy) => enemy.role === "writ-runner" && enemy.alive);
+    if (runner && runner.reacquisitionCount > reacquisitionDurations.length) {
+      reacquisitionDurations.push(runner.lastReacquisitionMs);
+    }
+    if (runner?.reacquiring && runner.state !== "approach") {
+      throw new Error(`Rotten offscreen writ-runner remained attack-eligible in ${runner.state}`);
+    }
+    if (runner?.reacquiring && state.rottenEnemyTell) {
+      throw new Error(`Rotten offscreen writ-runner retained a tell: ${state.rottenEnemyTell}`);
+    }
+    if (runner?.reacquisitionCount >= 2 && runner.onscreen) {
+      break;
+    }
+    if (state.rottenPhase !== "encounter") {
+      throw new Error(`Rotten reacquisition left encounter early: ${state.rottenPhase}`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 40));
+  }
+
+  if (!runner || runner.reacquisitionCount < 2 || !runner.onscreen) {
+    throw new Error(`Rotten writ-runner did not reacquire both edges: ${JSON.stringify(runner)}`);
+  }
+  assertAtMostNumber(runner.lastReacquisitionMs, 750, "Rotten writ-runner reacquisition time");
+  await captureEvidence(page, "rotten-enemy-reacquired-1920x1080.png");
+
+  const beforeHit = await page.dataset(["rottenAttackCount", "rottenAttackHitCount"]);
+  for (let index = 0; index < 8; index += 1) {
+    await page.key("j");
+    await new Promise((resolve) => setTimeout(resolve, 260));
+    const hits = await page.dataset(["rottenAttackCount", "rottenAttackHitCount"]);
+    if (Number(hits.rottenAttackHitCount) > Number(beforeHit.rottenAttackHitCount)) {
+      const result = {
+        reacquisitionCount: runner.reacquisitionCount,
+        reacquisitionDurations,
+        lastReacquisitionMs: runner.lastReacquisitionMs,
+        maxFeetY,
+        maxBodyBottom,
+        attacksBefore: Number(beforeHit.rottenAttackCount),
+        hitsBefore: Number(beforeHit.rottenAttackHitCount),
+        attacksAfter: Number(hits.rottenAttackCount),
+        hitsAfter: Number(hits.rottenAttackHitCount),
+      };
+      await page.close();
+      return result;
+    }
+  }
+
+  const failed = await page.dataset([
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenEnemyStates",
+    "rottenEnemyReacquisition",
+  ]);
+  await page.close();
+  throw new Error(`Rotten Spitter could not hit reacquired writ-runner: ${JSON.stringify(failed)}`);
+}
+
+async function smokeRottenEnemyAnchoring(browser) {
+  const cases = [
+    {
+      name: "bribe-line",
+      seed: "CYCLE-4",
+      routeKey: "1",
+      routeId: "bribe-line",
+      expectedRoles: ["bailiff", "clerk"],
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-enemy-cycle-bribe-line-1366x768.png",
+    },
+    {
+      name: "unfiled-alley",
+      seed: "GAUNTLET-ALPHA",
+      routeKey: "1",
+      routeId: "unfiled-alley",
+      expectedRoles: ["writ-runner"],
+      viewport: { width: 1920, height: 1080 },
+      evidence: "rotten-enemy-cycle-unfiled-alley-1920x1080.png",
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smoke=rottenEnemyCycle`,
+      { viewport: testCase.viewport },
+    );
+    await selectRottenBuild(page, "3", "6", testCase.routeKey);
+    await page.waitForDataset("rottenSelectedRoute", testCase.routeId);
+    const traversed = Object.fromEntries(testCase.expectedRoles.map((role) => [role, new Set()]));
+    let maxFeetY = Number.NEGATIVE_INFINITY;
+    let maxBodyBottom = Number.NEGATIVE_INFINITY;
+    let moving = true;
+    const started = Date.now();
+    await page.keyDown("d");
+
+    try {
+      while (Date.now() - started < 14_000) {
+        if (moving && Date.now() - started >= 700) {
+          await page.keyUp("d");
+          moving = false;
+        }
+        const state = await page.dataset([
+          "rottenPhase",
+          "rottenSelectedRoute",
+          "rottenEnemyGeometry",
+        ]);
+        for (const enemy of parseRottenEnemyGeometry(state.rottenEnemyGeometry)) {
+          if (!enemy.alive) {
+            continue;
+          }
+          maxFeetY = Math.max(maxFeetY, enemy.feetY);
+          maxBodyBottom = Math.max(maxBodyBottom, enemy.bodyBottom);
+          if (enemy.feetY > 587 || enemy.bodyBottom > 583) {
+            throw new Error(
+              `Rotten ${testCase.name} ${enemy.role}:${enemy.state} fell below floor: `
+              + `feet=${enemy.feetY}, bodyBottom=${enemy.bodyBottom}`,
+            );
+          }
+          traversed[enemy.role]?.add(enemy.state);
+        }
+        const complete = testCase.expectedRoles.every((role) =>
+          ["windup", "active", "recovery"].every((stateName) => traversed[role].has(stateName)));
+        if (complete) {
+          break;
+        }
+        if (state.rottenPhase === "dead") {
+          throw new Error(`Rotten ${testCase.name} died before all enemy attack states were sampled`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 45));
+      }
+    } finally {
+      if (moving) {
+        await page.keyUp("d");
+      }
+    }
+
+    for (const role of testCase.expectedRoles) {
+      for (const stateName of ["windup", "active", "recovery"]) {
+        if (!traversed[role].has(stateName)) {
+          throw new Error(
+            `Rotten ${testCase.name} ${role} did not traverse ${stateName}: ${[...traversed[role]].join(",")}`,
+          );
+        }
+      }
+    }
+    await captureEvidence(page, testCase.evidence);
+    await page.close();
+    results.push({
+      route: testCase.routeId,
+      viewport: testCase.viewport,
+      traversed: Object.fromEntries(
+        Object.entries(traversed).map(([role, states]) => [role, [...states]]),
+      ),
+      maxFeetY,
+      maxBodyBottom,
+    });
+  }
+
+  return results;
+}
+
+function parseRottenEnemyGeometry(value) {
+  if (!value) {
+    return [];
+  }
+  return String(value).split("|").map((entry) => {
+    const [role, state, alive, feetY, bodyBottom] = entry.split(":");
+    return {
+      role,
+      state,
+      alive: alive === "1",
+      feetY: Number(feetY),
+      bodyBottom: Number(bodyBottom),
+    };
+  });
+}
+
+function parseRottenEnemyReacquisition(value) {
+  if (!value) {
+    return [];
+  }
+  return String(value).split("|").map((entry) => {
+    const [
+      role,
+      state,
+      alive,
+      onscreen,
+      reacquiring,
+      reacquisitionCount,
+      lastReacquisitionMs,
+      offscreenForMs,
+      bodyLeft,
+      bodyRight,
+      velocityX,
+      reacquisitionDirection,
+    ] = entry.split(":");
+    return {
+      role,
+      state,
+      alive: alive === "1",
+      onscreen: onscreen === "1",
+      reacquiring: reacquiring === "1",
+      reacquisitionCount: Number(reacquisitionCount),
+      lastReacquisitionMs: Number(lastReacquisitionMs),
+      offscreenForMs: Number(offscreenForMs),
+      bodyLeft: Number(bodyLeft),
+      bodyRight: Number(bodyRight),
+      velocityX: Number(velocityX),
+      reacquisitionDirection: Number(reacquisitionDirection),
+    };
+  });
+}
+
+async function selectRottenBuild(page, weaponKey, skillKey, routeKey) {
+  await page.send("Page.bringToFront");
+  await page.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await page.waitForDataset("rottenPhase", "loadout");
+  await page.key(weaponKey);
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  await page.key(skillKey);
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  await page.key("Enter");
+  await page.waitForDataset("rottenPhase", "route-choice");
+  await page.key(routeKey);
+  await page.waitForDataset("rottenPhase", "encounter");
+}
+
+async function smokeRottenRunRetry(browser) {
+  const retryPage = await browser.open("/?mode=rotten&seed=GAUNTLET-ALPHA", {
+    viewport: { width: 1366, height: 768 },
+  });
+  await retryPage.send("Page.bringToFront");
+  await retryPage.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await retryPage.waitForDataset("rottenPhase", "loadout");
+  await retryPage.key("3");
+  await retryPage.waitForDataset("rottenWeapon", "tax-pike");
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  await retryPage.key("6");
+  await retryPage.waitForDataset("rottenSkill", "seized-stamp");
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  await retryPage.send("Page.bringToFront");
+  await retryPage.key("Enter");
+  await retryPage.waitForDataset("rottenPhase", "route-choice");
+  await retryPage.key("2");
+  await retryPage.waitForDataset("rottenPhase", "encounter");
+  await retryPage.holdKey("d", 2_600);
+  await retryPage.waitForDataset("rottenPhase", "dead", 25_000);
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  const dead = await retryPage.dataset([
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenHp",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(dead.rottenHp, "0/6", "Rotten explicit death health");
+  if (Number(dead.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Rotten death did not retain owned encounter objects before retry: ${dead.rottenCombatObjectCount}`);
+  }
+  await retryPage.key("r");
+  await retryPage.waitForDataset("rottenPhase", "loadout", 8_000);
+  await retryPage.waitForDataset("rottenWeapon", "", 2_000);
+  const retried = await retryPage.dataset([
+    "rottenPhase",
+    "rottenSeed",
+    "rottenPlanId",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenWave",
+    "rottenWavesCleared",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(retried.rottenSeed, dead.rottenSeed, "Rotten retry seed");
+  assertEqual(retried.rottenPlanId, dead.rottenPlanId, "Rotten retry plan");
+  assertEqual(retried.rottenWeapon, "", "Rotten retry weapon reset");
+  assertEqual(retried.rottenSkill, "", "Rotten retry skill reset");
+  assertEqual(retried.rottenWave, "0", "Rotten retry wave reset");
+  assertEqual(retried.rottenWavesCleared, "0", "Rotten retry clear count reset");
+  assertEqual(retried.rottenCombatObjectCount, "0", "Rotten retry stale combat objects");
+  await captureEvidence(retryPage, "rotten-encounter-retry-clean-1366x768.png");
+  await retryPage.key("r");
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  assertEqual(
+    (await retryPage.dataset(["rottenPhase"])).rottenPhase,
+    "loadout",
+    "Rotten post-retry R is inert outside dead state",
+  );
+  await retryPage.close();
+
+  return { route: "Rotten Run death -> same-seed R retry", dead, retried };
 }
 
 async function smokeFirstRoom(browser) {
@@ -1269,7 +1743,8 @@ class CdpPage {
     }
 
     if (message.method === "Runtime.exceptionThrown") {
-      this.errors.push(message.params.exceptionDetails.text);
+      const details = message.params.exceptionDetails;
+      this.errors.push(details.exception?.description ?? details.text);
     }
 
     if (
@@ -1429,7 +1904,17 @@ try {
     results.push(await smokeSumpDeathRestart(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenContract") {
     results.push(await smokeRottenRunContract(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenEnemyCycle") {
+    results.push({
+      route: "Rotten enemy anchored state cycles",
+      cases: await smokeRottenEnemyAnchoring(browser),
+      reacquisition: await smokeRottenEnemyReacquisition(browser),
+    });
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenEncounter") {
+    results.push(await smokeRottenRunRetry(browser));
+    results.push(await smokeRottenRunEncounter(browser));
   } else {
+    results.push(await smokeRottenRunRetry(browser));
     results.push(await smokeTitlePause(browser));
     results.push(await smokeManualOpeningRoute(browser));
     results.push(await smokePlatformRoute(browser));
@@ -1454,6 +1939,7 @@ try {
     results.push(await smokeMiniBoss(browser));
     results.push(await smokeBossDeathRestart(browser));
     results.push(await smokeRottenRunContract(browser));
+    results.push(await smokeRottenRunEncounter(browser));
   }
 
   const payload = { ok: true, results };

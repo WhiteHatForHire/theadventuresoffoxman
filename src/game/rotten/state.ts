@@ -1,26 +1,46 @@
+import type { RottenSkillId, RottenWeaponId, RottenWeaponStyle } from "./loadout";
 import type { RottenRouteId } from "./routes";
+import type { RottenUpgradeId } from "./upgrades";
 
-export type RottenRunShellPhase = "route-choice" | "encounter";
+export type RottenRunPhase = "loadout" | "route-choice" | "encounter" | "reward-choice" | "dead";
 
 export interface RottenRunDebugSnapshot {
   readonly scene: "RottenRunScene";
-  readonly phase: RottenRunShellPhase;
+  readonly phase: RottenRunPhase;
   readonly schemaVersion: number;
   readonly seed: string;
   readonly planId: string;
   readonly stage: 1;
   readonly routeOptions: readonly [RottenRouteId, RottenRouteId];
   readonly selectedRoute: RottenRouteId | null;
-  readonly weapon: null;
-  readonly skill: null;
-  readonly upgrades: readonly [];
-  readonly graft: 3;
-  readonly hp: null;
-  readonly livingEnemies: 0;
+  readonly weapon: RottenWeaponId | null;
+  readonly skill: RottenSkillId | null;
+  readonly upgrades: readonly RottenUpgradeId[];
+  readonly graft: number;
+  readonly hp: { readonly current: number; readonly max: number } | null;
+  readonly livingEnemies: number;
   readonly eliteCount: 0;
   readonly bossHealth: null;
   readonly bossPhase: null;
-  readonly elapsedActiveMilliseconds: 0;
+  readonly elapsedActiveMilliseconds: number;
   readonly result: null;
   readonly traceDigest: string;
+  readonly wave: 0 | 1 | 2;
+  readonly wavesCleared: number;
+  readonly spawnHistory: readonly string[];
+  readonly enemyStates: readonly string[];
+  readonly enemyGeometry: readonly string[];
+  readonly enemyReacquisition: readonly string[];
+  readonly enemyTell: string;
+  readonly attackCount: number;
+  readonly attackHitCount: number;
+  readonly weaponStyle: RottenWeaponStyle | "";
+  readonly weaponCooldownMs: number;
+  readonly weaponHeat: number;
+  readonly weaponRecovering: boolean;
+  readonly skillUseCount: number;
+  readonly skillHitCount: number;
+  readonly skillReady: boolean;
+  readonly offerIds: readonly RottenUpgradeId[];
+  readonly combatObjectCount: number;
 }

@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "Rotten enemy anchored state cycles",
+      "cases": [
+        {
+          "route": "bribe-line",
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "traversed": {
+            "bailiff": [
+              "approach",
+              "windup",
+              "recovery",
+              "active"
+            ],
+            "clerk": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.7,
+          "maxBodyBottom": 580
+        },
+        {
+          "route": "unfiled-alley",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "traversed": {
+            "writ-runner": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.3,
+          "maxBodyBottom": 580
+        }
+      ],
+      "reacquisition": {
+        "reacquisitionCount": 2,
+        "reacquisitionDurations": [
+          217,
+          567
+        ],
+        "lastReacquisitionMs": 567,
+        "maxFeetY": 583.3,
+        "maxBodyBottom": 580,
+        "attacksBefore": 0,
+        "hitsBefore": 0,
+        "attacksAfter": 1,
+        "hitsAfter": 1
+      }
+    }
+  ]
+}

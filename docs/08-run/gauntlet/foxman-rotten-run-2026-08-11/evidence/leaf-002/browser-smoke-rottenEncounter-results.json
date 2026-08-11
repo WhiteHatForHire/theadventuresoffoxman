@@ -1,0 +1,144 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "Rotten Run death -> same-seed R retry",
+      "dead": {
+        "rottenPhase": "dead",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenHp": "0/6",
+        "rottenCombatObjectCount": "30",
+        "canvasCount": 1
+      },
+      "retried": {
+        "rottenPhase": "loadout",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "",
+        "rottenSkill": "",
+        "rottenWave": "0",
+        "rottenWavesCleared": "0",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "Rotten Run real 3/6/Enter/2 combat",
+      "enemyCycles": [
+        {
+          "route": "bribe-line",
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "traversed": {
+            "bailiff": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ],
+            "clerk": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.7,
+          "maxBodyBottom": 580
+        },
+        {
+          "route": "unfiled-alley",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "traversed": {
+            "writ-runner": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.3,
+          "maxBodyBottom": 580
+        }
+      ],
+      "reacquisition": {
+        "reacquisitionCount": 2,
+        "reacquisitionDurations": [
+          232,
+          566
+        ],
+        "lastReacquisitionMs": 566,
+        "maxFeetY": 583.3,
+        "maxBodyBottom": 580,
+        "attacksBefore": 0,
+        "hitsBefore": 0,
+        "attacksAfter": 1,
+        "hitsAfter": 1
+      },
+      "loadout": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "loadout",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "",
+        "rottenSkill": "",
+        "rottenTraceDigest": "5C5695F6",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      },
+      "activeCombat": {
+        "rottenPhase": "encounter",
+        "rottenWave": "1",
+        "rottenLivingEnemies": "2",
+        "rottenEnemyStates": "bailiff:windup:3|bailiff:approach:3",
+        "rottenEnemyTell": "bailiff:windup:SWING!",
+        "rottenWeapon": "tax-pike",
+        "rottenSkill": "seized-stamp",
+        "rottenCombatObjectCount": "28",
+        "canvasCount": 1
+      },
+      "reward": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "reward-choice",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "tax-pike",
+        "rottenSkill": "seized-stamp",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenWave": "2",
+        "rottenWavesCleared": "2",
+        "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+        "rottenLivingEnemies": "0",
+        "rottenAttackCount": "6",
+        "rottenAttackHitCount": "6",
+        "rottenWeaponStyle": "spacing",
+        "rottenSkillUseCount": "2",
+        "rottenSkillHitCount": "2",
+        "rottenGraft": "7",
+        "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+        "rottenHp": "6/6",
+        "rottenTraceDigest": "4EE866CA",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      },
+      "spitterBomb": {
+        "rottenPhase": "reward-choice",
+        "rottenWeapon": "receipt-spitter",
+        "rottenSkill": "bribe-bomb",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenAttackCount": "1",
+        "rottenAttackHitCount": "1",
+        "rottenSkillUseCount": "2",
+        "rottenSkillHitCount": "4",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      }
+    }
+  ]
+}
