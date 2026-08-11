@@ -25,13 +25,15 @@ experiment.
 Rotten Run Gauntlet implementation, with the accepted V1 campaign and technically
 closed Act 2 retained as regression baselines.
 
-The deterministic Rotten Run plan and separate browser-visible mode shell are
-accepted at `fa94e97`. A normalized seed now freezes three two-option stages and
-the Commissioner of Consequences, the title preserves Campaign on Enter while
-exposing Rotten Run on R, and the complete 24-route browser matrix remains green.
-The active gate is the first real two-wave Stage 1 combat loop with bounded
-loadout variety; later stages, rewards, elites, boss completion, and records are
-not yet implemented.
+The deterministic Rotten Run plan, separate browser-visible mode shell, bounded
+loadout, and real two-wave Stage 1 combat are accepted through `0c29d6a`. A
+normalized seed freezes three two-option stages and the Commissioner of
+Consequences; the title preserves Campaign on Enter while exposing Rotten Run on
+R; four weapons, three skills, three Stage 1 enemy roles, death/retry, and the
+reward docket are manually operable. The complete 26-route browser matrix remains
+green. The active gate is the deterministic reward transaction and carried-build
+transition into the Stage 2 route docket; Stage 2 combat, later enemies/elites,
+boss completion, settings, records, and full-run proof remain unimplemented.
 
 The app boots in Phaser, has a title/start flow, renders optimized generated runtime assets, supports movement/dash/combat/ranged combat/active skill/mutations/pause/death/restart, splits Phaser into a production vendor chunk, and has smoke-proven room, platform-traversal, dash, Act 2 Sump Warrens, Sump death/restart, 390px viewport, ranged, skill, reward/shop, reward/shop skill, second-path, mutation, second-path death/restart, connected boss-route, full-slice, skill-to-boss, mini-boss, boss-death, and manual opening routes. Sump restart restores the player, all three enemy actors, input/motor state, completion gate, UI, and active hit VFX. Dash now has a lightweight three-image trail and audio-bus cue without changing movement tuning. Browser evidence and the remaining human gate are recorded in `docs/08-run/2026-08-08-sol-wave-run-receipt.md`.
 

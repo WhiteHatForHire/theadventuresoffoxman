@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active — LEAF-001 accepted; LEAF-002 playable Stage 1 combat next
+**Status:** Active — LEAF-001 and LEAF-002 accepted; LEAF-003 reward market and Stage 2 docket next
 **Priority:** P0
 **Type:** Product / Runtime / QA
 
@@ -50,6 +50,15 @@ Execute the bounded run at
   gates.
 - Product story, development story, postmortem, receipts, and continuation
   handoff exist.
+
+### Immediate Gate
+
+- Make the Stage 1 reward docket transactional through one deterministic choice:
+  offer, heal, or bank.
+- Carry graft, HP, loadout, route history, and owned upgrades into the fixed
+  Stage 2 route-choice surface without claiming Stage 2 combat is complete.
+- Stabilize the focused encounter reset/tell snapshots and preserve the accepted
+  26-route campaign-plus-Rotten matrix.
 
 ## 2. Foxman Case Study Screenshot And Annotation Pass
 

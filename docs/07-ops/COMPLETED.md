@@ -32,6 +32,40 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-11 - Rotten Run Playable Stage 1 Combat Accepted
+
+**Type:** App / Product / Gameplay / QA / Ops
+**Source:** Codex builder + fresh blind critics
+**Related Files:**
+
+- `src/game/rotten/RottenCombatController.ts`
+- `src/game/rotten/RottenEnemy.ts`
+- `src/game/rotten/loadout.ts`
+- `src/game/rotten/enemyRoles.ts`
+- `src/game/rotten/waves.ts`
+- `src/game/rotten/upgrades.ts`
+- `src/game/scenes/RottenRunScene.ts`
+- `tests/unit/rotten-run-stage-one.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-002/`
+
+**Summary:**
+
+Added the manually operable Stage 1 Rotten Run loop: four distinct weapons,
+three active skills, two deterministic route choices, two combat waves, three
+readable enemy roles, explicit death, clean same-seed retry, and a deterministic
+reward docket. Two blind reviews found and drove bounded repairs for atlas-frame
+floor anchoring and living-enemy offscreen reacquisition. A final fresh critic
+passed the exact production artifact at 1366×768 and 1920×1080 with real melee
+and ranged clears; the accepted browser regression passes all 26 routes and the
+campaign remains unchanged.
+
+**Follow-Ups:**
+
+- [ ] Make reward purchase, heal, and bank choices transactional and carry the build to Stage 2.
+- [ ] Stabilize focused encounter reset/tell snapshot timing without changing gameplay unless a real defect reproduces.
+- [ ] Keep later-stage combat, elites, boss, results, settings, and records in their own bounded leaves.
+
 ## 2026-08-11 - Rotten Run Deterministic Mode Shell Accepted
 
 **Type:** App / Product / QA / Ops
@@ -50,7 +84,7 @@ Added a separate, seed-addressable Rotten Run shell without changing campaign sc
 
 **Follow-Ups:**
 
-- [ ] Add the bounded loadout and real two-wave Stage 1 combat leaf.
+- [x] Add the bounded loadout and real two-wave Stage 1 combat leaf.
 - [ ] Preserve the stable `GAUNTLET-ALPHA` plan fixture and campaign matrix while advancing normal mode flow.
 
 ## 2026-08-11 - Rotten Run Gauntlet Launch Baseline Accepted

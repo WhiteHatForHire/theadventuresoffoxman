@@ -191,3 +191,52 @@ Continue. Platform telemetry reports `781748` tokens, far below the first autono
 `Commit and push only the recovery-control files, then launch exactly one fresh-context LEAF-002 blind critic using a new leaf-002-recritic3 evidence directory.`
 
 Prerequisites: stage only canonical recovery files; leave the candidate byte-for-byte intact; verify no other descendant exists.
+
+## Checkpoint 5 - LEAF-002 Promoted And LEAF-003 Frozen
+
+Updated: `2026-08-11T09:16:10Z`
+
+### Final LEAF-002 Verdict
+
+- A replacement fresh-context critic built a new external production artifact from the recovered candidate and operated it through the real in-app Browser at 1366×768 and 1920×1080.
+- Verdict: `PASS`. Campaign Enter, deterministic loadout/routes, grounded and reacquiring enemies, melee and ranged clears, delayed Bribe Bomb damage, Receipt Spitter heat/recovery, death, clean same-seed R retry, two-wave reward, zero stale combat objects, and one canvas were directly observed.
+- The critic's first full browser regression passed `26/26` routes. Typecheck, production build/dist, and `33/33` unit tests passed.
+- Largest residual gap: focused encounter observation produced two different transient failures before a pass. Manual retry and the first full matrix did not reproduce gameplay-state persistence; LEAF-003 must stabilize two-frame reset truth and tell latching, then run ten focused repeats without changing product timing absent a stable reproduction.
+- Project-local evidence is preserved at `evidence/leaf-002/`, including the verbatim critic receipt, focused/full JSON, and representative direct-browser frames.
+
+### Lead Promotion
+
+- Independently inspected the receipt, raw route counts, candidate hashes, grounded/tell/Bomb/heat/reward/reacquisition frames, stopped critic runtime, and clean critic scope.
+- Re-ran `npm test -- --run` (`33/33`), `npm run typecheck`, `npm run build`, `npm run smoke`, and `git diff --check`; all passed.
+- Staged only authorized Rotten source, scene, unit/browser tests, and compact critic evidence.
+- Committed and pushed accepted product baseline `0c29d6aa51658e774924efe3714788a9371d76d0`; local `main` and `origin/main` match and the worktree is clean.
+
+### LEAF-003 Product Boundary
+
+- `RR-DEC-011`: one pure deterministic reward transaction; keys 1-3 offer, 4 heal, 5 bank.
+- `RR-DEC-012`: the leaf ends honestly at the real Stage 2 route docket, with no fake Stage 2 combat or new enemies.
+- `RR-DEC-013`: stabilize harness observation rather than tuning unreproduced gameplay.
+- The task contract is frozen in `LEAF-003.md`; shared Player/combat/enemy/campaign files, Stage 2 combat, elites, boss, records, settings, assets, and packages are explicit non-goals.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-016` | `RR-STEP-015` | fresh blind critic | Build and manually review post-repair LEAF-002 at both viewports | `PASS` | bounded turn | descendant exact unavailable | `evidence/leaf-002/critic-receipt.md` |
+| `RR-STEP-017` | `RR-STEP-016` | lead | Verify raw evidence, rerun cheap checks, promote and push LEAF-002 | Pass | `~8m` | included below | commit `0c29d6a`, origin matched |
+| `RR-STEP-018` | `RR-STEP-017` | lead | Run shipping update and freeze reward/Stage 2 boundary | Pass | checkpoint | `961573 / 1250000000` platform goal telemetry | ops docs, decisions `RR-DEC-011..013`, `LEAF-003.md` |
+
+### Token Decision
+
+Continue. Platform goal telemetry reports `961573` tokens, far below the first autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### External Actions
+
+- Pushed accepted product commit `0c29d6a` to `origin/main`.
+- No public deployment, domain, paid service, credential change, destructive history action, or campaign deletion occurred.
+
+### Next Safe Action
+
+`Commit and push this promotion/control checkpoint, verify clean main, then launch exactly one bounded LEAF-003 builder from the accepted head.`
+
+Prerequisites: staged control/ops diff passes JSON and whitespace checks; builder receives no commit, push, ops, or Gauntlet-control authority.

@@ -54,7 +54,7 @@ Status: active
 
 ## Open Questions
 
-- None blocking `LEAF-001`.
+- None blocking `LEAF-003`.
 
 ### RR-DEC-006 - Additive Pure Core And Separate Scene
 
@@ -101,8 +101,38 @@ Status: active
 **Affected surfaces:** `src/game/rotten/` runtime/content modules and `RottenRunScene` composition.
 **Constraints:** no edits to campaign actors/scenes; pure registries own content, runtime modules own enemy/combat behavior, and the scene owns transitions.
 
+### RR-DEC-011 - One Pure Transaction Per Reward Market
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** A reward docket is consequential only when affordability, payment, immediate effects, and the carried build are deterministic state rather than scene-local presentation.
+**Affected surfaces:** Rotten Run economy/build state, reward offers, reward UI, trace, browser snapshot.
+**Constraints:** keys `1-3` buy the corresponding offer, `4` buys the 2-graft heal, and `5` banks; exactly one accepted choice advances the run; invalid or unaffordable choices leave state unchanged with visible feedback; transaction rules remain browser-independent pure code.
+
+### RR-DEC-012 - LEAF-003 Ends At The Honest Stage 2 Docket
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Reward choice and carried run state form a coherent bounded leaf, while adding shield auditors, sump scribes, elites, and Stage 2 waves in the same change would dilute review and architecture ownership.
+**Affected surfaces:** run stage, route history, Stage 2 route-choice presentation, leaf acceptance.
+**Constraints:** after one reward transaction, show the plan's real Stage 2 pair with carried HP, graft, loadout, and upgrades; do not create fake Stage 2 combat, placeholder enemies, implementation commentary, or a completion claim beyond this boundary.
+
+### RR-DEC-013 - Stabilize Smoke Observation, Not Unreproduced Gameplay
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** The final LEAF-002 critic saw two different transient focused-harness snapshots while manual retry and the first full matrix remained correct.
+**Affected surfaces:** Rotten browser polling and evidence capture only.
+**Constraints:** require retry reset truth across two animation frames and latch a tell once observed; run the focused encounter ten consecutive times before LEAF-003 review; do not alter gameplay reset/tell timing unless a stable harness or real browser reproduces a product defect.
+
 ## Promotion Notes
 
 - `LEAF-001` accepted by a fresh blind critic with no largest gap.
 - Accepted product commit: `fa94e97`.
 - Evidence: `evidence/leaf-001/critic-receipt.md` and the focused/full browser results beside it.
+- `LEAF-002` accepted after two `REVISE` repairs and one interrupted review; the final fresh critic issued `PASS` on the real production artifact.
+- Accepted product commit: `0c29d6a`.
+- Evidence: `evidence/leaf-002/critic-receipt.md`, focused contract/encounter/enemy-cycle results, the 26-route full result, and direct-browser captures beside them.
