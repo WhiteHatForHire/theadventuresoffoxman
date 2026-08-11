@@ -8,6 +8,8 @@ Canonical status: `budget_exhausted`
 
 Strict completion: **not met**
 
+Public-ready case-study source: [`SITE_DEBRIEF_ADDENDUM.md`](SITE_DEBRIEF_ADDENDUM.md)
+
 ## Final Checkpoint
 
 The atomic LEAF-005 promotion was already at its final acceptance boundary when

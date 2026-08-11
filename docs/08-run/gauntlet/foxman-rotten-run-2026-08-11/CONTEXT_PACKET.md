@@ -42,6 +42,7 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 - [`MASTER_DIRECTIVE.md`](MASTER_DIRECTIVE.md)
 - [`RUN_STATE.json`](RUN_STATE.json)
 - [`CONTROLLED_WIND_DOWN.md`](CONTROLLED_WIND_DOWN.md)
+- [`SITE_DEBRIEF_ADDENDUM.md`](SITE_DEBRIEF_ADDENDUM.md)
 - [`DECISION_REGISTRY.md`](DECISION_REGISTRY.md)
 - [`SEEDED_RUN_CONTRACT.md`](SEEDED_RUN_CONTRACT.md)
 - Repository `AGENTS.md`, `PROJECT.md`, and relevant source/tests for the assigned leaf.
