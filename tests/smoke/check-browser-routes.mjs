@@ -113,6 +113,124 @@ async function smokeRottenRunContract(browser) {
   return { route: "/ -> R; seeded Rotten Run -> 2", titleEntry, planned, selected, viewport };
 }
 
+async function smokeRottenSmokeIsolation(browser) {
+  const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenEncounter";
+  const page = await browser.open(route, { viewport: { width: 1366, height: 768 } });
+  await page.send("Page.bringToFront");
+  await page.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await page.waitForDataset("rottenPhase", "loadout");
+  await page.evaluate(`(() => {
+    const observation = { keyEvents: [] };
+    window.__FOXMAN_ROTTEN_ISOLATION_OBSERVATION__ = observation;
+    window.addEventListener("keydown", (event) => {
+      const data = document.body.dataset;
+      observation.keyEvents.push({
+        key: event.key,
+        phase: data.rottenPhase ?? "",
+        weapon: data.rottenWeapon ?? "",
+        skill: data.rottenSkill ?? "",
+        route: data.rottenSelectedRoute ?? "",
+      });
+    });
+    return true;
+  })()`);
+
+  const initial = await page.dataset([
+    "rottenPhase",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenSelectedRoute",
+    "rottenHp",
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenTraceDigest",
+  ]);
+
+  await page.key("3");
+  await page.waitForDataset("rottenWeapon", "tax-pike");
+  await page.key("6");
+  await page.waitForDataset("rottenSkill", "seized-stamp");
+  await page.key("Enter");
+  await page.waitForDataset("rottenPhase", "route-choice");
+  await page.key("2");
+  await page.waitForDataset("rottenPhase", "encounter");
+  await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
+
+  const telemetryKeys = [
+    "rottenPhase",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenSelectedRoute",
+    "rottenHp",
+    "rottenLivingEnemies",
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenTraceDigest",
+    "rottenCombatObjectCount",
+  ];
+  const samples = [];
+  const observedAt = Date.now();
+  while (Date.now() - observedAt < 4_500) {
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    samples.push({
+      observedMilliseconds: Date.now() - observedAt,
+      ...await page.dataset(telemetryKeys),
+    });
+  }
+  const state = samples.at(-1);
+  const domInput = await page.evaluate(`(() => ({
+    activeElement: document.activeElement?.tagName ?? "",
+    keyEvents: [...(window.__FOXMAN_ROTTEN_ISOLATION_OBSERVATION__?.keyEvents ?? [])],
+  }))()`);
+  const maximumCounts = {
+    weaponAttacks: Math.max(...samples.map(({ rottenAttackCount }) => Number(rottenAttackCount))),
+    weaponHits: Math.max(...samples.map(({ rottenAttackHitCount }) => Number(rottenAttackHitCount))),
+    skillUses: Math.max(...samples.map(({ rottenSkillUseCount }) => Number(rottenSkillUseCount))),
+    skillHits: Math.max(...samples.map(({ rottenSkillHitCount }) => Number(rottenSkillHitCount))),
+  };
+  const evidence = {
+    route,
+    smokeAutoQueryValue: null,
+    combatInputsAfterEncounterEntry: [],
+    observationWindowMilliseconds: Date.now() - observedAt,
+    initial,
+    state,
+    maximumCounts,
+    domInput,
+    samples,
+  };
+
+  await captureEvidence(page, "rotten-smoke-isolation-1366x768.png");
+  await page.close();
+
+  assertEqual(initial.rottenPhase, "loadout", "Rotten isolation initial phase");
+  assertEqual(state.rottenWeapon, "tax-pike", "Rotten isolation real-key weapon");
+  assertEqual(state.rottenSkill, "seized-stamp", "Rotten isolation real-key skill");
+  assertEqual(state.rottenSelectedRoute, "bailiffs-ramp", "Rotten isolation real-key route");
+  assertDeepEqual(
+    domInput.keyEvents.map(({ key }) => key),
+    ["3", "6", "Enter", "2"],
+    "Rotten isolation DOM key events",
+  );
+  assertDeepEqual(
+    domInput.keyEvents.map(({ phase }) => phase),
+    ["loadout", "loadout", "route-choice", "encounter"],
+    "Rotten isolation DOM key phases",
+  );
+  if (state.rottenPhase !== "encounter" && state.rottenPhase !== "dead") {
+    throw new Error(`Rotten isolation left combat unexpectedly: ${JSON.stringify(evidence)}`);
+  }
+  if (maximumCounts.weaponAttacks !== 0 || maximumCounts.skillUses !== 0) {
+    throw new Error(`Rotten smoke name authorized combat automation: ${JSON.stringify(evidence)}`);
+  }
+
+  return evidence;
+}
+
 async function smokeRottenRunEncounter(browser) {
   const enemyCycles = await smokeRottenEnemyAnchoring(browser);
   const reacquisition = await smokeRottenEnemyReacquisition(browser);
@@ -701,7 +819,7 @@ function pickDataset(state, keys) {
 
 async function smokeRottenEnemyReacquisition(browser) {
   const page = await browser.open(
-    "/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenReacquire",
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenReacquire",
     { viewport: { width: 1920, height: 1080 } },
   );
   await selectRottenBuild(page, "4", "6", "1");
@@ -817,7 +935,7 @@ async function smokeRottenEnemyAnchoring(browser) {
 
   for (const testCase of cases) {
     const page = await browser.open(
-      `/?mode=rotten&seed=${testCase.seed}&smoke=rottenEnemyCycle`,
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenEnemyCycle`,
       { viewport: testCase.viewport },
     );
     await selectRottenBuild(page, "3", "6", testCase.routeKey);
@@ -2506,6 +2624,8 @@ try {
     results.push(await smokeDashRoute(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenContract") {
     results.push(await smokeRottenRunContract(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenIsolation") {
+    results.push(await smokeRottenSmokeIsolation(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenEnemyCycle") {
     results.push({
       route: "Rotten enemy anchored state cycles",
@@ -2526,6 +2646,7 @@ try {
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarket") {
     results.push(await smokeRottenRunMarket(browser));
   } else {
+    results.push(await smokeRottenSmokeIsolation(browser));
     results.push(await smokeRottenRunRetry(browser));
     results.push(await smokeTitlePause(browser));
     results.push(await smokeManualOpeningRoute(browser));

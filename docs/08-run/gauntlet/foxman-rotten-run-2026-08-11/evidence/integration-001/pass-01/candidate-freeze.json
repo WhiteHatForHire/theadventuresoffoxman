@@ -1,0 +1,35 @@
+{
+  "frozenAt": "2026-08-11T13:35:26Z",
+  "repository": "/Users/marcusvale/Documents/coding/marcusbrainhq/repos/theadventuresoffoxman",
+  "branch": "main",
+  "head": "e7d3e397289a178719520856c03935e9104df364",
+  "controlBase": "e7d3e397289a178719520856c03935e9104df364",
+  "lastAcceptedProductCommit": "23e309e6dce71f039c4eab2508816a584bd53354",
+  "trackedChanges": [
+    "src/game/scenes/RottenRunScene.ts",
+    "tests/smoke/check-browser-routes.mjs"
+  ],
+  "diffStat": "2 files changed, 125 insertions(+), 4 deletions(-)",
+  "binaryDiffSha256": "7c518775453f51387f6748d512438acaf1d102c5c8a9b47930c1baa2d51f08e2",
+  "controlArchiveSha256": "02d90c1a603fe865944b99e0fc76b03c9c62f9916108f892d3f5ec2f5d194faa",
+  "files": {
+    "src/game/scenes/RottenRunScene.ts": {
+      "controlSha256": "5593d0e3030e73df91ccbe01b4de964d45c2cdb62d7f7b8a0773dfd73c426147",
+      "candidateSha256": "89f8b26296ce85e454435d5a223ca4ef69fbfe951b09eb9e3a1ef2ce897976f2"
+    },
+    "tests/smoke/check-browser-routes.mjs": {
+      "controlSha256": "5b15e0a4fe957d9dfe6aa6698394ff1d9b720bb66a3f582e7d23863238fc5a96",
+      "candidateSha256": "2ba97d0c4239c0ed79904820303d4ebbc0cde248965d404a394f0d16bd210e6e"
+    },
+    "package.json": {
+      "candidateSha256": "f28211eb6f0fd14b1dc4bbef5bb400b960a1ac1da6628d31fbef24f7dd3f2dc3"
+    },
+    "package-lock.json": {
+      "candidateSha256": "105de11245d9a082be519157a1361f375c96daf70b1d9f57e8bf044385772835"
+    }
+  },
+  "scopeVerification": {
+    "candidateVsControl": "exactly the two tracked files listed above",
+    "acceptedProductVsControlRuntime": "no diff under src, tests, package manifests, Vite config, or TypeScript config; 23e309e..e7d3 is documentation/evidence only"
+  }
+}

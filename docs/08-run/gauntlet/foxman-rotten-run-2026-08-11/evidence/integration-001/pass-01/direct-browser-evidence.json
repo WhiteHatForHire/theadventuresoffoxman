@@ -1,0 +1,73 @@
+{
+  "browser": "Codex In-app Browser",
+  "artifactUrl": "http://127.0.0.1:4178",
+  "artifactManifestSha256": "6a9a4aade3c0467ab2ce5cd2a4e2113310dc19245c8e64aacaee9ef545714570",
+  "isolation": {
+    "url": "http://127.0.0.1:4178/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenEncounter",
+    "smokeAuto": null,
+    "viewport": { "width": 1366, "height": 768 },
+    "keyLedger": [
+      { "key": "3", "phase": "loadout", "weapon": "tax-pike", "skill": "", "route": "", "focus": "BODY" },
+      { "key": "6", "phase": "loadout", "weapon": "tax-pike", "skill": "seized-stamp", "route": "", "focus": "BODY" },
+      { "key": "Enter", "phase": "route-choice", "weapon": "tax-pike", "skill": "seized-stamp", "route": "", "focus": "BODY" },
+      { "key": "2", "phase": "encounter", "weapon": "tax-pike", "skill": "seized-stamp", "route": "bailiffs-ramp", "focus": "BODY" }
+    ],
+    "combatInputsAfterEncounterEntry": [],
+    "observationWindowMilliseconds": 5121,
+    "maximumCounts": { "attackCount": 0, "attackHitCount": 0, "skillUseCount": 0, "skillHitCount": 0 },
+    "final": { "phase": "dead", "hp": "0/6", "livingEnemies": 2, "attackCount": 0, "skillUseCount": 0, "canvasCount": 1, "canvasBacking": "1280x720", "canvasCss": "1365.328125x768" },
+    "interpretation": "Enemy AI legitimately killed Foxman during the no-action window; no weapon or skill automation occurred.",
+    "consoleWarningsOrErrors": [],
+    "screenshot": "screenshots/iab-isolation-manual-1366x768.png",
+    "screenshotSha256": "196b07e5aab234278ace8961d68e48a0caa37e0ee20cd174dad51755cb929ee7"
+  },
+  "authorizedContrast": {
+    "url": "http://127.0.0.1:4178/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenEncounter",
+    "viewport": { "width": 1366, "height": 768 },
+    "keyLedger": ["3", "6", "Enter", "2"],
+    "firstNonzeroObservedMilliseconds": 1375,
+    "firstNonzero": { "attackCount": 1, "attackHitCount": 1, "skillUseCount": 1, "skillHitCount": 1 },
+    "completed": { "phase": "reward-choice", "attackCount": 6, "skillUseCount": 2, "graft": 7, "hp": "6/6", "combatObjectCount": 0 },
+    "consoleWarningsOrErrors": [],
+    "screenshot": "screenshots/iab-authorized-auto-1366x768.png",
+    "screenshotSha256": "c76b90fed1485bbf21fac5100c3625bd8cec42c44d2bfa38be22f4da8b84be48"
+  },
+  "campaign": {
+    "viewport": { "width": 1366, "height": 768 },
+    "input": "Enter",
+    "state": { "scene": "RunScene", "weapon": "Rusty Knife", "hp": 5, "focus": "BODY", "canvasCount": 1 },
+    "consoleWarningsOrErrors": [],
+    "screenshot": "screenshots/iab-campaign-enter-1366x768.png",
+    "screenshotSha256": "b52c3121ba673e26342c177933ab894fd995fd34354f91c5098d9101220ae9a8"
+  },
+  "normalRotten": {
+    "url": "http://127.0.0.1:4178/?mode=rotten&seed=GAUNTLET-ALPHA",
+    "viewport": { "width": 1920, "height": 1080 },
+    "state": { "phase": "loadout", "seed": "GAUNTLET-ALPHA", "planId": "RR1-1C93B57F", "stage": 1, "graft": 3, "focus": "BODY", "canvasCount": 1, "canvasBacking": "1280x720", "canvasCss": "1920x1080" },
+    "consoleWarningsOrErrors": [],
+    "screenshot": "screenshots/iab-rotten-normal-loadout-1920x1080.png",
+    "screenshotSha256": "04cfd73575ab4e06b2d29712a1e2f29bfc6986747bf00c6612b497d86ccf0631"
+  },
+  "connectedStage2": {
+    "viewport": { "width": 1920, "height": 1080 },
+    "keyLedger": ["3", "6", "Enter", "2", "1"],
+    "reward": { "phase": "reward-choice", "weapon": "tax-pike", "skill": "seized-stamp", "hp": "6/6", "graft": 7, "combatObjectCount": 0 },
+    "carry": { "phase": "route-choice", "stage": 2, "routeOptions": "seized-goods-lift|late-fee-chapel", "weapon": "tax-pike", "skill": "seized-stamp", "upgrades": "dead-letter", "hp": "6/6", "graft": 0, "routeHistory": "1:bailiffs-ramp:upgrade:dead-letter", "rewardDecisionCount": 1, "combatObjectCount": 0 },
+    "consoleWarningsOrErrors": [],
+    "screenshot": "screenshots/iab-stage2-carry-1920x1080.png",
+    "screenshotSha256": "9a748cf455662b2f7bc3a84492b41ef7944fa0567712773336837b48963dab96"
+  },
+  "resourceAudit": {
+    "documentReady": "complete",
+    "productionScript": "assets/index-kp_sjlIr.js",
+    "productionStylesheet": "assets/index-BXaDcDRc.css",
+    "loopbackServerStatuses": { "200": 138, "304": 135, "404": 7 },
+    "guardedResourceFailures": [],
+    "ignoredFailures": ["favicon.ico only"]
+  },
+  "preservedTransient": {
+    "kind": "selector observation timing",
+    "detail": "The Stage 2 flow's reward selector wait expired immediately before the page exposed reward-choice/open. The same live page discriminator showed 6/6 HP, 7 graft, 6 attacks, 2 skill uses, zero combat objects, and one canvas. No selection input was retried; the single subsequent 1 key produced the accepted Stage 2 carry."
+  },
+  "captureBackendNote": "At the 1920x1080 override the page reported innerWidth=1920, innerHeight=1080, visualViewport=1920x1080, devicePixelRatio=1, and canvas CSS 1920x1080. The standard IAB PNG encoder returned a visually complete 1873x1080 image; diagnostic clip/full-page captures showed backend coordinate/caching behavior and are not treated as product evidence."
+}

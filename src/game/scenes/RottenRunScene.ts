@@ -4,7 +4,7 @@ import { Player } from "../entities/Player";
 import { GAME_HEIGHT, GAME_WIDTH } from "../GameConfig";
 import { InputMapper, type InputSnapshot } from "../input/InputMapper";
 import { addPaintedPlatform } from "../levels/PaintedPlatform";
-import { smokeParam } from "../smoke";
+import { smokeAutoEnabled, smokeParam } from "../smoke";
 import {
   RottenCombatController,
   type RottenCombatDebugState,
@@ -138,7 +138,7 @@ export class RottenRunScene extends Phaser.Scene {
 
   create(): void {
     const query = new URLSearchParams(window.location.search);
-    const smoke = smokeParam();
+    const smoke = smokeAutoEnabled() ? smokeParam() : null;
     this.compatibilityMode = smoke === "rottenContract";
     this.encounterSmoke = smoke === "rottenEncounter"
       || smoke === "rottenMarket"

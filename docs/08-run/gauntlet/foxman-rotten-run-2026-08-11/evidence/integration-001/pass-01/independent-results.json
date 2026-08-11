@@ -1,0 +1,30 @@
+{
+  "review": "INTEGRATION-001-REVISION-001",
+  "verdict": "PASS",
+  "controlHead": "e7d3e397289a178719520856c03935e9104df364",
+  "preReceiptRuntimeParent": "a4a3451dd174e3a6de532d75bee2014918e66e06",
+  "acceptedProductCommit": "23e309e6dce71f039c4eab2508816a584bd53354",
+  "candidateDiffSha256": "7c518775453f51387f6748d512438acaf1d102c5c8a9b47930c1baa2d51f08e2",
+  "artifactManifestSha256": "6a9a4aade3c0467ab2ce5cd2a4e2113310dc19245c8e64aacaee9ef545714570",
+  "checks": {
+    "unit": { "attempts": 1, "result": "PASS", "files": 4, "tests": 42 },
+    "typecheck": { "attempts": 1, "result": "PASS" },
+    "build": { "attempts": 1, "result": "PASS", "viteModules": 52 },
+    "distSmoke": { "attempts": 1, "result": "PASS" },
+    "gitDiffCheck": { "attempts": 1, "result": "PASS" },
+    "focused": {
+      "rottenIsolation": { "attempts": 1, "result": "PASS", "sha256": "47857714e26b96f1a161ff1cc45faeaaebc5ef039c9fdc2fe40d122645d02fc6" },
+      "rottenContract": { "attempts": 1, "result": "PASS", "sha256": "88a581a0a10c1cd453ff9ba0407c49c5071a721e0ad06a1572bd9d6f25ce9414" },
+      "rottenEnemyCycle": { "attempts": 1, "result": "PASS", "sha256": "49d8a8923dfc8fdadf56e964e7a73c40bd1a1c4a52895e072ab5f0c3bc7224d6" },
+      "rottenEncounter": { "attempts": 1, "result": "PASS", "sha256": "c9e0be0a86871da71fc284e2f09c5a3318afe4f3fcf9c61c8fac3dae81387e92" },
+      "rottenMarket": { "attempts": 1, "result": "PASS", "sha256": "ffb4155abf44a682e0fdbbae1bad5a58ccbab70b56cce5cd245b05e3e7ed1e9a" }
+    },
+    "fullMatrix": { "attempts": 1, "retries": 0, "result": "PASS", "topLevelResults": 28, "campaignRoutes": 23, "priorRottenRoutes": 4, "isolationRoutes": 1, "sha256": "5f8fb46149774aa184fe60b5e119b168f55d78c583cb19b6dab3ebc2c45757a5" },
+    "directBrowser": { "result": "PASS", "viewports": ["1366x768", "1920x1080"] }
+  },
+  "seriousIntegrationGaps": [],
+  "residuals": [
+    "npm ci reported two pre-existing high-severity dependency audit findings; package changes were outside this repair.",
+    "Future Stage 2 combat, settings, records, accessibility, and completion work remains outside this re-review."
+  ]
+}
