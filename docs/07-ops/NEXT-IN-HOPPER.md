@@ -10,7 +10,8 @@ Update this file whenever a task is completed, superseded, blocked, or moved int
 
 # Current Shipping Objective
 
-Expand `The Adventures of Foxman, a Merciless Bastard` from accepted V1 slice into a full-game campaign spine.
+Complete the bounded Rotten Run side-scrolling roguelite Gauntlet while
+preserving the accepted campaign baseline.
 
 ---
 
@@ -28,7 +29,29 @@ Expand `The Adventures of Foxman, a Merciless Bastard` from accepted V1 slice in
 
 # Active Tasks
 
-## 1. Foxman Case Study Screenshot And Annotation Pass
+## 1. Rotten Run Gauntlet
+
+**Status:** Active
+**Priority:** P0
+**Type:** Product / Runtime / QA
+
+### Goal
+
+Execute the bounded run at
+`docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/MASTER_DIRECTIVE.md`.
+
+### Acceptance Criteria
+
+- A complete 15-25 minute seeded roguelite run is playable in the browser.
+- Route, weapon, skill, mutation, enemy, elite, and boss variety prove at least
+  three viable builds.
+- The accepted campaign smoke matrix remains green.
+- Independent critics pass deterministic, browser, presentation, and reality
+  gates.
+- Product story, development story, postmortem, receipts, and continuation
+  handoff exist.
+
+## 2. Foxman Case Study Screenshot And Annotation Pass
 
 **Status:** Active  
 **Priority:** P1  
@@ -46,7 +69,7 @@ Extend the completed case-study Markdown/DOCX package with live gameplay screens
 - Re-render the DOCX and visually inspect representative pages.
 - Preserve the central thesis: one-shot generation creates artifacts, while agent orchestration creates production quality.
 
-## 2. Post-V1 Polish And Packaging Triage
+## 3. Post-V1 Polish And Packaging Triage
 
 **Status:** Active  
 **Priority:** P1  
@@ -64,7 +87,7 @@ Prepare the accepted V1 candidate for handoff by triaging polish, packaging, rel
 - Update release/handoff docs.
 - `npm run smoke:all` passes.
 
-## 3. Act 2 Closure Human Review And Next-Gate Decision
+## 4. Act 2 Closure Human Review And Next-Gate Decision
 
 **Status:** Ready for Marcus review
 **Priority:** P1  

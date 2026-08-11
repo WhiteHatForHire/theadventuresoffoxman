@@ -8,11 +8,22 @@ The protagonist is Foxman: a fox/man hybrid with a sharp tongue, worse judgment,
 
 ## Current Objective
 
-Build the game through gated production. The master initiative plan, full-game initiative, Phase 1 style-lock package, engine scaffold, movement sandbox, combat sandbox, first vertical-slice room, first asset integration pass, vertical-slice polish pass, Phase 8 foundation hooks, a second combat/reward path, unique tax clerk runtime art, a committed browser smoke harness, reward choices, an elite auditor prototype, a Toll Baron mini-boss room, unique Toll Baron runtime art, a first boss-specific stamp behavior, repeatable atlas exports for Foxman, Drunken Guard, Tax Clerk, Toll Baron, pickup/exit props, reward/shop icons, and Rotten Borough tile platforms, a runtime Rotten Borough background export, a first ranged weapon prototype, a first active skill prototype, two mutation prototypes, an upgraded reward/shop choice surface, reward/shop counter runtime art, smoke-proven death/restart loops, a visible second-path-to-boss transition, second-path enemy damage/restart coverage, a smoke-proven full-slice route, carried Spite Belch usability in the second path and boss fight, interactive shop-card affordances, a skill-oriented boss route, a smoke-proven combat HUD readability pass, visible hit feedback VFX, V1 build-size stabilization, a V1 acceptance audit, a first-room presentation/visual-smoke polish pass, first-room manual playability rescue pass, atlas body anchoring pass, July 2026 playability audit/rescue pass, first-room platform asset/traversal pass, dash/dodge feel and feedback passes, the Act 2 Sump Warrens campaign expansion, Act 1 boss-clear-to-Act-2 handoff, and complete Sump death/restart recovery now exist. The current build is an expanded campaign prototype with a technically closed Act 2 chapter; the next gate is Marcus's human play review and a deliberate choice between further campaign expansion and public-demo packaging.
+Run the bounded **Rotten Run** Gauntlet authorized on 2026-08-11: use the
+accepted campaign's movement, combat, weapons, skills, mutations, enemies,
+bosses, asset pipeline, and browser harness to produce a replayable seeded
+side-scrolling roguelite vertical slice while preserving the authored campaign.
+The controlling directive is
+[`MASTER_DIRECTIVE.md`](docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/MASTER_DIRECTIVE.md).
+
+The existing build remains an expanded campaign prototype with a technically
+closed Act 2 chapter. Its pending human play verdict is preserved as a later
+campaign decision and does not block the separately authorized Rotten Run
+experiment.
 
 ## Current Phase
 
-Phase 9: Full-game campaign expansion. V1 candidate accepted; Act 2 closure is a technical pass with human acceptance pending.
+Rotten Run Gauntlet preparation, with the accepted V1 campaign and technically
+closed Act 2 retained as regression baselines.
 
 The app boots in Phaser, has a title/start flow, renders optimized generated runtime assets, supports movement/dash/combat/ranged combat/active skill/mutations/pause/death/restart, splits Phaser into a production vendor chunk, and has smoke-proven room, platform-traversal, dash, Act 2 Sump Warrens, Sump death/restart, 390px viewport, ranged, skill, reward/shop, reward/shop skill, second-path, mutation, second-path death/restart, connected boss-route, full-slice, skill-to-boss, mini-boss, boss-death, and manual opening routes. Sump restart restores the player, all three enemy actors, input/motor state, completion gate, UI, and active hit VFX. Dash now has a lightweight three-image trail and audio-bus cue without changing movement tuning. Browser evidence and the remaining human gate are recorded in `docs/08-run/2026-08-08-sol-wave-run-receipt.md`.
 
