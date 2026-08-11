@@ -4,30 +4,32 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "integration-review-after-leaf-003",
+  "currentGate": "integration-001-smoke-isolation-revision",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 1507324,
-  "usageCoverage": "Platform goal telemetry through LEAF-003 promotion and integration-review framing; descendant-specific breakdown remains unavailable.",
+  "knownTokensUsed": 1588289,
+  "usageCoverage": "Platform goal telemetry through the first INTEGRATION-001 verdict and recovery receipt; descendant-specific breakdown remains unavailable.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": null,
+  "activeLeaf": "INTEGRATION-001-REVISION-001",
   "lastAcceptedCommit": "23e309e6dce71f039c4eab2508816a584bd53354",
   "promotedLeaves": ["LEAF-001", "LEAF-002", "LEAF-003"],
   "lastCriticVerdict": {
-    "leaf": "LEAF-003",
-    "verdict": "pass",
-    "largestGap": "No product gap remained after two tests-only dash-observation revisions. The final blind critic passed the exact candidate through direct purchase/heal/bank/reset play and a first-attempt 27-route matrix.",
-    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-003/critic-receipt.md"
+    "leaf": "INTEGRATION-001",
+    "verdict": "revise",
+    "largestGap": "RottenRunScene arms encounter, market, heal, poor-market, compatibility, and reacquisition smoke fixtures from smoke= alone. A real browser URL without smokeAuto=1 self-fired weapon and skill input, violating manual-play and evidence isolation.",
+    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/integration-001/revise-01/critic-receipt.md"
   },
   "reviewGate": {
-    "status": "leaf-003-passed-integration-review-required",
+    "status": "integration-revise-smoke-auto-isolation",
     "completedReviews": [
       "Initial LEAF-003 blind review: direct market product passed; revise timing-fragile campaign dash sampling and remove broken one-off key probes",
-      "Fresh LEAF-003 re-review after revision 01: direct market product passed; revise dash wait so displacement and peak evidence resolve coherently"
+      "Fresh LEAF-003 re-review after revision 01: direct market product passed; revise dash wait so displacement and peak evidence resolve coherently",
+      "INTEGRATION-001: 42/42 unit, build/type/dist, all focused gates, and one 27/27 matrix passed; direct browser review reproduced unauthorized Rotten smoke automation without smokeAuto=1"
     ],
     "interruptedReview": "Two critic turns stalled only during receipt/connector cleanup after their REVISE findings were already delivered; the lead preserved their evidence, stopped exact servers, and recorded recovery receipts before each repair.",
     "finalReview": "leaf-003-recritic2 passed a frozen external production artifact through real in-app Browser purchase/heal/bank/reset play at both viewports, focused gates, and a first-attempt 27-route regression.",
-    "largestResidualGap": "The protocol-mandated integration review after three promoted leaves must pass before LEAF-004 Stage 2 combat begins."
+    "integrationReview": "REVISE. The reviewer froze complete independent findings, then stalled during receipt formatting; the lead interrupted only that reviewer and reconstructed the required receipt from immutable evidence.",
+    "largestResidualGap": "All Rotten smoke fixtures must require the explicit smokeAuto=1 opt-in, with a negative direct-URL regression and preserved authorized focused/full browser gates, before a fresh integration re-review."
   },
   "candidate": null,
   "baseline": {
@@ -46,6 +48,6 @@
     "resolvedAt": "2026-08-11T09:12:00Z",
     "resolution": "A replacement fresh critic passed the real browser artifact and LEAF-002 was promoted at 0c29d6a."
   },
-  "updatedAt": "2026-08-11T12:32:36Z",
-  "nextSafeAction": "Commit and push the LEAF-003 promotion/control checkpoint, verify clean main, then launch exactly one fresh read-only integration reviewer across promoted LEAF-001 through LEAF-003. Do not start LEAF-004 before that review passes."
+  "updatedAt": "2026-08-11T13:10:42Z",
+  "nextSafeAction": "Commit and push the INTEGRATION-001 REVISE receipt and bounded repair contract, then launch exactly one repair builder. Gate all Rotten smoke fixtures behind smokeAutoEnabled(), prove smoke= alone stays manual, preserve authorized smoke routes and the full matrix, then send the candidate to one fresh read-only integration re-review. Do not start LEAF-004 before PASS."
 }

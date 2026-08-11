@@ -137,6 +137,15 @@ Status: active
 **Affected surfaces:** promoted Rotten Run flow, campaign entry/regression, input transport, state/trace ownership, cleanup, performance, accessibility/readability, evidence provenance, and the LEAF-004 boundary.
 **Constraints:** use one fresh read-only integration reviewer on the accepted `23e309e` baseline; run the real browser artifact and accepted deterministic/full-matrix gates; do not build Stage 2 combat until the review passes; if it returns `REVISE`, repair only the largest integration gap before re-review.
 
+### RR-DEC-015 - Smoke Names Never Authorize Product Automation
+
+**Status:** approved
+**Owner:** lead from independent INTEGRATION-001 evidence
+**Date:** 2026-08-11
+**Rationale:** A real browser URL containing a known Rotten `smoke=` value but no `smokeAuto=1` silently armed combat automation. Smoke scenario naming and permission to automate must be separate so manual play, critic evidence, and direct links remain trustworthy.
+**Affected surfaces:** Rotten scene smoke-fixture initialization and browser isolation coverage.
+**Constraints:** every Rotten compatibility, encounter, heal, poor-market, and reacquisition fixture must require `smokeAutoEnabled()`; ordinary `mode=rotten&seed=...` loading remains unchanged; add a negative real-browser regression for `smoke=` without opt-in; preserve the authorized focused routes with `smokeAuto=1`; do not change combat, input timing, content, or campaign behavior.
+
 ## Promotion Notes
 
 - `LEAF-001` accepted by a fresh blind critic with no largest gap.

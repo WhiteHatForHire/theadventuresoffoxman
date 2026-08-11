@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active — LEAF-001 through LEAF-003 accepted; mandatory integration review next
+**Status:** Active — LEAF-001 through LEAF-003 accepted; integration isolation revision required
 **Priority:** P0
 **Type:** Product / Runtime / QA
 
@@ -53,14 +53,12 @@ Execute the bounded run at
 
 ### Immediate Gate
 
-- Run one fresh read-only integration review across the accepted mode shell,
-  Stage 1 combat, reward transaction, and Stage 2 handoff.
-- Verify cross-system state/trace ownership, input controls, cleanup,
-  campaign regression, performance, readability/accessibility, and evidence
-  provenance on the real browser artifact.
-- Preserve the accepted `27/27` matrix and direct purchase/heal/bank/reset truth.
-- On `PASS`, frame the bounded Stage 2 combat leaf. On `REVISE`, repair only the
-  largest integration gap before any new content begins.
+- Repair the one INTEGRATION-001 blocker: `smoke=` must never arm Rotten
+  automation unless `smokeAuto=1` is explicitly present.
+- Add a negative direct-browser isolation regression while preserving every
+  authorized focused smoke path, the accepted campaign, and the full matrix.
+- Send the bounded repair to one fresh read-only integration reviewer.
+- Frame Stage 2 combat only after that reviewer returns `PASS`.
 
 ## 2. Foxman Case Study Screenshot And Annotation Pass
 

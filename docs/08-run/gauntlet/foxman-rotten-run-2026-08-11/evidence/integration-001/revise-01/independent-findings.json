@@ -1,0 +1,140 @@
+{
+  "review": "INTEGRATION-001",
+  "frozen_at": "2026-08-11T21:04:41+08:00",
+  "independence": {
+    "prior_leaf_receipts_consulted": false,
+    "external_builder_rationale_consulted": false,
+    "artifact_built_outside_repository": true,
+    "repository_mutated": false
+  },
+  "candidate": {
+    "repository": "/Users/marcusvale/Documents/coding/marcusbrainhq/repos/theadventuresoffoxman",
+    "control_head": "a4a3451dd174e3a6de532d75bee2014918e66e06",
+    "origin_main": "a4a3451dd174e3a6de532d75bee2014918e66e06",
+    "accepted_product_commit": "23e309e6dce71f039c4eab2508816a584bd53354",
+    "accepted_product_tree": "803bd1f12ce6acc4372963811216ec2bfa44bcde",
+    "control_tree": "7543e4df77952750cecf420b6d0439fd473b79ae",
+    "product_is_ancestor_of_control": true,
+    "product_to_control_runtime_diff_empty": true
+  },
+  "artifact": {
+    "source": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/integration-001-review/source",
+    "served_dist": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/integration-001-review/source/dist",
+    "served_url": "http://127.0.0.1:4177",
+    "fresh_dist_matches_repository_dist_byte_for_byte": true,
+    "dist_manifest_aggregate_sha256": "2b31a5926bb0c81ee481d702ebd44d63bfc796bfb16516da7a454d9f8dec24f0",
+    "app_bundle": {
+      "file": "assets/index-Bo6v9nIn.js",
+      "bytes": 167737,
+      "gzip_reported_bytes": 39380,
+      "sha256": "6f6f9afa03782c7aa32dc6ec605f9bc6f53c635dcc060f47cd58481e1010ff61"
+    },
+    "phaser_bundle": {
+      "file": "assets/phaser-vendor-DFK5Ua9d.js",
+      "bytes": 1208056,
+      "gzip_reported_bytes": 330080,
+      "sha256": "f9025c1a29bc3ae097dd886ce07717b297466da1ce8f032c8294252ce6cf5cdb"
+    }
+  },
+  "gates": {
+    "unit": {"attempts": 1, "result": "PASS", "files": 4, "tests": 42},
+    "typecheck": {"attempts": 1, "result": "PASS"},
+    "build": {"attempts": 1, "result": "PASS", "vite_modules": 52},
+    "dist_smoke": {"attempts": 1, "result": "PASS"},
+    "focused": {
+      "dash": "PASS",
+      "contract": "PASS",
+      "enemy_cycle": "PASS",
+      "encounter": "PASS",
+      "market": "PASS"
+    },
+    "full_matrix": {
+      "attempts": 1,
+      "filtered": false,
+      "result": "PASS",
+      "routes": 27,
+      "evidence_sha256": "827b72a8a3365360810bda4993f9ef4e3a1404c2700bfd03a0557385812598b4"
+    }
+  },
+  "connected_product": {
+    "campaign_enter_and_representative_action": "PASS",
+    "rotten_loadout_route_stage1_combat": "PASS",
+    "death_and_same_seed_clean_retry": "PASS",
+    "reward_open_and_key1_purchase": "PASS",
+    "exact_stage2_carry": "PASS",
+    "contrasting_bank_path": "PASS",
+    "invalid_and_repeated_noop": "PASS",
+    "stage2_honesty": "PASS",
+    "viewports": ["1366x768", "1920x1080"],
+    "canvas_count_observed": 1,
+    "combat_object_count_after_reward_retry_and_stage2": 0
+  },
+  "blocking_finding": {
+    "id": "SMOKE-AUTO-ISOLATION",
+    "severity": "P1",
+    "query": "http://127.0.0.1:4177/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenEncounter",
+    "smoke_auto_query_value": null,
+    "attempts": 1,
+    "retry_performed": false,
+    "manual_inputs_before_combat": ["3", "6", "ENTER", "2"],
+    "combat_inputs_after_route_entry": [],
+    "initial": {"phase": "loadout", "attackCount": 0, "skillUseCount": 0},
+    "observed_after_approximately_ms": 2900,
+    "final": {
+      "phase": "encounter",
+      "attackCount": 1,
+      "attackHitCount": 1,
+      "skillUseCount": 1,
+      "skillHitCount": 1,
+      "livingEnemies": 1,
+      "hp": "6/6"
+    },
+    "source": [
+      "src/game/scenes/RottenRunScene.ts:141-149 reads smokeParam() directly and arms all Rotten fixtures",
+      "src/game/scenes/RottenRunScene.ts:172-176 chooses automatedInput whenever encounterSmoke is true",
+      "src/game/scenes/RottenRunScene.ts:562-564 mutates graft for the poor-market fixture",
+      "src/game/scenes/RottenRunScene.ts:471-476 force-displaces an enemy for reacquisition",
+      "src/game/smoke.ts:5-6 defines the missing explicit smokeAutoEnabled() gate",
+      "src/game/scenes/RunScene.ts:210 and the other campaign scenes gate smokeParam() behind smokeAutoEnabled()"
+    ],
+    "screenshot": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/integration-001-review/screenshots/iab-smoke-isolation-failure-1366x768.png",
+    "screenshot_sha256": "5ef5db16c5820355784afb852b61d017ac3674efc0486f4213e40e10d87b38bc",
+    "impact": "A normal direct Rotten link containing a smoke route but lacking the explicit automation opt-in silently controls combat and may mutate market/reacquisition state, so manual-play and smoke-evidence boundaries are not trustworthy."
+  },
+  "runtime": {
+    "warnings_or_errors": [],
+    "snapshot_sample_window_ms": 1510,
+    "snapshot_transitions": 28,
+    "active_delta_ms": {"min": 50, "max": 67, "mean": 55.96},
+    "phase": "encounter",
+    "hp": "6/6",
+    "combat_objects": 28,
+    "manual_attack_count": 0,
+    "manual_skill_use_count": 0
+  },
+  "architecture": {
+    "positive": [
+      "Seed/plan/routing/build/market rules are pure typed modules.",
+      "Market transition is a single immutable reducer and exact carry is derived from one pure state.",
+      "Combat controller owns enemies, projectiles, bombs and collider cleanup; observed reward/retry/Stage-2 states had zero combat objects.",
+      "Existing campaign combat scenes are unchanged; only title/preload/config integration seams changed."
+    ],
+    "residuals": [
+      "RottenRunScene is 1057 lines and mirrors phase/loadout/route/trace fields beside RottenPureRunState; LEAF-004 reuse should extract stage orchestration instead of cloning Stage 1.",
+      "The scene installs persistent keyboard.on handlers on create; no duplicate listener or canvas was observed, but explicit scene-shutdown ownership is not documented.",
+      "A hidden 280 ms market-entry input lock can swallow an extremely fast first choice without feedback."
+    ]
+  },
+  "accessibility": {
+    "visual_keyboard_controls": "PASS at both required viewports",
+    "focus_semantics": "Keyboard controls worked with BODY active.",
+    "residual": "Canvas-only UI exposes zero focusable elements, zero ARIA/role nodes, empty DOM text, and canvas tabIndex -1; Tab leaves focus on BODY."
+  },
+  "provenance": {
+    "asset_files_changed_by_three_product_leaves": false,
+    "runtime_assets_are_repository_local_and_logged": true,
+    "campaign_scene_scope_isolated": true
+  },
+  "ranked_repair": "Gate every Rotten compatibility/encounter/heal/poor/reacquisition automation fixture with smokeAutoEnabled(), while preserving normal mode/seed route loading; add one regression proving a smoke route without smokeAuto=1 stays manual and the same route with smokeAuto=1 still automates.",
+  "verdict": "REVISE"
+}

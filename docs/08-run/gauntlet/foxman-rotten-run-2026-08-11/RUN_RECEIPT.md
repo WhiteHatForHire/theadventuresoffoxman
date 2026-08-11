@@ -313,3 +313,53 @@ Continue. Platform goal telemetry reports `1507324` tokens, far below the first 
 `Commit and push this promotion/control checkpoint, verify clean main, then launch exactly one fresh read-only integration reviewer on the accepted 23e309e product baseline.`
 
 Prerequisites: JSON and whitespace checks pass; `main` equals `origin/main`; no builder or product edit starts before the integration verdict.
+
+## Checkpoint 7 - INTEGRATION-001 Revises Smoke-Automation Isolation
+
+Updated: `2026-08-11T13:10:42Z`
+
+### Independent Review Result
+
+- A fresh read-only reviewer exported the accepted product outside the repository and froze control HEAD `a4a3451`, product commit `23e309e`, and byte-identical dist aggregate SHA-256 `2b31a5926bb0c81ee481d702ebd44d63bfc796bfb16516da7a454d9f8dec24f0`.
+- First-attempt deterministic gates passed: `42/42` unit tests, typecheck, 52-module production build, dist smoke, focused dash/contract/enemy-cycle/encounter/market, and exactly one unfiltered `27/27` browser matrix.
+- Direct in-app Browser play at both target viewports passed Campaign Enter/actions, Rotten loadout and route choice, Stage 1 tells/combat, death and clean same-seed retry, reward open, purchase, bank, invalid/repeated no-op, exact Stage 2 carry, one canvas, and zero stale combat objects.
+- The reviewer did not consult prior leaf receipts or builder rationale before freezing its verdict.
+
+### Preserved Blocking Finding
+
+- Verdict: `REVISE` for `SMOKE-AUTO-ISOLATION`.
+- On `?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenEncounter` with `smokeAuto` absent, the reviewer pressed only `3`, `6`, `Enter`, and `2`, then sent no combat input. The artifact self-fired one weapon attack and one skill use, both with hits.
+- Source inspection confirms `RottenRunScene` reads `smokeParam()` unconditionally and arms all Rotten compatibility/encounter/market/heal/poor/reacquisition fixtures, while campaign scenes correctly gate the parameter with `smokeAutoEnabled()`.
+- Independent findings SHA-256: `888c1c4756895c43f03fa7a5501e8737cb487d9e47b83e4453de7fe773b03a95`; failure screenshot SHA-256: `5ef5db16c5820355784afb852b61d017ac3674efc0486f4213e40e10d87b38bc`.
+- Evidence is imported under `evidence/integration-001/revise-01/`.
+
+### Reviewer Recovery
+
+- After freezing all findings, the reviewer stopped making observable progress during receipt formatting. Two explicit closeout requests produced no response.
+- The lead interrupted only that stalled reviewer, verified its preview was stopped and the repository untouched, and reconstructed the required receipt from `INDEPENDENT_FINDINGS.json` plus hashed raw artifacts.
+- The interrupted reviewer is not being relabeled as a PASS. Its exact verdict remains `REVISE`.
+
+### Ranked Repair And Boundary
+
+- `RR-DEC-015` requires every Rotten smoke fixture to use the explicit `smokeAutoEnabled()` permission gate.
+- Add one negative real-browser proof that a known `smoke=` route without `smokeAuto=1` stays manual, while all authorized `smokeAuto=1` routes remain green.
+- Limit the builder to `RottenRunScene.ts`, additive browser coverage, and external evidence. No combat, timing, content, campaign, package, asset, or control-file change is authorized.
+- Run one fresh integration re-review after the repair. `LEAF-004` remains blocked until PASS.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-027` | `RR-STEP-026` | fresh integration reviewer | Independently build, test, operate, and inspect promoted LEAF-001..003 | `REVISE` | bounded turn | descendant exact unavailable | `evidence/integration-001/revise-01/` |
+| `RR-STEP-028` | `RR-STEP-027` | lead recovery | Preserve frozen review after receipt-formatting stall; stop only reviewer | Pass | `~10m` | included below | reconstructed critic receipt plus source/process audit |
+| `RR-STEP-029` | `RR-STEP-028` | lead | Rank one repair and freeze its builder contract | Pass | checkpoint | `1588289 / 1250000000` platform telemetry | `RR-DEC-015`, `INTEGRATION-001-REVISION-001.md` |
+
+### Token Decision
+
+Continue. Platform goal telemetry reports `1588289` tokens, far below the first autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### Next Safe Action
+
+`Commit and push this REVISE/control checkpoint, verify clean main, then launch exactly one bounded smoke-isolation repair builder. Do not start Stage 2 combat.`
+
+Prerequisites: validate JSON, receipt terminator, evidence hashes, and whitespace; builder receives no commit, push, ops, or control-file authority.
