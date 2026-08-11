@@ -1,7 +1,7 @@
 # Foxman Rotten Run Bounded Context Packet
 
 Run ID: `foxman-rotten-run-gauntlet-2026-08-11`
-Freshness: `2026-08-11T19:23:13Z`
+Freshness: `2026-08-11T23:12:22Z`
 Context policy: each leaf receives this shared truth plus only its directly required source files.
 
 ## Goal
@@ -11,12 +11,13 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 ## Current Truth
 
 - Prepared baseline `779f935` and the authored campaign remain accepted regression truth.
-- Promoted Rotten product baseline is `e8a9957`; `main` and `origin/main` matched at promotion.
+- Promoted Rotten product baseline is `d849c4f`; `main` and `origin/main` matched at promotion.
 - Current stack is Vite, TypeScript, Phaser 3; no stack change is authorized.
-- LEAF-001..004 are promoted: deterministic plan/mode shell, complete Stage 1 and Stage 2 combat/reward loops, all five roles, both elites, all eight carried effects, and the honest Stage 3 docket are accepted.
-- The fresh LEAF-004 recritic passed 54/54 units, every focused gate, direct Browser review at both desktop viewports, a 40-cycle target lifecycle gate, and one 34/34 matrix.
+- LEAF-001..005 are promoted: deterministic plan/mode shell, complete Stage 1 through Stage 3 combat/reward loops, all five roles, both elites, all eight carried effects, three markets, and the honest inert Commissioner dossier are accepted.
+- The fresh LEAF-005 recritic passed 61/61 units, all 17 focused gates, direct Browser review at both desktop viewports, a 40-cycle target lifecycle gate, and the sole 40/40 current-revision matrix.
 - `GAUNTLET-ALPHA` remains plan `RR1-1C93B57F`; its Stage 3 pair is `collection-parade|garnish-gallery`.
-- LEAF-005 is the complete Stage 3 loop ending at an honest inert Commissioner dossier. Boss combat, results/records, settings/accessibility, audio completion, and full-run proof remain later work.
+- Canonical status is `budget_exhausted`, not complete. Marcus reported approximately 6% backend budget remaining and forbade any new leaf or validation cycle.
+- Boss combat, results/records, settings/accessibility, audio completion, final real-boss build proofs, and final human acceptance remain.
 
 ## Active Decisions
 
@@ -39,6 +40,8 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 ## Required Sources
 
 - [`MASTER_DIRECTIVE.md`](MASTER_DIRECTIVE.md)
+- [`RUN_STATE.json`](RUN_STATE.json)
+- [`CONTROLLED_WIND_DOWN.md`](CONTROLLED_WIND_DOWN.md)
 - [`DECISION_REGISTRY.md`](DECISION_REGISTRY.md)
 - [`SEEDED_RUN_CONTRACT.md`](SEEDED_RUN_CONTRACT.md)
 - Repository `AGENTS.md`, `PROJECT.md`, and relevant source/tests for the assigned leaf.
@@ -50,7 +53,8 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 - Comedy stays aimed at fictional corruption, institutions, villains, and Foxman's own failures.
 - New generated assets must be original, project-local, provenance-recorded, and runtime-verified.
 - Do not mistake the 390px containment check for promised touch support.
-- `RottenRunScene` is 1064 lines after Stage 2; Stage 3 must not add stage-numbered method families.
+- Preserve the generic encounter/build/market runtime; do not add stage-numbered flow clones.
+- Do not resume, frame, or launch another leaf without explicit human budget restoration and resume authority.
 
 ## Explicit Exclusions
 

@@ -1,54 +1,87 @@
 {
   "schemaVersion": 1,
   "runId": "foxman-rotten-run-gauntlet-2026-08-11",
-  "project": "The Adventures of Foxman, a Merciless Bastard",
-  "mode": "Rotten Run",
-  "status": "active",
-  "currentGate": "leaf-005-builder",
+  "projectId": "theadventuresoffoxman-rotten-run",
+  "protocol": "symposium-os/experimental/gauntlet-loop/v0.1",
+  "status": "budget_exhausted",
+  "currentGate": "controlled-wind-down-after-leaf-005",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 2611578,
-  "usageCoverage": "Platform goal telemetry through LEAF-004 promotion and LEAF-005 framing; descendant-specific breakdown remains unavailable.",
-  "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
-  "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": "LEAF-005",
-  "lastAcceptedCommit": "e8a99579d11fbd36dea07967814164e39c27e673",
-  "promotedLeaves": ["LEAF-001", "LEAF-002", "LEAF-003", "LEAF-004"],
-  "lastCriticVerdict": {
-    "leaf": "LEAF-004",
-    "verdict": "pass",
-    "largestGap": "No serious product gap remains in LEAF-004. The generic matrix footer records rather than directly asserts total baseline page equality, while the dedicated 40-cycle lifecycle gate and the one-shot matrix both independently prove exact baseline restoration.",
-    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-004/critic-receipt.md"
-  },
-  "reviewGate": {
-    "status": "leaf-004-pass-leaf-005-authorized",
-    "completedReviews": [
-      "INTEGRATION-001: 42/42 unit, build/type/dist, all focused gates, and one 27/27 matrix passed; direct browser review reproduced unauthorized Rotten smoke automation without smokeAuto=1",
-      "Fresh INTEGRATION-001 re-review: repaired manual isolation and authorized contrast passed directly at both viewports; all focused gates and exactly one 28/28 matrix passed",
-      "Initial LEAF-004 blind review: complete Stage 2 product passed directly at both viewports; REVISE because the one permitted full matrix leaked Chrome targets and stalled after a clean product state",
-      "Fresh LEAF-004 re-review: 54/54 unit, all focused gates, direct Stage 2 play at both viewports, 40/40 target lifecycle cycles, and exactly one 34/34 matrix passed"
-    ],
-    "interruptedReview": "The final LEAF-004 recritic completed and froze PASS, then twice stalled only during receipt formatting. The lead preserved the frozen hashes and artifacts and reconstructed a clearly labeled recovery receipt without rerunning evidence or changing the verdict.",
-    "finalReview": "leaf-004-recritic passed a frozen external production artifact through direct Stage 2 route, role, elite, build, market, death/reset, lifecycle, and full-matrix gates at both viewports.",
-    "integrationReview": "The prior three-leaf integration gate remains PASS. LEAF-004 independently passed after one harness-only target-lifecycle repair; the first REVISE remains preserved beside the final PASS.",
-    "largestResidualGap": "Stage 3 is still an honest non-operative docket. LEAF-005 must add all three Stage 3 encounter specs, the third market, and an inert Commissioner dossier through the existing generic architecture."
-  },
-  "candidate": null,
-  "baseline": {
+  "knownTokensUsed": 3052620,
+  "updatedAt": "2026-08-11T23:12:22Z",
+  "repository": {
+    "path": "/Users/marcusvale/Documents/coding/marcusbrainhq/repos/theadventuresoffoxman",
     "branch": "main",
-    "head": "779f93571b22f4b7606328d82626719220e31ac9",
-    "originHead": "779f93571b22f4b7606328d82626719220e31ac9",
-    "worktree": "clean",
-    "campaignBrowserRoutesPassed": 23
+    "baselineHead": "d849c4fcd2398716eb22f6ae3605b64fafca8db5"
   },
-  "recovery": {
-    "event": "Codex force-quit around 2026-08-11T08:21:00Z",
-    "auditedAt": "2026-08-11T08:29:50Z",
-    "decision": "resume",
-    "repositoryTruth": "main and origin/main both at 206a087; exactly one worktree; no Foxman-owned runtime or descendant survived; preserved dirty files match the LEAF-002 candidate.",
-    "promotionBoundary": "LEAF-001 remains promoted. LEAF-002 is not promoted until a fresh-context post-repair blind critic passes the real browser artifact.",
-    "resolvedAt": "2026-08-11T09:12:00Z",
-    "resolution": "A replacement fresh critic passed the real browser artifact and LEAF-002 was promoted at 0c29d6a."
-  },
-  "updatedAt": "2026-08-11T19:23:13Z",
-  "nextSafeAction": "Commit and push the LEAF-004 promotion/LEAF-005 control checkpoint, verify clean main and origin, then launch exactly one bounded LEAF-005 builder from LEAF-005.md."
+  "activeLeaf": null,
+  "blocker": "Marcus reported only 6% backend budget remaining and directed an immediate controlled wind-down with no new leaf or validation cycle. The strict definition of done is not met: Commissioner combat, victory/results, local records, settings/accessibility, audio completion, and final real-boss build proofs remain.",
+  "history": [
+    {
+      "at": "2026-08-11T03:59:59Z",
+      "event": "Prepared the bounded Rotten Run Gauntlet from baseline 779f935 and froze the seeded run contract.",
+      "evidence": [
+        "MASTER_DIRECTIVE.md",
+        "SEEDED_RUN_CONTRACT.md",
+        "commit:779f93571b22f4b7606328d82626719220e31ac9"
+      ]
+    },
+    {
+      "at": "2026-08-11T04:47:43Z",
+      "event": "Promoted the deterministic Rotten Run mode shell and preserved Campaign Enter compatibility.",
+      "evidence": [
+        "evidence/leaf-001/critic-receipt.md",
+        "commit:fa94e97"
+      ]
+    },
+    {
+      "at": "2026-08-11T09:12:26Z",
+      "event": "Recovered from the force-quit, preserved LEAF-001, obtained a fresh LEAF-002 browser PASS, and promoted LEAF-002.",
+      "evidence": [
+        "RECOVERY_AUDIT.md",
+        "evidence/leaf-002/critic-receipt.md",
+        "commit:0c29d6a"
+      ]
+    },
+    {
+      "at": "2026-08-11T12:31:38Z",
+      "event": "Promoted LEAF-003 market/build carry after blind review and the accepted campaign regression matrix.",
+      "evidence": [
+        "evidence/leaf-003/critic-receipt.md",
+        "commit:23e309e"
+      ]
+    },
+    {
+      "at": "2026-08-11T14:03:38Z",
+      "event": "Promoted the smoke-isolation integration repair after independent re-review.",
+      "evidence": [
+        "evidence/integration-001/pass-01/",
+        "commit:7cef4b0"
+      ]
+    },
+    {
+      "at": "2026-08-11T19:21:58Z",
+      "event": "Promoted complete Stage 2, five roles, two elite variants, eight carried effects, the second market, and the Stage 3 docket.",
+      "evidence": [
+        "evidence/leaf-004/critic-receipt.md",
+        "commit:e8a99579d11fbd36dea07967814164e39c27e673"
+      ]
+    },
+    {
+      "at": "2026-08-11T23:10:16Z",
+      "event": "Promoted LEAF-005 after a fresh blind recritic passed Stage 3 combat, the third market, the inert Commissioner dossier, all 17 focused gates, direct browser review at both viewports, and the sole 40/40 matrix.",
+      "evidence": [
+        "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-005-recritic/RECRITIC_RECEIPT.md",
+        "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-005-recritic/evidence/final-matrix/browser-smoke-results.json",
+        "commit:d849c4fcd2398716eb22f6ae3605b64fafca8db5"
+      ]
+    },
+    {
+      "at": "2026-08-11T23:12:22Z",
+      "event": "Human budget directive superseded autonomous continuation; stopped all Foxman-owned temporary runtimes and sealed a budget-exhausted, non-complete checkpoint.",
+      "evidence": [
+        "CONTROLLED_WIND_DOWN.md",
+        "RUN_RECEIPT.md"
+      ]
+    }
+  ]
 }

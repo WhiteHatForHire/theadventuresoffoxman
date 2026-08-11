@@ -514,3 +514,48 @@ autonomous trajectory audit at `25000000`; no trajectory audit is due.
 Prerequisites: JSON, field-guide line budget, and whitespace checks pass; the
 builder receives no commit, push, ops, control, public-action, or product-scope
 authority.
+
+## Controlled Wind-Down After LEAF-005
+
+### Outcome
+
+- A fresh blind LEAF-005 recritic froze `PASS` before consulting prior
+  receipts. All 17 focused filters passed first attempt, direct in-app Browser
+  review passed at both required viewports, and the single current-revision
+  unfiltered matrix passed `40/40` in `899327 ms` with exact browser-target
+  restoration and no retry.
+- The lead verified the seven-path candidate and receipt hashes, committed the
+  accepted product as `d849c4fcd2398716eb22f6ae3605b64fafca8db5`, pushed
+  `main`, and verified `origin/main` matched with a clean worktree.
+- Marcus then reported approximately 6% backend budget remaining and directed
+  immediate controlled wind-down. No next leaf, critic, repair, generation,
+  deployment, or broad matrix was opened.
+- The run is `budget_exhausted`, not `complete`. Commissioner combat,
+  victory/results, local records, settings/accessibility, audio completion,
+  final boss build proofs, and final human acceptance remain.
+
+### Final Evidence
+
+| Step | Parent | Role | Action | Result | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-040` | `RR-STEP-039` | bounded builder | Implement complete Stage 3, third market, and inert Commissioner dossier | `needs_revision`; old matrix red preserved | descendant exact unavailable | external `work/leaf-005-builder/closeout.json` |
+| `RR-STEP-041` | `RR-STEP-040` | fresh blind critic | Review old candidate | `REVISE`; product direct review passed, focused input cascade preserved | descendant exact unavailable | external `work/leaf-005-critic/critic-receipt.md` |
+| `RR-STEP-042` | `RR-STEP-041` | bounded revision builder | Add physical numeric release barrier and focused regression | Pass, not self-accepted; 10/10 boundary stability | descendant exact unavailable | external `work/leaf-005-builder/revision-001/revision-receipt.md` |
+| `RR-STEP-043` | `RR-STEP-042` | fresh blind recritic | Rebuild, directly operate, and run sole full matrix | `PASS`; 61/61 units, 17/17 focused, 40/40 matrix | descendant exact unavailable | external `work/leaf-005-recritic/RECRITIC_RECEIPT.md` |
+| `RR-STEP-044` | `RR-STEP-043` | lead | Verify, commit, and push accepted LEAF-005 product | Pass | `3052620 / 1250000000` known platform telemetry | commit `d849c4f`, origin matched |
+| `RR-STEP-045` | `RR-STEP-044` | lead | Reconcile descendants/runtime and seal human-directed wind-down | `budget_exhausted` | human reports 6% backend remaining | `CONTROLLED_WIND_DOWN.md`, schema-valid `RUN_STATE.json` |
+
+### Runtime And External Actions
+
+- The recritic's intentionally retained external preview on `127.0.0.1:4177`
+  was stopped after its URL and PID were recorded. No Foxman browser-smoke,
+  test-Chrome, or preview process remains.
+- Accepted product commit `d849c4f` was pushed to `origin/main`.
+- No public deployment, paid action, credential change, destructive history
+  action, or unfamiliar-process cleanup occurred.
+- Exact external builder/critic evidence remains untouched under
+  `/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/`.
+
+### Next Safe Action
+
+`Wait for explicit human budget restoration and resume authority. Then recover from RUN_STATE.json and CONTROLLED_WIND_DOWN.md, verify clean main/origin, and frame—but do not launch—the smallest Commissioner combat leaf. Do not repeat LEAF-001 through LEAF-005.`
