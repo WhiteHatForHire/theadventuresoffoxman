@@ -5,7 +5,7 @@
 ## Master Initiative Plan
 
 Date: 2026-06-25  
-Current phase: Phase 8 - extended vertical-slice content expansion / V1 rescue polish  
+Current phase: Rotten Run bounded Gauntlet over the accepted Phase 8 / Act 2 campaign baseline
 Default stack: Vite, TypeScript, Phaser 3  
 Target platform for first slice: desktop web browser  
 Project path: `/Users/marcusvale/Documents/june25game`
@@ -37,6 +37,14 @@ The production philosophy is gate-based:
 5. Integrate only when the game still boots, plays, and can be manually verified.
 
 This document is the production contract for the initiative. Future agents should not skip it.
+
+Current Gauntlet addendum: the separate seeded Rotten Run mode is accepted
+through the complete Stage 2 combat/reward loop at `e8a9957`, including all
+five enemy roles, both elite variants, all eight carried upgrades, and an exact
+Stage 3 docket. The next bounded gate is the complete Stage 3 loop ending at an
+honest inert Commissioner dossier. The authored campaign remains preserved
+regression truth; boss combat, results/records, settings/accessibility, audio
+completion, and final proof are not yet claimed.
 
 ---
 

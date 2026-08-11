@@ -1,7 +1,7 @@
 # Foxman Rotten Run Bounded Context Packet
 
 Run ID: `foxman-rotten-run-gauntlet-2026-08-11`
-Freshness: `2026-08-11T04:47:15Z`
+Freshness: `2026-08-11T19:23:13Z`
 Context policy: each leaf receives this shared truth plus only its directly required source files.
 
 ## Goal
@@ -10,11 +10,13 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 
 ## Current Truth
 
-- Launch controls were accepted and pushed as `6d5b091` from prepared baseline `779f935`.
-- Fresh broad validation passes all 23 accepted campaign routes plus the promoted Rotten Run contract route.
+- Prepared baseline `779f935` and the authored campaign remain accepted regression truth.
+- Promoted Rotten product baseline is `e8a9957`; `main` and `origin/main` matched at promotion.
 - Current stack is Vite, TypeScript, Phaser 3; no stack change is authorized.
-- Campaign scenes already provide movement, dash, melee/ranged combat, one skill, two mutations, enemies, an elite, a boss, death/restart, progress persistence, and a browser state harness.
-- `LEAF-001` is promoted at `fa94e97`: deterministic plan, separate title/direct entry, namespaced state, and 24-route browser regression are accepted.
+- LEAF-001..004 are promoted: deterministic plan/mode shell, complete Stage 1 and Stage 2 combat/reward loops, all five roles, both elites, all eight carried effects, and the honest Stage 3 docket are accepted.
+- The fresh LEAF-004 recritic passed 54/54 units, every focused gate, direct Browser review at both desktop viewports, a 40-cycle target lifecycle gate, and one 34/34 matrix.
+- `GAUNTLET-ALPHA` remains plan `RR1-1C93B57F`; its Stage 3 pair is `collection-parade|garnish-gallery`.
+- LEAF-005 is the complete Stage 3 loop ending at an honest inert Commissioner dossier. Boss combat, results/records, settings/accessibility, audio completion, and full-run proof remain later work.
 
 ## Active Decisions
 
@@ -26,8 +28,13 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 - `RR-DEC-006`: additive pure core and separate scene; no campaign refactor.
 - `RR-DEC-007`: fixed three-stage, two-wave, two-route-choice topology plus one boss.
 - `RR-DEC-008`: fixed content budget and mechanics in the seeded product contract.
-- `RR-DEC-009`: preserve `smoke=rottenContract` while normal flow advances through loadout.
-- `RR-DEC-010`: Stage 1 combat stays isolated under Rotten Run content/runtime modules.
+- `RR-DEC-015`: smoke scenario names never authorize automation without `smokeAuto=1`.
+- `RR-DEC-016`: LEAF-004 ships a complete Stage 2 loop.
+- `RR-DEC-017`: all carried upgrades use one reusable combat build.
+- `RR-DEC-018`: stages use generic pure specs and scene orchestration, not copied flows.
+- `RR-DEC-019`: LEAF-005 ships the complete Stage 3 loop.
+- `RR-DEC-020`: Stage 3 reuses the generic encounter/build runtime.
+- `RR-DEC-021`: the third market enters a truthful inert boss phase.
 
 ## Required Sources
 
@@ -38,11 +45,12 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 
 ## Constraints And Traps
 
-- Existing smoke query routes are accepted contracts, not disposable test scaffolding.
+- Existing smoke query routes and the 40-cycle target lifecycle route are accepted contracts, not disposable test scaffolding.
 - Manual play and critic-operated browser evidence are required; autorun alone cannot accept a gameplay gate.
 - Comedy stays aimed at fictional corruption, institutions, villains, and Foxman's own failures.
 - New generated assets must be original, project-local, provenance-recorded, and runtime-verified.
 - Do not mistake the 390px containment check for promised touch support.
+- `RottenRunScene` is 1064 lines after Stage 2; Stage 3 must not add stage-numbered method families.
 
 ## Explicit Exclusions
 

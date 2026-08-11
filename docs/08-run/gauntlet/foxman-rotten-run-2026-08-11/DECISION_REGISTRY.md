@@ -54,7 +54,8 @@ Status: active
 
 ## Open Questions
 
-- None blocking the post-LEAF-003 integration review. `LEAF-004` remains gated on that review.
+- None blocking LEAF-005. Commissioner combat tuning and final results/records
+  remain intentionally deferred to the next bounded leaf.
 
 ### RR-DEC-006 - Additive Pure Core And Separate Scene
 
@@ -173,6 +174,33 @@ Status: active
 **Affected surfaces:** pure encounter specifications, generic market transitions, scene orchestration, Phaser presentation helpers, lifecycle cleanup.
 **Constraints:** route/wave/elite specifications and market transitions remain browser-independent; Phaser helpers may live under `src/game/scenes/rotten/`; the scene orchestrates one generic stage path; keyboard handlers receive explicit shutdown ownership; do not rewrite campaign architecture.
 
+### RR-DEC-019 - LEAF-005 Ships The Complete Stage 3 Loop
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-12
+**Rationale:** The final pre-boss stage is one coherent increment only when both seed-planned routes, two real waves, the third reward decision, and the carried boss boundary are operative together.
+**Affected surfaces:** Stage 3 encounters, route history, third market, boss-phase handoff, browser evidence.
+**Constraints:** all three frozen Stage 3 routes become playable across seeds; one third decision advances to an honest inert Commissioner dossier; boss combat, victory, results, and records remain out of scope.
+
+### RR-DEC-020 - Stage 3 Reuses The Generic Encounter And Build Runtime
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-12
+**Rationale:** LEAF-004 proved that route data, one combat-build configuration, and generic scene orchestration can add a full stage without scene growth. Stage 3 should deepen composition, not add another runtime family.
+**Affected surfaces:** `encounters.ts`, generic scene flow, existing enemy/combat ownership, Stage 3 smoke proofs.
+**Constraints:** Garnish Gallery and Appeal Furnace use only the five accepted roles; Collection Parade has exactly one gilded and one overdue elite on different deterministic core roles; no new mechanic, role, elite, stage method family, shared player change, or plan-ID change.
+
+### RR-DEC-021 - Third Market Enters A Truthful Inert Boss Phase
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-12
+**Rationale:** The pure run state already names `boss` as the next phase. Entering that phase with a complete carried dossier is more truthful than leaving another route-choice shell or fabricating an unfinished boss.
+**Affected surfaces:** market reducer, run phase/state, Commissioner dossier presentation, debug snapshot and trace.
+**Constraints:** the third choice records history and enters `boss` with `commissioner-of-consequences`; boss health/phase remain null, no boss or combat object is created, and all start/combat keys are inert until the boss leaf.
+
 ## Promotion Notes
 
 - `LEAF-001` accepted by a fresh blind critic with no largest gap.
@@ -184,3 +212,6 @@ Status: active
 - `LEAF-003` accepted after two tests-only `REVISE` repairs to make dash observation coherent; the final fresh critic issued `PASS` on the exact candidate with direct purchase/heal/bank/reset play at both viewports.
 - Accepted product commit: `23e309e`.
 - Evidence: `evidence/leaf-003/critic-receipt.md`, focused dash/contract/encounter/enemy-cycle/market results, the 27-route full result, ten-run stability summary, and direct-browser captures beside them.
+- `LEAF-004` accepted after a blind critic passed the complete product behavior but returned `REVISE` when its one-shot matrix leaked Chrome targets and stalled. A harness-only lifecycle repair closed actual targets and bounded CDP operations; a fresh blind recritic then issued `PASS` on the frozen 14-file candidate.
+- Accepted product commit: `e8a9957`.
+- Evidence: `evidence/leaf-004/critic-receipt.md`, the preserved first `REVISE`, builder/revision receipts, the exact-once 40-cycle lifecycle result, the first-attempt 34-route full result, and direct-browser captures beside them.

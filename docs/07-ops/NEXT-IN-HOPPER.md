@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active — integration PASS; LEAF-004 full Stage 2 loop authorized
+**Status:** Active — LEAF-004 PASS and promoted; LEAF-005 full Stage 3 loop authorized
 **Priority:** P0
 **Type:** Product / Runtime / QA
 
@@ -53,14 +53,15 @@ Execute the bounded run at
 
 ### Immediate Gate
 
-- Build the complete Stage 2 route/combat/reward loop from the accepted carried
-  state, ending honestly at the seed-planned Stage 3 docket.
-- Add shield-auditor, sump-scribe, gilded, and overdue behavior with readable
-  counterplay and deterministic assignments.
-- Apply every owned upgrade through one reusable combat-build runtime while
-  preserving default campaign movement/combat.
-- Require a fresh blind critic, both desktop viewports, and the full accepted
-  campaign-plus-Rotten matrix before promotion.
+- Make all three frozen Stage 3 routes operative through the existing generic
+  encounter, combat-build, market, and presentation boundaries.
+- Prove Garnish mixed range, Appeal hazard control, and Collection Parade's
+  deterministic one-gilded/one-overdue double-elite composition.
+- Add the third deterministic reward decision and carry all three route/market
+  histories into an honest inert Commissioner dossier; do not start boss
+  combat or claim results in this leaf.
+- Require a fresh blind critic, both desktop viewports, the target-lifecycle
+  gate, and the full accepted campaign-plus-Rotten matrix before promotion.
 
 ## 2. Foxman Case Study Screenshot And Annotation Pass
 

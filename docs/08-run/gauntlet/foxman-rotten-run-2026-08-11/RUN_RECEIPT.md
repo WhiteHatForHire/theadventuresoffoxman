@@ -412,3 +412,105 @@ Continue. Platform telemetry reports `1856992` tokens, far below the first auton
 `Commit and push this integration-promotion/control checkpoint, verify clean main, then launch exactly one bounded LEAF-004 builder from the frozen contract.`
 
 Prerequisites: JSON and whitespace checks pass; builder receives no commit, push, ops, control, public-action, or product-scope authority.
+
+## Checkpoint 9 - LEAF-004 Promoted; Complete Stage 3 Leaf Frozen
+
+Updated: `2026-08-11T19:23:13Z`
+
+### Accepted Product Truth
+
+- Stage 2 is now a complete route/combat/reward loop. `Bile Registry`,
+  `Seized Goods Lift`, and `Late Fee Chapel` each have two real waves and feed
+  one generic second market before the exact Stage 3 docket.
+- Shield Auditor frontal block/flank/skill/dash counterplay, Sump Scribe
+  telegraph/hazard/expiry/Bomb clear, gilded armor, overdue enrage, both elite
+  bounties, and all eight carried upgrade effects are materially operative.
+- Knife/Belch/Compound, Pike/Stamp/Hangover, and Spitter/Bomb/Dead Letter each
+  clear real Stage 2 routes. The remaining five upgrades have browser-visible
+  mechanic proofs through the same `RottenCombatBuild` boundary.
+- Stage 2 purchase, honest damaged heal, bank, no-op handling, two-entry
+  history, exact Stage 3 carry, real Stage 2 death, same-seed `R` reset, zero
+  stale combat objects, and one-canvas containment are accepted.
+- Stage ownership remains generic: `RottenRunScene` is 1064 lines after the
+  full Stage 2 addition, with pure encounter/market/build modules and a Phaser
+  presentation helper instead of copied stage flows.
+
+### Blind Review And Harness Revision Ledger
+
+| Review | Verdict | Preserved largest gap | Bounded disposition |
+| --- | --- | --- | --- |
+| Initial fresh blind critic | `REVISE` overall; product behavior `PASS` | Its sole unfiltered matrix leaked 32 Chrome page targets and stalled after reaching a clean Stage 1 reward state because page close only closed the websocket and CDP calls were unbounded | Preserved the full REVISE receipt and direct product evidence; authorized only a browser-harness lifecycle repair. |
+| Bounded revision builder | builder pass, not self-acceptance | Six expected-red close cycles grew page targets from 1 to 7 | Added actual `Target.closeTarget` plus bounded fallback, CDP/navigation/screenshot/close timeouts, pending-call rejection, progress diagnostics, and a 40-cycle lifecycle gate; no product file changed. |
+| Fresh blind recritic | `PASS` | No serious product gap; one generic footer records rather than directly asserts total page equality | Dedicated lifecycle and the one-shot matrix independently prove exact baseline restoration, so the residual is nonblocking. |
+
+- The recritic froze the 14-file candidate before reading prior evidence, built
+  outside the repository, and passed `54/54` units, typecheck, 53-module build,
+  dist smoke, every focused route, and direct in-app Browser review at
+  1366x768 and 1920x1080.
+- Its exact-once lifecycle run passed 40/40 unique targets: baseline `1/0`,
+  every open `2/1`, every close `1/0`, final exact baseline.
+- Its first and only unfiltered matrix passed `34/34` in `496725 ms`, opened
+  and closed 57 unique targets, emitted 174 progress events, and ended at the
+  exact original baseline with no timeout or failure event.
+- The recritic froze `PASS` before provenance comparison, cleaned its runtime,
+  then twice stalled only while formatting the receipt. The lead reconstructed
+  a clearly labeled recovery receipt from its frozen hashes and durable raw
+  evidence without rerunning validation or reinterpreting the verdict.
+
+### Lead Promotion
+
+- Verified all 14 candidate file hashes against the frozen critic snapshot,
+  inspected representative Stage 2 shield, hazard, elite, market, Stage 3,
+  and death frames, validated receipts/JSON, and confirmed no Foxman runtime or
+  descendant remained.
+- Lead deterministic checks passed before promotion: `54/54` units, typecheck,
+  build, dist smoke, smoke-harness syntax, whitespace, a fresh 40-cycle target
+  lifecycle route, and a fresh negative no-`smokeAuto` isolation route. The
+  full matrix was not repeated by the lead.
+- Imported compact builder, first-critic, revision, final-critic, lifecycle,
+  full-matrix, and representative browser evidence under `evidence/leaf-004/`.
+- Committed and pushed accepted product baseline
+  `e8a99579d11fbd36dea07967814164e39c27e673`; local `main` and `origin/main`
+  matched and the worktree was clean.
+
+### LEAF-005 Boundary
+
+- `RR-DEC-019` requires the complete Stage 3 route/combat/third-market loop,
+  ending at an honest inert Commissioner dossier.
+- `RR-DEC-020` freezes exact Stage 3 compositions using only existing roles,
+  one generic encounter/build runtime, and deterministic double-elite scopes.
+- `RR-DEC-021` makes the third accepted market choice enter the real `boss`
+  phase while leaving boss health/phase null and creating no boss object.
+- Commissioner combat, victory/results, records, settings/accessibility, audio
+  completion, new raster assets, and final three-build boss proofs remain later
+  bounded work.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-034` | `RR-STEP-033` | bounded builder | Implement complete Stage 2, carried build runtime, second market, and Stage 3 docket | Pass | bounded turn | descendant exact unavailable | product candidate plus external builder receipt |
+| `RR-STEP-035` | `RR-STEP-034` | fresh blind critic | Review frozen Stage 2 product and one-shot matrix | `REVISE` overall; product pass | bounded turn | descendant exact unavailable | `evidence/leaf-004/first-critic-revise.md` |
+| `RR-STEP-036` | `RR-STEP-035` | bounded revision builder | Repair browser target lifecycle and bound CDP operations only | Pass | bounded turn | descendant exact unavailable | `evidence/leaf-004/revision-builder-receipt.md` |
+| `RR-STEP-037` | `RR-STEP-036` | fresh blind recritic | Rebuild, directly operate, lifecycle-test, and run exactly one full matrix | `PASS` | bounded turn | descendant exact unavailable | `evidence/leaf-004/critic-receipt.md` |
+| `RR-STEP-038` | `RR-STEP-037` | lead | Recover stalled receipt formatting, verify, import evidence, commit, and push LEAF-004 | Pass | bounded recovery | included below | commit `e8a9957`, origin matched |
+| `RR-STEP-039` | `RR-STEP-038` | lead | Run Shipping Update and freeze complete Stage 3 leaf | Pass | checkpoint | `2611578 / 1250000000` platform telemetry | state, ops, `RR-DEC-019..021`, `LEAF-005.md` |
+
+### Token Decision
+
+Continue. Platform goal telemetry reports `2611578` tokens, far below the first
+autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### External Actions
+
+- Pushed accepted product commit `e8a9957` to `origin/main`.
+- No public deployment, domain, paid service, credential change, destructive
+  history action, campaign deletion, or unrelated process cleanup occurred.
+
+### Next Safe Action
+
+`Commit and push this LEAF-004 promotion/LEAF-005 control checkpoint, verify clean main, then launch exactly one bounded LEAF-005 builder from the frozen contract.`
+
+Prerequisites: JSON, field-guide line budget, and whitespace checks pass; the
+builder receives no commit, push, ops, control, public-action, or product-scope
+authority.

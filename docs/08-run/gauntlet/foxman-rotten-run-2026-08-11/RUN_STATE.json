@@ -4,33 +4,33 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "leaf-004-builder",
+  "currentGate": "leaf-005-builder",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 1856992,
-  "usageCoverage": "Platform goal telemetry through INTEGRATION-001 repair promotion and LEAF-004 framing; descendant-specific breakdown remains unavailable.",
+  "knownTokensUsed": 2611578,
+  "usageCoverage": "Platform goal telemetry through LEAF-004 promotion and LEAF-005 framing; descendant-specific breakdown remains unavailable.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": "LEAF-004",
-  "lastAcceptedCommit": "7cef4b039c401890ac24fb1a8a27800aa6bb18f7",
-  "promotedLeaves": ["LEAF-001", "LEAF-002", "LEAF-003"],
+  "activeLeaf": "LEAF-005",
+  "lastAcceptedCommit": "e8a99579d11fbd36dea07967814164e39c27e673",
+  "promotedLeaves": ["LEAF-001", "LEAF-002", "LEAF-003", "LEAF-004"],
   "lastCriticVerdict": {
-    "leaf": "INTEGRATION-001-REVISION-001",
+    "leaf": "LEAF-004",
     "verdict": "pass",
-    "largestGap": "No serious integration gap remains after explicit smokeAuto gating. Non-blocking residuals are the canvas-only accessibility surface, a hidden 280ms market input lock, and the need to avoid further RottenRunScene monolith growth.",
-    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/integration-001/pass-01/critic-receipt.md"
+    "largestGap": "No serious product gap remains in LEAF-004. The generic matrix footer records rather than directly asserts total baseline page equality, while the dedicated 40-cycle lifecycle gate and the one-shot matrix both independently prove exact baseline restoration.",
+    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-004/critic-receipt.md"
   },
   "reviewGate": {
-    "status": "integration-pass-leaf-004-authorized",
+    "status": "leaf-004-pass-leaf-005-authorized",
     "completedReviews": [
-      "Initial LEAF-003 blind review: direct market product passed; revise timing-fragile campaign dash sampling and remove broken one-off key probes",
-      "Fresh LEAF-003 re-review after revision 01: direct market product passed; revise dash wait so displacement and peak evidence resolve coherently",
       "INTEGRATION-001: 42/42 unit, build/type/dist, all focused gates, and one 27/27 matrix passed; direct browser review reproduced unauthorized Rotten smoke automation without smokeAuto=1",
-      "Fresh INTEGRATION-001 re-review: repaired manual isolation and authorized contrast passed directly at both viewports; all focused gates and exactly one 28/28 matrix passed"
+      "Fresh INTEGRATION-001 re-review: repaired manual isolation and authorized contrast passed directly at both viewports; all focused gates and exactly one 28/28 matrix passed",
+      "Initial LEAF-004 blind review: complete Stage 2 product passed directly at both viewports; REVISE because the one permitted full matrix leaked Chrome targets and stalled after a clean product state",
+      "Fresh LEAF-004 re-review: 54/54 unit, all focused gates, direct Stage 2 play at both viewports, 40/40 target lifecycle cycles, and exactly one 34/34 matrix passed"
     ],
-    "interruptedReview": "Two critic turns stalled only during receipt/connector cleanup after their REVISE findings were already delivered; the lead preserved their evidence, stopped exact servers, and recorded recovery receipts before each repair.",
-    "finalReview": "leaf-003-recritic2 passed a frozen external production artifact through real in-app Browser purchase/heal/bank/reset play at both viewports, focused gates, and a first-attempt 27-route regression.",
-    "integrationReview": "PASS after one bounded two-file isolation repair and one fresh read-only re-review. The first reviewer remains recorded as REVISE; the second critic independently passed the exact candidate.",
-    "largestResidualGap": "Stage 2 is still a truthful non-operative docket. LEAF-004 must add a reusable complete Stage 2 combat/reward loop without cloning Stage 1 orchestration."
+    "interruptedReview": "The final LEAF-004 recritic completed and froze PASS, then twice stalled only during receipt formatting. The lead preserved the frozen hashes and artifacts and reconstructed a clearly labeled recovery receipt without rerunning evidence or changing the verdict.",
+    "finalReview": "leaf-004-recritic passed a frozen external production artifact through direct Stage 2 route, role, elite, build, market, death/reset, lifecycle, and full-matrix gates at both viewports.",
+    "integrationReview": "The prior three-leaf integration gate remains PASS. LEAF-004 independently passed after one harness-only target-lifecycle repair; the first REVISE remains preserved beside the final PASS.",
+    "largestResidualGap": "Stage 3 is still an honest non-operative docket. LEAF-005 must add all three Stage 3 encounter specs, the third market, and an inert Commissioner dossier through the existing generic architecture."
   },
   "candidate": null,
   "baseline": {
@@ -49,6 +49,6 @@
     "resolvedAt": "2026-08-11T09:12:00Z",
     "resolution": "A replacement fresh critic passed the real browser artifact and LEAF-002 was promoted at 0c29d6a."
   },
-  "updatedAt": "2026-08-11T14:11:03Z",
-  "nextSafeAction": "Commit and push the INTEGRATION-001 PASS promotion/control checkpoint, verify clean main at 7cef4b0 plus control commit, then launch exactly one bounded LEAF-004 builder from LEAF-004.md."
+  "updatedAt": "2026-08-11T19:23:13Z",
+  "nextSafeAction": "Commit and push the LEAF-004 promotion/LEAF-005 control checkpoint, verify clean main and origin, then launch exactly one bounded LEAF-005 builder from LEAF-005.md."
 }

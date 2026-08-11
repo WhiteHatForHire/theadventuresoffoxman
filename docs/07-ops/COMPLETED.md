@@ -32,6 +32,34 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-12 - Rotten Run Complete Stage 2 Loop Accepted
+
+**Type:** App / Product / Architecture / QA / Ops
+**Source:** Codex builder + fresh blind critics
+**Related Files:**
+
+- `src/game/rotten/encounters.ts`
+- `src/game/rotten/RottenCombatController.ts`
+- `src/game/scenes/rotten/RottenRunPresentation.ts`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-004/`
+
+**Summary:**
+
+Completed and promoted the full Stage 2 route/combat/reward loop at `e8a9957`.
+All three Stage 2 routes, Shield Auditor, Sump Scribe, gilded and overdue
+elites, all eight carried build effects, the second deterministic market,
+exact Stage 3 carry, and Stage 2 death/same-seed reset are playable through one
+generic stage path. The first blind critic passed the product but returned
+`REVISE` when the one-shot matrix leaked Chrome targets and stalled. A bounded
+harness-only repair added actual target closure and CDP timeouts; a fresh blind
+recritic then passed 54/54 units, every focused gate, a 40-cycle lifecycle
+probe, direct browser review at both desktop viewports, and one 34/34 matrix.
+
+**Follow-Ups:**
+
+- [ ] Build and independently accept the complete Stage 3 loop in LEAF-005.
+- [ ] Preserve the target lifecycle and no-`smokeAuto` isolation gates.
+
 ## 2026-08-11 - Rotten Run Three-Leaf Integration Gate Accepted
 
 **Type:** App / QA / Architecture / Ops
@@ -56,7 +84,7 @@ and the sole 28/28 full matrix. Accepted baseline: `7cef4b0`.
 
 **Follow-Ups:**
 
-- [ ] Build and independently accept the complete Stage 2 loop in LEAF-004.
+- [x] Build and independently accept the complete Stage 2 loop in LEAF-004.
 - [ ] Preserve the negative smoke-isolation route permanently.
 - [ ] Address the canvas-only accessibility surface in the later settings/accessibility leaf.
 
@@ -92,7 +120,7 @@ accepted baseline is commit `23e309e`.
 **Follow-Ups:**
 
 - [x] Pass the mandatory integration review across promoted LEAF-001 through LEAF-003.
-- [ ] Frame Stage 2 combat only after the integration gate passes.
+- [x] Frame Stage 2 combat only after the integration gate passes.
 - [ ] Keep Stage 3, boss, results, settings, records, and three-build proof in later bounded leaves.
 
 ## 2026-08-11 - Rotten Run Playable Stage 1 Combat Accepted
