@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "consecutivePasses": 10,
+  "attempts": 10,
+  "stoppedEarly": false,
+  "invariants": {
+    "sameSeedResetPasses": 10,
+    "twoEdgeReacquisitionPasses": 10,
+    "reacquisitionLastMsMin": 548,
+    "reacquisitionLastMsMax": 568,
+    "reacquisitionRealAttackHit": "1/1 on every pass",
+    "taxPikeAttackHit": "6/6 on every pass",
+    "receiptSpitterAttackHit": "1/1 on every pass",
+    "rewardCombatObjectCount": "0 on every pass"
+  },
+  "resultSha256": {
+    "pass-01": "dbfc674a4c214da3e0f2bd74f145a01c839d93b4fe0a9a5be4f129704f6fa1b4",
+    "pass-02": "b3d3ced96837107bacdce49321909f12ec1fac944a6f6434b4ec5901bd5921d0",
+    "pass-03": "df1d188155d752547d82a397f8066a4375c0e9484b2d3fe334218c748903127a",
+    "pass-04": "c9e0be0a86871da71fc284e2f09c5a3318afe4f3fcf9c61c8fac3dae81387e92",
+    "pass-05": "0f4110df8fdf7d7276971763282c0c2c41227766a5e8c17b2d7daed3df079edf",
+    "pass-06": "df1d188155d752547d82a397f8066a4375c0e9484b2d3fe334218c748903127a",
+    "pass-07": "8e6e56a8b4f2dab0c483c077cb1d84118ae9bd8e139d72fa82a16195d2aa2189",
+    "pass-08": "df1d188155d752547d82a397f8066a4375c0e9484b2d3fe334218c748903127a",
+    "pass-09": "c9e0be0a86871da71fc284e2f09c5a3318afe4f3fcf9c61c8fac3dae81387e92",
+    "pass-10": "df1d188155d752547d82a397f8066a4375c0e9484b2d3fe334218c748903127a"
+  }
+}

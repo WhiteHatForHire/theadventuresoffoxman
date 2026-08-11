@@ -1,0 +1,1218 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "Rotten Run death -> same-seed R retry",
+      "dead": {
+        "rottenPhase": "dead",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenHp": "0/6",
+        "rottenCombatObjectCount": "30",
+        "canvasCount": 1
+      },
+      "retried": {
+        "rottenPhase": "loadout",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "",
+        "rottenSkill": "",
+        "rottenWave": "0",
+        "rottenWavesCleared": "0",
+        "rottenGraft": "3",
+        "rottenUpgrades": "",
+        "rottenRouteHistory": "",
+        "rottenMarketStatus": "",
+        "rottenMarketChoice": "",
+        "rottenRewardDecisionCount": "0",
+        "rottenOfferIds": "",
+        "rottenHp": "",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/",
+      "state": {
+        "scene": "RunScene",
+        "paused": "false",
+        "playerState": "fall",
+        "hudWeaponText": "Weapon: Rusty Knife",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/ -> Enter, hold D/J/D",
+      "state": {
+        "scene": "RewardScene",
+        "pickupCollected": "true",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "exitUnlocked": "true",
+        "roomComplete": "true",
+        "currentWeapon": "Butcher Saber",
+        "playerHealth": "5",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=platforms",
+      "state": {
+        "scene": "RunScene",
+        "playerX": "966",
+        "playerY": "420",
+        "playerGrounded": "true",
+        "platformRouteComplete": "true",
+        "secondaryPickupCollected": "true",
+        "currentWeapon": "Receipt Spitter",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=dash",
+      "waitResolved": {
+        "playerX": "264",
+        "peakAbsoluteVelocityX": 620,
+        "playerDashCount": "1",
+        "playerDashTrailCount": "3",
+        "playerDashCueCount": "1"
+      },
+      "state": {
+        "scene": "RunScene",
+        "playerState": "dash",
+        "playerX": "264",
+        "playerVelocityX": "620",
+        "playerDashCount": "1",
+        "playerDashReady": "false",
+        "playerDashTrailCount": "3",
+        "playerDashCueCount": "1",
+        "canvasCount": 1
+      },
+      "observation": {
+        "active": false,
+        "samples": 1,
+        "peakAbsoluteVelocityX": 620,
+        "peakVelocityX": 620,
+        "peakPlayerState": "dash",
+        "peakDashCount": "1",
+        "peakDashTrailCount": "3",
+        "peakDashCueCount": "1"
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=sump",
+      "state": {
+        "scene": "SumpWarrensScene",
+        "sumpLivingEnemies": "0",
+        "sumpComplete": "true",
+        "currentWeapon": "Tax Pike",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "kills": "3",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared",
+        "hudRouteText": "Route: sump cleared",
+        "hudTargetText": "Target: sump crew 0",
+        "hitFeedbackCount": "5",
+        "hitFeedbackActiveCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=sumpDeath -> restart",
+      "restartMethod": "deterministic-restart-hook",
+      "dead": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "playerMaxHealth": "6",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpClerkHealth": "2",
+        "sumpEliteHealth": "4",
+        "kills": "0",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "SumpWarrensScene",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "playerDashCount": "0",
+        "playerDashTrailCount": "0",
+        "playerDashCueCount": "0",
+        "deathBanner": "false",
+        "sumpRestartCount": "1",
+        "sumpLivingEnemies": "3",
+        "sumpComplete": "false",
+        "sumpGuardHealth": "3",
+        "sumpGuardAlive": "true",
+        "sumpClerkHealth": "2",
+        "sumpClerkAlive": "true",
+        "sumpEliteHealth": "4",
+        "sumpEliteAlive": "true",
+        "hitFeedbackCount": "0",
+        "hitFeedbackActiveCount": "0",
+        "kills": "0",
+        "progressDeaths": "1",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/ at 390x844 -> Enter",
+      "titleViewport": {
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollWidth": 390,
+        "canvasWidth": 390,
+        "canvasHeight": 219.375,
+        "canvasLeft": 0,
+        "canvasRight": 390,
+        "canvasTop": 312,
+        "canvasBottom": 531.375
+      },
+      "state": {
+        "scene": "RunScene",
+        "playerAlive": "true",
+        "hudWeaponText": "Weapon: Rusty Knife",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=room",
+      "state": {
+        "scene": "RunScene",
+        "pickupCollected": "true",
+        "enemyAlive": "false",
+        "exitUnlocked": "true",
+        "roomComplete": "true",
+        "currentWeapon": "Butcher Saber",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=ranged",
+      "state": {
+        "scene": "RunScene",
+        "currentWeapon": "Receipt Spitter",
+        "weaponKind": "ranged",
+        "secondaryPickupCollected": "true",
+        "rangedProjectileFired": "3",
+        "rangedProjectileHits": "2",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared",
+        "hudSkillText": "Skill: none",
+        "hitFeedbackCount": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=skill",
+      "state": {
+        "scene": "RunScene",
+        "currentSkill": "Spite Belch",
+        "skillUnlocked": "true",
+        "skillUses": "2",
+        "skillHits": "2",
+        "skillCooldownReady": "false",
+        "enemyAlive": "false",
+        "enemyHealth": "0",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hitFeedbackCount": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=reward",
+      "before": {
+        "scene": "RewardScene",
+        "rewardStub": "true",
+        "rewardChoices": "pikeReach,auditShield",
+        "shopChoices": "pikeReach,auditShield,spiteBelch,hangoverHide,pettyGrudge",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "SecondRunScene",
+        "currentWeapon": "Tax Pike",
+        "rewardChoice": "pikeReach",
+        "taxClerkVariant": "taxClerk",
+        "eliteVariant": "eliteAuditor",
+        "weaponReach": "365",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=reward -> key 5",
+      "state": {
+        "scene": "SecondRunScene",
+        "shopChoice": "pettyGrudge",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "skillChoice": "none",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=rewardSkill -> key 3",
+      "state": {
+        "scene": "SecondRunScene",
+        "shopChoice": "spiteBelch",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "none",
+        "skillChoice": "Spite Belch",
+        "skillUnlocked": "true",
+        "currentSkill": "Spite Belch",
+        "skillUses": "2",
+        "skillHits": "2",
+        "taxClerkAlive": "false",
+        "eliteAlive": "false",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hudRouteText": "Route: boss door",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach",
+      "state": {
+        "scene": "SecondRunScene",
+        "currentWeapon": "Tax Pike",
+        "rewardChoice": "pikeReach",
+        "taxClerkAlive": "false",
+        "taxClerkVariant": "taxClerk",
+        "eliteAlive": "false",
+        "eliteVariant": "eliteAuditor",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach",
+        "weaponReach": "365",
+        "weaponDamage": "2",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=auditShield",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerHealth": "6",
+        "hudHealthText": "HP: 6/6",
+        "weaponReach": "310",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach&mutation=hangoverHide",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "hangoverHide",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "weaponDamage": "2",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=second&reward=pikeReach&mutation=pettyGrudge",
+      "state": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "playerMaxHealth": "5",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "secondPathComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=secondDeath&reward=auditShield",
+      "dead": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "playerMaxHealth": "6",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "2",
+        "taxClerkAlive": "true",
+        "secondPathComplete": "false",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "SecondRunScene",
+        "rewardChoice": "auditShield",
+        "playerAlive": "true",
+        "playerHealth": "6",
+        "playerMaxHealth": "6",
+        "deathBanner": "false",
+        "taxClerkAlive": "true",
+        "taxClerkHealth": "2",
+        "eliteAlive": "true",
+        "eliteHealth": "4",
+        "secondPathComplete": "false",
+        "weaponReach": "310",
+        "progressDeaths": "2",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=secondBoss&reward=pikeReach",
+      "before": {
+        "scene": "SecondRunScene",
+        "secondPathComplete": "true",
+        "bossDoorVisible": "true",
+        "bossTransitionReady": "false",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "MiniBossScene",
+        "bossAlive": "true",
+        "bossVariant": "tollBaron",
+        "bossComplete": "false",
+        "v1SliceComplete": "false",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found",
+        "hudSkillText": "Skill: none",
+        "hudRouteText": "Route: toll baron",
+        "hudTargetText": "Target: Toll Baron 7",
+        "hitFeedbackCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=fullSlice -> key 5",
+      "shop": {
+        "scene": "RewardScene",
+        "shopChoices": "pikeReach,auditShield,spiteBelch,hangoverHide,pettyGrudge",
+        "rewardStub": "true",
+        "canvasCount": 1
+      },
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Tax Pike",
+        "shopChoice": "pettyGrudge",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "pettyGrudge",
+        "weaponDamage": "3",
+        "weaponReach": "365",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hudSkillText": "Skill: none",
+        "hudRouteText": "Route: boss cleared",
+        "hudTargetText": "Target: Toll Baron 0",
+        "hitFeedbackCount": "4",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=rewardSkillBoss -> key 3",
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Tax Pike",
+        "shopChoice": "spiteBelch",
+        "rewardChoice": "pikeReach",
+        "mutationChoice": "none",
+        "skillChoice": "Spite Belch",
+        "currentSkill": "Spite Belch",
+        "skillUses": "2",
+        "skillHits": "2",
+        "weaponReach": "365",
+        "weaponDamage": "2",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hudSkillText": "Skill: Spite Belch (cooling)",
+        "hudRouteText": "Route: boss cleared",
+        "hudTargetText": "Target: Toll Baron 0",
+        "hitFeedbackCount": "6",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=boss -> Enter -> Act 2",
+      "state": {
+        "scene": "MiniBossScene",
+        "currentWeapon": "Butcher Saber",
+        "bossAlive": "false",
+        "bossVariant": "tollBaron",
+        "bossSpecialCount": "2",
+        "bossComplete": "true",
+        "v1SliceComplete": "true",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated",
+        "hitFeedbackCount": "4",
+        "canvasCount": 1
+      },
+      "after": {
+        "scene": "SumpWarrensScene",
+        "currentWeapon": "Tax Pike",
+        "sumpLivingEnemies": "3",
+        "progressUnlocks": "butcher_saber,first_room_complete,reward_room_stub,receipt_spitter,act2_sump_warrens_found,sump_gate_guard_drowned,sump_ledger_clerk_evicted,sump_elite_auditor_sunk,act2_sump_warrens_cleared,spite_belch,mutation_pettyGrudge,tax_clerk_evicted,elite_auditor_embarrassed,reward_pikeReach,reward_auditShield,mutation_hangoverHide,boss_room_found,toll_baron_humiliated,act1_cleared",
+        "hudRouteText": "Route: sump warrens",
+        "hudTargetText": "Target: sump crew 3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/?smokeAuto=1&smoke=bossDeath",
+      "dead": {
+        "scene": "MiniBossScene",
+        "playerAlive": "false",
+        "playerHealth": "0",
+        "deathBanner": "true",
+        "deaths": "1",
+        "progressDeaths": "3",
+        "bossAlive": "true",
+        "bossSpecialCount": "3",
+        "hitFeedbackCount": "3",
+        "canvasCount": 1
+      },
+      "restarted": {
+        "scene": "MiniBossScene",
+        "playerAlive": "true",
+        "playerHealth": "5",
+        "deathBanner": "false",
+        "bossAlive": "true",
+        "bossHealth": "7",
+        "bossSpecialCount": "0",
+        "progressDeaths": "3",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "/ -> R; seeded Rotten Run -> 2",
+      "titleEntry": {
+        "scene": "RottenRunScene",
+        "rottenScene": "RottenRunScene",
+        "rottenPhase": "loadout",
+        "rottenSeed": "RR-MSOMJIH4",
+        "rottenPlanId": "RR1-1849B387",
+        "canvasCount": 1
+      },
+      "planned": {
+        "scene": "RottenRunScene",
+        "rottenScene": "RottenRunScene",
+        "rottenPhase": "route-choice",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenStage": "1",
+        "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+        "rottenSelectedRoute": "",
+        "canvasCount": 1
+      },
+      "selected": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "encounter",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenStage": "1",
+        "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenTraceDigest": "6E9B364D",
+        "canvasCount": 1
+      },
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "route": "Rotten Run real 3/6/Enter/2 combat",
+      "enemyCycles": [
+        {
+          "route": "bribe-line",
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "traversed": {
+            "bailiff": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ],
+            "clerk": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.7,
+          "maxBodyBottom": 580
+        },
+        {
+          "route": "unfiled-alley",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "traversed": {
+            "writ-runner": [
+              "approach",
+              "windup",
+              "active",
+              "recovery"
+            ]
+          },
+          "maxFeetY": 583.3,
+          "maxBodyBottom": 580
+        }
+      ],
+      "reacquisition": {
+        "reacquisitionCount": 2,
+        "reacquisitionDurations": [
+          217,
+          548
+        ],
+        "lastReacquisitionMs": 548,
+        "maxFeetY": 583.3,
+        "maxBodyBottom": 580,
+        "attacksBefore": 0,
+        "hitsBefore": 0,
+        "attacksAfter": 1,
+        "hitsAfter": 1
+      },
+      "loadout": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "loadout",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "",
+        "rottenSkill": "",
+        "rottenTraceDigest": "5C5695F6",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      },
+      "activeCombat": {
+        "rottenPhase": "encounter",
+        "rottenWave": "1",
+        "rottenLivingEnemies": "2",
+        "rottenEnemyStates": "bailiff:windup:3|bailiff:approach:3",
+        "rottenEnemyTell": "bailiff:windup:SWING!",
+        "rottenWeapon": "tax-pike",
+        "rottenSkill": "seized-stamp",
+        "rottenCombatObjectCount": "28",
+        "canvasCount": 1,
+        "latchedEnemyTell": "bailiff:windup:SWING!"
+      },
+      "reward": {
+        "scene": "RottenRunScene",
+        "rottenPhase": "reward-choice",
+        "rottenSeed": "GAUNTLET-ALPHA",
+        "rottenPlanId": "RR1-1C93B57F",
+        "rottenWeapon": "tax-pike",
+        "rottenSkill": "seized-stamp",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenWave": "2",
+        "rottenWavesCleared": "2",
+        "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+        "rottenLivingEnemies": "0",
+        "rottenAttackCount": "6",
+        "rottenAttackHitCount": "6",
+        "rottenWeaponStyle": "spacing",
+        "rottenSkillUseCount": "2",
+        "rottenSkillHitCount": "2",
+        "rottenGraft": "7",
+        "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+        "rottenHp": "6/6",
+        "rottenTraceDigest": "EA7AD83C",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      },
+      "spitterBomb": {
+        "rottenPhase": "reward-choice",
+        "rottenWeapon": "receipt-spitter",
+        "rottenSkill": "bribe-bomb",
+        "rottenSelectedRoute": "bailiffs-ramp",
+        "rottenAttackCount": "1",
+        "rottenAttackHitCount": "1",
+        "rottenSkillUseCount": "2",
+        "rottenSkillHitCount": "4",
+        "rottenCombatObjectCount": "0",
+        "canvasCount": 1
+      }
+    },
+    {
+      "route": "Rotten Run real purchase/heal/bank/rejected market keys",
+      "purchase": {
+        "route": "Rotten Run real upgrade purchase key",
+        "purchaseArming": {
+          "consecutiveOpenFrames": 22,
+          "maxOpenFrames": 22,
+          "resolvedBeforeIntended": false,
+          "keyEvents": [
+            {
+              "key": "3",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "6",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "Enter",
+              "phase": "route-choice",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "2",
+              "phase": "encounter",
+              "marketStatus": "",
+              "decisionCount": "0"
+            }
+          ],
+          "stableState": {
+            "rottenPhase": "reward-choice",
+            "rottenStage": "1",
+            "rottenMarketStatus": "open",
+            "rottenRewardDecisionCount": "0",
+            "rottenMarketChoice": "",
+            "rottenWave": "2",
+            "rottenWavesCleared": "2",
+            "rottenHp": "6/6",
+            "rottenLivingEnemies": "0",
+            "rottenAttackCount": "6",
+            "rottenAttackHitCount": "6",
+            "rottenSkillUseCount": "2",
+            "rottenSkillHitCount": "2",
+            "rottenCombatObjectCount": "0",
+            "canvasCount": 1
+          }
+        },
+        "purchaseBefore": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "7",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "purchase": {
+          "rottenPhase": "route-choice",
+          "rottenStage": "2",
+          "rottenRouteOptions": "seized-goods-lift|late-fee-chapel",
+          "rottenSelectedRoute": "",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "dead-letter",
+          "rottenGraft": "0",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:upgrade:dead-letter",
+          "rottenMarketStatus": "resolved",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "upgrade:dead-letter",
+          "rottenMarketTraceEvent": "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+          "rottenRewardDecisionCount": "1",
+          "rottenOfferIds": "",
+          "rottenOfferPrices": "",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "60C943E0",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "rottenRewardFeedback": "DEAD LETTER BOUGHT. THE DOCKET REMEMBERS.",
+          "rottenRewardFeedbackReason": "accepted",
+          "canvasCount": 1
+        },
+        "repeatedPurchase": {
+          "rottenPhase": "route-choice",
+          "rottenStage": "2",
+          "rottenRouteOptions": "seized-goods-lift|late-fee-chapel",
+          "rottenSelectedRoute": "",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "dead-letter",
+          "rottenGraft": "0",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:upgrade:dead-letter",
+          "rottenMarketStatus": "resolved",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "upgrade:dead-letter",
+          "rottenMarketTraceEvent": "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+          "rottenRewardDecisionCount": "1",
+          "rottenOfferIds": "",
+          "rottenOfferPrices": "",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "60C943E0",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        }
+      },
+      "heal": {
+        "route": "Rotten Run real damaged-health heal key",
+        "healDamage": {
+          "damaged": true,
+          "firstDamagedHp": "5/6",
+          "attackCountAtFirstDamage": "0",
+          "skillUseCountAtFirstDamage": "0"
+        },
+        "healBefore": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "7",
+          "rottenHp": "5/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "true",
+          "rottenTraceDigest": "E280964D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "healArming": {
+          "consecutiveOpenFrames": 23,
+          "maxOpenFrames": 23,
+          "resolvedBeforeIntended": false,
+          "keyEvents": [
+            {
+              "key": "3",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "6",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "Enter",
+              "phase": "route-choice",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "2",
+              "phase": "encounter",
+              "marketStatus": "",
+              "decisionCount": "0"
+            }
+          ],
+          "stableState": {
+            "rottenPhase": "reward-choice",
+            "rottenStage": "1",
+            "rottenMarketStatus": "open",
+            "rottenRewardDecisionCount": "0",
+            "rottenMarketChoice": "",
+            "rottenWave": "2",
+            "rottenWavesCleared": "2",
+            "rottenHp": "5/6",
+            "rottenLivingEnemies": "0",
+            "rottenAttackCount": "5",
+            "rottenAttackHitCount": "5",
+            "rottenSkillUseCount": "2",
+            "rottenSkillHitCount": "3",
+            "rottenCombatObjectCount": "0",
+            "canvasCount": 1
+          }
+        },
+        "heal": {
+          "rottenPhase": "route-choice",
+          "rottenStage": "2",
+          "rottenRouteOptions": "seized-goods-lift|late-fee-chapel",
+          "rottenSelectedRoute": "",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "5",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:heal:1",
+          "rottenMarketStatus": "resolved",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "heal:1",
+          "rottenMarketTraceEvent": "market:1:bailiffs-ramp:heal:1:spent-2",
+          "rottenRewardDecisionCount": "1",
+          "rottenOfferIds": "",
+          "rottenOfferPrices": "",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3279BD61",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "rottenRewardFeedback": "PATCHED 1 HP. THE CLERK KEPT THE CHANGE.",
+          "rottenRewardFeedbackReason": "accepted",
+          "canvasCount": 1
+        }
+      },
+      "bank": {
+        "route": "Rotten Run real bank key",
+        "bankBefore": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "receipt-spitter",
+          "rottenSkill": "bribe-bomb",
+          "rottenUpgrades": "",
+          "rottenGraft": "7",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "D6D0192B",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "bankArming": {
+          "consecutiveOpenFrames": 23,
+          "maxOpenFrames": 23,
+          "resolvedBeforeIntended": false,
+          "keyEvents": [
+            {
+              "key": "4",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "7",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "Enter",
+              "phase": "route-choice",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "2",
+              "phase": "encounter",
+              "marketStatus": "",
+              "decisionCount": "0"
+            }
+          ],
+          "stableState": {
+            "rottenPhase": "reward-choice",
+            "rottenStage": "1",
+            "rottenMarketStatus": "open",
+            "rottenRewardDecisionCount": "0",
+            "rottenMarketChoice": "",
+            "rottenWave": "2",
+            "rottenWavesCleared": "2",
+            "rottenHp": "6/6",
+            "rottenLivingEnemies": "0",
+            "rottenAttackCount": "1",
+            "rottenAttackHitCount": "1",
+            "rottenSkillUseCount": "2",
+            "rottenSkillHitCount": "4",
+            "rottenCombatObjectCount": "0",
+            "canvasCount": 1
+          }
+        },
+        "bank": {
+          "rottenPhase": "route-choice",
+          "rottenStage": "2",
+          "rottenRouteOptions": "seized-goods-lift|late-fee-chapel",
+          "rottenSelectedRoute": "",
+          "rottenWeapon": "receipt-spitter",
+          "rottenSkill": "bribe-bomb",
+          "rottenUpgrades": "",
+          "rottenGraft": "7",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:bank",
+          "rottenMarketStatus": "resolved",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "bank",
+          "rottenMarketTraceEvent": "market:1:bailiffs-ramp:bank:spent-0",
+          "rottenRewardDecisionCount": "1",
+          "rottenOfferIds": "",
+          "rottenOfferPrices": "",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "26393F34",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "rottenRewardFeedbackReason": "accepted",
+          "canvasCount": 1
+        }
+      },
+      "rejected": {
+        "route": "Rotten Run real unaffordable and invalid no-op keys",
+        "poorBefore": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "4",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "poorArming": {
+          "consecutiveOpenFrames": 23,
+          "maxOpenFrames": 23,
+          "resolvedBeforeIntended": false,
+          "keyEvents": [
+            {
+              "key": "3",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "6",
+              "phase": "loadout",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "Enter",
+              "phase": "route-choice",
+              "marketStatus": "",
+              "decisionCount": "0"
+            },
+            {
+              "key": "2",
+              "phase": "encounter",
+              "marketStatus": "",
+              "decisionCount": "0"
+            }
+          ],
+          "stableState": {
+            "rottenPhase": "reward-choice",
+            "rottenStage": "1",
+            "rottenMarketStatus": "open",
+            "rottenRewardDecisionCount": "0",
+            "rottenMarketChoice": "",
+            "rottenWave": "2",
+            "rottenWavesCleared": "2",
+            "rottenHp": "6/6",
+            "rottenLivingEnemies": "0",
+            "rottenAttackCount": "6",
+            "rottenAttackHitCount": "6",
+            "rottenSkillUseCount": "2",
+            "rottenSkillHitCount": "2",
+            "rottenCombatObjectCount": "0",
+            "canvasCount": 1
+          }
+        },
+        "unaffordable": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "4",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "invalid": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "4",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "canvasCount": 1
+        },
+        "rejectedCaptureBefore": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "4",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "rottenRewardFeedback": "THAT NUMBER ISN'T ON THE DOCKET.",
+          "rottenRewardFeedbackReason": "invalid-input",
+          "canvasCount": 1
+        },
+        "rejectedCaptureAfter": {
+          "rottenPhase": "reward-choice",
+          "rottenStage": "1",
+          "rottenRouteOptions": "unfiled-alley|bailiffs-ramp",
+          "rottenSelectedRoute": "bailiffs-ramp",
+          "rottenWeapon": "tax-pike",
+          "rottenSkill": "seized-stamp",
+          "rottenUpgrades": "",
+          "rottenGraft": "4",
+          "rottenHp": "6/6",
+          "rottenRouteHistory": "1:bailiffs-ramp:pending",
+          "rottenMarketStatus": "open",
+          "rottenMarketStage": "1",
+          "rottenMarketRoute": "bailiffs-ramp",
+          "rottenMarketChoice": "",
+          "rottenMarketTraceEvent": "",
+          "rottenRewardDecisionCount": "0",
+          "rottenOfferIds": "dead-letter|petty-grudge|spite-reserve",
+          "rottenOfferPrices": "7|5|5",
+          "rottenHealAvailable": "false",
+          "rottenTraceDigest": "3A96510D",
+          "rottenWave": "2",
+          "rottenWavesCleared": "2",
+          "rottenSpawnHistory": "1:bailiff,bailiff|2:bailiff,writ-runner",
+          "rottenLivingEnemies": "0",
+          "rottenCombatObjectCount": "0",
+          "rottenRewardFeedback": "THAT NUMBER ISN'T ON THE DOCKET.",
+          "rottenRewardFeedbackReason": "invalid-input",
+          "canvasCount": 1
+        }
+      }
+    }
+  ]
+}

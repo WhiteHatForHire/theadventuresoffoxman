@@ -1,0 +1,344 @@
+{
+  "reviewedAt": "2026-08-11T12:24:52.791Z",
+  "browser": "Codex In-app Browser",
+  "artifactUrl": "http://127.0.0.1:4193/",
+  "initialTabs": [],
+  "initialSelected": null,
+  "title1366": {
+    "canvasCount": 1,
+    "canvasRect": {
+      "height": 768,
+      "width": 1365.328125,
+      "x": 0,
+      "y": 0
+    },
+    "height": 768,
+    "imageFailures": [],
+    "scene": "TitleScene",
+    "url": "http://127.0.0.1:4193/",
+    "width": 1366
+  },
+  "campaign1366": {
+    "canvasCount": 1,
+    "canvasRect": {
+      "height": 768,
+      "width": 1365.328125,
+      "x": 0,
+      "y": 0
+    },
+    "currentWeapon": "Rusty Knife",
+    "height": 768,
+    "hudWeaponText": "Weapon: Rusty Knife",
+    "imageFailures": [],
+    "playerAlive": "true",
+    "scene": "RunScene",
+    "width": 1366
+  },
+  "rewardOpen1366": {
+    "canvasCount": 1,
+    "combatObjects": "0",
+    "decisionCount": "0",
+    "graft": "7",
+    "healAvailable": "false",
+    "height": 768,
+    "hp": "6/6",
+    "imageFailures": [],
+    "marketStatus": "open",
+    "offerIds": "dead-letter|petty-grudge|spite-reserve",
+    "offerPrices": "7|5|5",
+    "phase": "reward-choice",
+    "planId": "RR1-1C93B57F",
+    "routeHistory": "1:bailiffs-ramp:pending",
+    "routeOptions": "unfiled-alley|bailiffs-ramp",
+    "seed": "GAUNTLET-ALPHA",
+    "selectedRoute": "bailiffs-ramp",
+    "skill": "seized-stamp",
+    "stage": "1",
+    "weapon": "tax-pike",
+    "width": 1366
+  },
+  "purchase1366": {
+    "canvasCount": 1,
+    "combatObjects": "0",
+    "decisionCount": "1",
+    "feedback": "DEAD LETTER BOUGHT. THE DOCKET REMEMBERS.",
+    "feedbackReason": "accepted",
+    "graft": "0",
+    "height": 768,
+    "hp": "6/6",
+    "imageFailures": [],
+    "marketChoice": "upgrade:dead-letter",
+    "marketStatus": "resolved",
+    "marketTraceEvent": "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+    "phase": "route-choice",
+    "planId": "RR1-1C93B57F",
+    "routeHistory": "1:bailiffs-ramp:upgrade:dead-letter",
+    "routeOptions": "seized-goods-lift|late-fee-chapel",
+    "seed": "GAUNTLET-ALPHA",
+    "selectedRoute": "",
+    "skill": "seized-stamp",
+    "stage": "2",
+    "traceDigest": "60C943E0",
+    "upgrades": "dead-letter",
+    "weapon": "tax-pike",
+    "width": 1366
+  },
+  "purchaseRepeatedKeyNoop": {
+    "equal": true,
+    "before": {
+      "canvasCount": 1,
+      "combatObjects": "0",
+      "decisionCount": "1",
+      "graft": "0",
+      "hp": "6/6",
+      "marketChoice": "upgrade:dead-letter",
+      "marketStatus": "resolved",
+      "marketTraceEvent": "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+      "phase": "route-choice",
+      "routeHistory": "1:bailiffs-ramp:upgrade:dead-letter",
+      "routeOptions": "seized-goods-lift|late-fee-chapel",
+      "selectedRoute": "",
+      "skill": "seized-stamp",
+      "stage": "2",
+      "traceDigest": "60C943E0",
+      "upgrades": "dead-letter",
+      "weapon": "tax-pike"
+    },
+    "after": {
+      "canvasCount": 1,
+      "combatObjects": "0",
+      "decisionCount": "1",
+      "graft": "0",
+      "hp": "6/6",
+      "marketChoice": "upgrade:dead-letter",
+      "marketStatus": "resolved",
+      "marketTraceEvent": "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+      "phase": "route-choice",
+      "routeHistory": "1:bailiffs-ramp:upgrade:dead-letter",
+      "routeOptions": "seized-goods-lift|late-fee-chapel",
+      "selectedRoute": "",
+      "skill": "seized-stamp",
+      "stage": "2",
+      "traceDigest": "60C943E0",
+      "upgrades": "dead-letter",
+      "weapon": "tax-pike"
+    }
+  },
+  "reloadReset1366": {
+    "canvasCount": 1,
+    "combatObjects": "0",
+    "decisionCount": "0",
+    "graft": "3",
+    "hp": "",
+    "marketChoice": "",
+    "marketStatus": "",
+    "marketTraceEvent": "",
+    "phase": "loadout",
+    "routeHistory": "",
+    "routeOptions": "unfiled-alley|bailiffs-ramp",
+    "selectedRoute": "",
+    "skill": "",
+    "stage": "1",
+    "traceDigest": "5C5695F6",
+    "upgrades": "",
+    "weapon": ""
+  },
+  "campaign1920": {
+    "canvasCount": 1,
+    "canvasRect": {
+      "height": 1080,
+      "width": 1920,
+      "x": 0,
+      "y": 0
+    },
+    "currentWeapon": "Rusty Knife",
+    "height": 1080,
+    "hudWeaponText": "Weapon: Rusty Knife",
+    "imageFailures": [],
+    "playerAlive": "true",
+    "scene": "RunScene",
+    "width": 1920
+  },
+  "healOpen1920": {
+    "canvasCount": 1,
+    "combatObjects": "0",
+    "decisionCount": "0",
+    "graft": "7",
+    "hp": "5/6",
+    "marketChoice": "",
+    "marketStatus": "open",
+    "marketTraceEvent": "",
+    "phase": "reward-choice",
+    "routeHistory": "1:bailiffs-ramp:pending",
+    "routeOptions": "unfiled-alley|bailiffs-ramp",
+    "selectedRoute": "bailiffs-ramp",
+    "skill": "seized-stamp",
+    "stage": "1",
+    "traceDigest": "E280964D",
+    "upgrades": "",
+    "weapon": "tax-pike"
+  },
+  "heal1920": {
+    "state": {
+      "canvasCount": 1,
+      "combatObjects": "0",
+      "decisionCount": "1",
+      "graft": "5",
+      "hp": "6/6",
+      "marketChoice": "heal:1",
+      "marketStatus": "resolved",
+      "marketTraceEvent": "market:1:bailiffs-ramp:heal:1:spent-2",
+      "phase": "route-choice",
+      "routeHistory": "1:bailiffs-ramp:heal:1",
+      "routeOptions": "seized-goods-lift|late-fee-chapel",
+      "selectedRoute": "",
+      "skill": "seized-stamp",
+      "stage": "2",
+      "traceDigest": "3279BD61",
+      "upgrades": "",
+      "weapon": "tax-pike"
+    },
+    "feedback": {
+      "feedback": "PATCHED 1 HP. THE CLERK KEPT THE CHANGE.",
+      "feedbackReason": "accepted",
+      "healAvailable": "false"
+    }
+  },
+  "bank1920": {
+    "before": {
+      "canvasCount": 1,
+      "combatObjects": "0",
+      "decisionCount": "0",
+      "graft": "7",
+      "hp": "6/6",
+      "marketChoice": "",
+      "marketStatus": "open",
+      "marketTraceEvent": "",
+      "phase": "reward-choice",
+      "routeHistory": "1:bailiffs-ramp:pending",
+      "routeOptions": "unfiled-alley|bailiffs-ramp",
+      "selectedRoute": "bailiffs-ramp",
+      "skill": "bribe-bomb",
+      "stage": "1",
+      "traceDigest": "D6D0192B",
+      "upgrades": "",
+      "weapon": "receipt-spitter"
+    },
+    "after": {
+      "canvasCount": 1,
+      "combatObjects": "0",
+      "decisionCount": "1",
+      "graft": "7",
+      "hp": "6/6",
+      "marketChoice": "bank",
+      "marketStatus": "resolved",
+      "marketTraceEvent": "market:1:bailiffs-ramp:bank:spent-0",
+      "phase": "route-choice",
+      "routeHistory": "1:bailiffs-ramp:bank",
+      "routeOptions": "seized-goods-lift|late-fee-chapel",
+      "selectedRoute": "",
+      "skill": "bribe-bomb",
+      "stage": "2",
+      "traceDigest": "26393F34",
+      "upgrades": "",
+      "weapon": "receipt-spitter"
+    },
+    "feedback": {
+      "feedback": "PURSE BANKED. FOXMAN TRUSTS HIMSELF WITH MONEY.",
+      "feedbackReason": "accepted"
+    },
+    "pursePreserved": true,
+    "hpPreserved": true
+  },
+  "resourceInventory": {
+    "summary": {
+      "byKind": {
+        "font": 0,
+        "image": 9,
+        "other": 0,
+        "script": 2,
+        "stylesheet": 1,
+        "video": 0
+      },
+      "inlineSvgCount": 0,
+      "totalCount": 12
+    },
+    "assets": [
+      {
+        "kind": "script",
+        "name": "index-Bo6v9nIn.js",
+        "url": "http://127.0.0.1:4193/assets/index-Bo6v9nIn.js"
+      },
+      {
+        "kind": "stylesheet",
+        "name": "index-BXaDcDRc.css",
+        "url": "http://127.0.0.1:4193/assets/index-BXaDcDRc.css"
+      },
+      {
+        "kind": "script",
+        "name": "phaser-vendor-DFK5Ua9d.js",
+        "url": "http://127.0.0.1:4193/assets/phaser-vendor-DFK5Ua9d.js"
+      },
+      {
+        "kind": "image",
+        "name": "bg_rotten_borough_mood_runtime-BZTO3j5s.webp",
+        "url": "http://127.0.0.1:4193/assets/bg_rotten_borough_mood_runtime-BZTO3j5s.webp"
+      },
+      {
+        "kind": "image",
+        "name": "reward_shop_counter_runtime-BsxiV52P.webp",
+        "url": "http://127.0.0.1:4193/assets/reward_shop_counter_runtime-BsxiV52P.webp"
+      },
+      {
+        "kind": "image",
+        "name": "reward_shop_icons_atlas-Bt6AxAs8.png",
+        "url": "http://127.0.0.1:4193/assets/reward_shop_icons_atlas-Bt6AxAs8.png"
+      },
+      {
+        "kind": "image",
+        "name": "toll_baron_atlas-Jsbga7vf.png",
+        "url": "http://127.0.0.1:4193/assets/toll_baron_atlas-Jsbga7vf.png"
+      },
+      {
+        "kind": "image",
+        "name": "foxman_atlas-DgAgREoh.png",
+        "url": "http://127.0.0.1:4193/assets/foxman_atlas-DgAgREoh.png"
+      },
+      {
+        "kind": "image",
+        "name": "drunken_guard_atlas-Dq9ZjCjg.png",
+        "url": "http://127.0.0.1:4193/assets/drunken_guard_atlas-Dq9ZjCjg.png"
+      },
+      {
+        "kind": "image",
+        "name": "tax_clerk_atlas-C3V2a7j7.png",
+        "url": "http://127.0.0.1:4193/assets/tax_clerk_atlas-C3V2a7j7.png"
+      },
+      {
+        "kind": "image",
+        "name": "pickup_exit_atlas-D2L0B9BG.png",
+        "url": "http://127.0.0.1:4193/assets/pickup_exit_atlas-D2L0B9BG.png"
+      },
+      {
+        "kind": "image",
+        "name": "rotten_borough_tiles_atlas-DkmeSx4V.png",
+        "url": "http://127.0.0.1:4193/assets/rotten_borough_tiles_atlas-DkmeSx4V.png"
+      }
+    ]
+  },
+  "finalErrorWarningLogs": [],
+  "screenshotFiles": [
+    "iab-title-1366x768.png",
+    "iab-campaign-enter-1366x768.png",
+    "iab-reward-open-1366x768.png",
+    "iab-stage2-purchase-1366x768.png",
+    "iab-campaign-enter-1920x1080.png",
+    "iab-heal-open-1920x1080.png",
+    "iab-stage2-heal-1920x1080.png",
+    "iab-stage2-bank-1920x1080.png"
+  ],
+  "inspectionToolNotes": [
+    "waitForLoadState(networkidle) was unsupported by this Browser backend; continued on the same tab with dataset and timed ready checks.",
+    "Two initial read-only state probes were corrected after a malformed wrapper and unavailable performance timing object; neither interacted with product state."
+  ]
+}

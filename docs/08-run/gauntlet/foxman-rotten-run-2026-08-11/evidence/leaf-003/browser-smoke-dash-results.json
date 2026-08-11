@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "route": "/?smokeAuto=1&smoke=dash",
+      "waitResolved": {
+        "playerX": "273",
+        "peakAbsoluteVelocityX": 620,
+        "playerDashCount": "1",
+        "playerDashTrailCount": "3",
+        "playerDashCueCount": "1"
+      },
+      "state": {
+        "scene": "RunScene",
+        "playerState": "dash",
+        "playerX": "273",
+        "playerVelocityX": "620",
+        "playerDashCount": "1",
+        "playerDashReady": "false",
+        "playerDashTrailCount": "3",
+        "playerDashCueCount": "1",
+        "canvasCount": 1
+      },
+      "observation": {
+        "active": false,
+        "samples": 1,
+        "peakAbsoluteVelocityX": 620,
+        "peakVelocityX": 620,
+        "peakPlayerState": "dash",
+        "peakDashCount": "1",
+        "peakDashTrailCount": "3",
+        "peakDashCueCount": "1"
+      }
+    }
+  ]
+}

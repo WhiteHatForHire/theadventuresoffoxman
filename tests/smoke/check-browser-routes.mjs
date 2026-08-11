@@ -147,8 +147,14 @@ async function smokeRottenRunEncounter(browser) {
   await page.waitForDataset("rottenPhase", "encounter");
   await page.waitForDataset("rottenSelectedRoute", "bailiffs-ramp");
 
+  await installRottenObservationLatch(page);
+  let latchedEnemyTell = "";
   await waitFor(
-    async () => Boolean(await page.evaluate("document.body.dataset.rottenEnemyTell")),
+    async () => {
+      const observed = await readRottenObservationLatch(page);
+      latchedEnemyTell ||= observed.enemyTell;
+      return Boolean(latchedEnemyTell);
+    },
     12_000,
     80,
   );
@@ -163,8 +169,9 @@ async function smokeRottenRunEncounter(browser) {
     "rottenSkill",
     "rottenCombatObjectCount",
   ]);
-  if (!String(activeCombat.rottenEnemyTell).includes("windup")) {
-    throw new Error(`Rotten encounter did not expose a readable windup tell: ${activeCombat.rottenEnemyTell}`);
+  activeCombat.latchedEnemyTell = latchedEnemyTell;
+  if (!String(latchedEnemyTell).includes("windup")) {
+    throw new Error(`Rotten encounter did not expose a readable windup tell: ${latchedEnemyTell}`);
   }
   if (Number(activeCombat.rottenCombatObjectCount) <= 0) {
     throw new Error(`Rotten encounter did not expose live owned objects: ${activeCombat.rottenCombatObjectCount}`);
@@ -263,6 +270,435 @@ async function smokeRottenRunEncounter(browser) {
   };
 }
 
+async function smokeRottenMarketPurchase(browser) {
+  const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenMarket";
+
+  const purchasePage = await browser.open(route, { viewport: { width: 1366, height: 768 } });
+  await purchasePage.waitForDataset("rottenPhase", "loadout");
+  await installRottenMarketPhaseLatch(purchasePage);
+  await selectRottenBuild(purchasePage, "3", "6", "2");
+  await releaseRottenSelectionKeys(purchasePage);
+  const purchaseArming = await waitForOpenRottenMarket(purchasePage);
+  const purchaseBefore = await purchasePage.dataset(rottenMarketTruthKeys());
+  assertEqual(purchaseBefore.rottenStage, "1", "Rotten purchase starts at Stage 1 market");
+  assertEqual(purchaseBefore.rottenGraft, "7", "Rotten purchase starting purse");
+  assertEqual(
+    purchaseBefore.rottenOfferIds,
+    "dead-letter|petty-grudge|spite-reserve",
+    "Rotten purchase fixed offers",
+  );
+  assertEqual(purchaseBefore.rottenOfferPrices, "7|5|5", "Rotten purchase effective prices");
+  await captureEvidence(purchasePage, "rotten-market-before-choice-1366x768.png");
+
+  await purchasePage.key("1");
+  await purchasePage.waitForDataset("rottenStage", "2", 5_000);
+  await purchasePage.waitForDataset("rottenUpgrades", "dead-letter", 2_000);
+  const purchase = await purchasePage.dataset([
+    ...rottenMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  assertEqual(purchase.rottenPhase, "route-choice", "Rotten purchase Stage 2 phase");
+  assertEqual(purchase.rottenRouteOptions, "seized-goods-lift|late-fee-chapel", "Rotten Stage 2 pair");
+  assertEqual(purchase.rottenSelectedRoute, "", "Rotten Stage 2 route remains unselected");
+  assertEqual(purchase.rottenWeapon, "tax-pike", "Rotten purchase carried weapon");
+  assertEqual(purchase.rottenSkill, "seized-stamp", "Rotten purchase carried skill");
+  assertEqual(purchase.rottenGraft, "0", "Rotten Dead Letter payment");
+  assertEqual(purchase.rottenHp, purchaseBefore.rottenHp, "Rotten purchase carried HP");
+  assertEqual(purchase.rottenMarketStatus, "resolved", "Rotten purchase resolved market");
+  assertEqual(purchase.rottenMarketChoice, "upgrade:dead-letter", "Rotten purchase choice");
+  assertEqual(
+    purchase.rottenMarketTraceEvent,
+    "market:1:bailiffs-ramp:upgrade:dead-letter:spent-7",
+    "Rotten purchase trace event",
+  );
+  assertEqual(
+    purchase.rottenRouteHistory,
+    "1:bailiffs-ramp:upgrade:dead-letter",
+    "Rotten purchase route history",
+  );
+  assertEqual(purchase.rottenRewardDecisionCount, "1", "Rotten purchase decision count");
+  assertEqual(purchase.rottenOfferIds, "", "Rotten purchase clears active offers");
+  assertEqual(purchase.rottenCombatObjectCount, "0", "Rotten purchase stale combat objects");
+  assertEqual(purchase.canvasCount, 1, "Rotten purchase canvas count");
+  assertEqual(purchase.rottenRewardFeedbackReason, "accepted", "Rotten purchase feedback reason");
+  if (purchase.rottenTraceDigest === purchaseBefore.rottenTraceDigest) {
+    throw new Error("Rotten purchase trace digest did not change");
+  }
+  await assertNoMissingTextureGreen(purchasePage, "Rotten Run Stage 2 purchase docket");
+  await captureEvidence(purchasePage, "rotten-market-purchase-accepted-1366x768.png");
+  await captureEvidence(purchasePage, "rotten-stage-two-docket-1366x768.png");
+  const purchaseTruth = pickDataset(purchase, rottenMarketTruthKeys());
+  await purchasePage.key("1");
+  await new Promise((resolve) => setTimeout(resolve, 120));
+  const repeatedPurchase = await purchasePage.dataset(rottenMarketTruthKeys());
+  assertDeepEqual(repeatedPurchase, purchaseTruth, "Rotten resolved market repeat input no-op");
+  await purchasePage.close();
+
+  return {
+    route: "Rotten Run real upgrade purchase key",
+    purchaseArming,
+    purchaseBefore,
+    purchase,
+    repeatedPurchase,
+  };
+}
+
+async function smokeRottenMarketHeal(browser) {
+  const healPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenMarketHeal",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await healPage.waitForDataset("rottenPhase", "loadout");
+  await installRottenMarketPhaseLatch(healPage);
+  await installRottenHealDamageLatch(healPage);
+  await selectRottenBuild(healPage, "3", "6", "2");
+  await releaseRottenSelectionKeys(healPage);
+  const healArming = await waitForOpenRottenMarket(healPage);
+  const healDamage = await readRottenHealDamageLatch(healPage);
+  const healBefore = await healPage.dataset(rottenMarketTruthKeys());
+  const [healCurrent, healMax] = parseHealth(healBefore.rottenHp, "Rotten heal before HP");
+  if (healCurrent >= healMax) {
+    throw new Error(`Rotten heal path reached market undamaged: ${healBefore.rottenHp}`);
+  }
+  assertEqual(String(healDamage.damaged), "true", "Rotten heal real damage observation");
+  assertEqual(healDamage.attackCountAtFirstDamage, "0", "Rotten heal attack count at first damage");
+  assertEqual(healDamage.skillUseCountAtFirstDamage, "0", "Rotten heal skill count at first damage");
+  assertEqual(healBefore.rottenHealAvailable, "true", "Rotten heal availability");
+  await healPage.key("4");
+  await healPage.waitForDataset("rottenStage", "2", 5_000);
+  const heal = await healPage.dataset([
+    ...rottenMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  const [healedCurrent, healedMax] = parseHealth(heal.rottenHp, "Rotten healed HP");
+  const restored = Math.min(2, healMax - healCurrent);
+  assertEqual(String(healedCurrent), String(healCurrent + restored), "Rotten heal current HP");
+  assertEqual(String(healedMax), String(healMax), "Rotten heal max HP");
+  assertEqual(heal.rottenGraft, String(Number(healBefore.rottenGraft) - 2), "Rotten heal payment");
+  assertEqual(heal.rottenUpgrades, "", "Rotten heal owns no upgrade");
+  assertEqual(heal.rottenMarketChoice, `heal:${restored}`, "Rotten heal choice");
+  assertEqual(
+    heal.rottenRouteHistory,
+    `1:bailiffs-ramp:heal:${restored}`,
+    "Rotten heal route history",
+  );
+  assertEqual(heal.rottenRewardDecisionCount, "1", "Rotten heal decision count");
+  assertEqual(heal.rottenRewardFeedbackReason, "accepted", "Rotten heal feedback reason");
+  assertEqual(heal.rottenCombatObjectCount, "0", "Rotten heal stale combat objects");
+  await assertNoMissingTextureGreen(healPage, "Rotten Run Stage 2 heal docket");
+  await captureEvidence(healPage, "rotten-market-heal-accepted-1920x1080.png");
+  await healPage.close();
+
+  return {
+    route: "Rotten Run real damaged-health heal key",
+    healDamage,
+    healBefore,
+    healArming,
+    heal,
+  };
+}
+
+async function smokeRottenMarketBank(browser) {
+  const route = "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenMarket";
+  const bankPage = await browser.open(route, { viewport: { width: 1366, height: 768 } });
+  await bankPage.waitForDataset("rottenPhase", "loadout");
+  await installRottenMarketPhaseLatch(bankPage);
+  await selectRottenBuild(bankPage, "4", "7", "2");
+  await releaseRottenSelectionKeys(bankPage);
+  const bankArming = await waitForOpenRottenMarket(bankPage);
+  const bankBefore = await bankPage.dataset(rottenMarketTruthKeys());
+  await bankPage.key("5");
+  await bankPage.waitForDataset("rottenStage", "2", 5_000);
+  const bank = await bankPage.dataset([
+    ...rottenMarketTruthKeys(),
+    "rottenRewardFeedbackReason",
+  ]);
+  assertEqual(bank.rottenGraft, bankBefore.rottenGraft, "Rotten bank preserves purse");
+  assertEqual(bank.rottenHp, bankBefore.rottenHp, "Rotten bank preserves HP");
+  assertEqual(bank.rottenUpgrades, "", "Rotten bank owns no upgrade");
+  assertEqual(bank.rottenMarketChoice, "bank", "Rotten bank choice");
+  assertEqual(bank.rottenRouteHistory, "1:bailiffs-ramp:bank", "Rotten bank route history");
+  assertEqual(bank.rottenRewardDecisionCount, "1", "Rotten bank decision count");
+  assertEqual(bank.rottenRewardFeedbackReason, "accepted", "Rotten bank feedback reason");
+  assertEqual(bank.rottenCombatObjectCount, "0", "Rotten bank stale combat objects");
+  await bankPage.evaluate(
+    "new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))",
+  );
+  await captureEvidence(bankPage, "rotten-market-bank-accepted-1366x768.png");
+  await bankPage.close();
+
+  return {
+    route: "Rotten Run real bank key",
+    bankBefore,
+    bankArming,
+    bank,
+  };
+}
+
+async function smokeRottenMarketRejected(browser) {
+  const poorPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenMarketPoor",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await poorPage.waitForDataset("rottenPhase", "loadout");
+  await installRottenMarketPhaseLatch(poorPage);
+  await selectRottenBuild(poorPage, "3", "6", "2");
+  await releaseRottenSelectionKeys(poorPage);
+  const poorArming = await waitForOpenRottenMarket(poorPage);
+  const poorBefore = await poorPage.dataset(rottenMarketTruthKeys());
+  assertEqual(poorBefore.rottenGraft, "4", "Rotten poor-market fixture purse");
+  assertEqual(poorBefore.rottenOfferPrices, "7|5|5", "Rotten poor-market prices");
+  await poorPage.key("1");
+  await poorPage.waitForDataset("rottenRewardFeedbackReason", "unaffordable", 2_000);
+  const unaffordable = await poorPage.dataset(rottenMarketTruthKeys());
+  assertDeepEqual(unaffordable, poorBefore, "Rotten unaffordable purchase state no-op");
+  await poorPage.key("6");
+  await poorPage.waitForDataset("rottenRewardFeedbackReason", "invalid-input", 2_000);
+  const invalid = await poorPage.dataset(rottenMarketTruthKeys());
+  assertDeepEqual(invalid, poorBefore, "Rotten invalid input state no-op");
+  await poorPage.evaluate(
+    "new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))",
+  );
+  await captureEvidence(poorPage, "rotten-market-rejected-input-1366x768.png");
+  const rejectedCaptureBefore = await poorPage.dataset([
+    ...rottenMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  await captureEvidence(poorPage, "rotten-market-rejected-input-settled-1366x768.png");
+  const rejectedCaptureAfter = await poorPage.dataset([
+    ...rottenMarketTruthKeys(),
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ]);
+  assertDeepEqual(
+    rejectedCaptureAfter,
+    rejectedCaptureBefore,
+    "Rotten rejected evidence double-capture state",
+  );
+  await poorPage.close();
+
+  return {
+    route: "Rotten Run real unaffordable and invalid no-op keys",
+    poorBefore,
+    poorArming,
+    unaffordable,
+    invalid,
+    rejectedCaptureBefore,
+    rejectedCaptureAfter,
+  };
+}
+
+async function smokeRottenRunMarket(browser) {
+  return {
+    route: "Rotten Run real purchase/heal/bank/rejected market keys",
+    purchase: await smokeRottenMarketPurchase(browser),
+    heal: await smokeRottenMarketHeal(browser),
+    bank: await smokeRottenMarketBank(browser),
+    rejected: await smokeRottenMarketRejected(browser),
+  };
+}
+
+function rottenMarketTruthKeys() {
+  return [
+    "rottenPhase",
+    "rottenStage",
+    "rottenRouteOptions",
+    "rottenSelectedRoute",
+    "rottenWeapon",
+    "rottenSkill",
+    "rottenUpgrades",
+    "rottenGraft",
+    "rottenHp",
+    "rottenRouteHistory",
+    "rottenMarketStatus",
+    "rottenMarketStage",
+    "rottenMarketRoute",
+    "rottenMarketChoice",
+    "rottenMarketTraceEvent",
+    "rottenRewardDecisionCount",
+    "rottenOfferIds",
+    "rottenOfferPrices",
+    "rottenHealAvailable",
+    "rottenTraceDigest",
+    "rottenWave",
+    "rottenWavesCleared",
+    "rottenSpawnHistory",
+    "rottenLivingEnemies",
+    "rottenCombatObjectCount",
+  ];
+}
+
+async function installRottenMarketPhaseLatch(page) {
+  await page.evaluate(`(() => {
+    if (window.__FOXMAN_ROTTEN_MARKET_OBSERVATION__) return true;
+    const observation = {
+      consecutiveOpenFrames: 0,
+      maxOpenFrames: 0,
+      resolvedBeforeIntended: false,
+      keyEvents: [],
+    };
+    window.__FOXMAN_ROTTEN_MARKET_OBSERVATION__ = observation;
+    window.addEventListener("keydown", (event) => {
+      const data = document.body.dataset;
+      observation.keyEvents.push({
+        key: event.key,
+        phase: data.rottenPhase ?? "",
+        marketStatus: data.rottenMarketStatus ?? "",
+        decisionCount: data.rottenRewardDecisionCount ?? "",
+      });
+    });
+    const sample = () => {
+      const data = document.body.dataset;
+      const open = data.rottenPhase === "reward-choice"
+        && data.rottenMarketStatus === "open"
+        && data.rottenRewardDecisionCount === "0";
+      observation.consecutiveOpenFrames = open ? observation.consecutiveOpenFrames + 1 : 0;
+      observation.maxOpenFrames = Math.max(
+        observation.maxOpenFrames,
+        observation.consecutiveOpenFrames,
+      );
+      if (data.rottenStage === "2" && data.rottenRewardDecisionCount === "1") {
+        observation.resolvedBeforeIntended = true;
+      }
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenMarketPhaseLatch(page) {
+  return page.evaluate(`(() => {
+    const observed = window.__FOXMAN_ROTTEN_MARKET_OBSERVATION__;
+    return {
+      consecutiveOpenFrames: observed?.consecutiveOpenFrames ?? 0,
+      maxOpenFrames: observed?.maxOpenFrames ?? 0,
+      resolvedBeforeIntended: observed?.resolvedBeforeIntended ?? false,
+      keyEvents: [...(observed?.keyEvents ?? [])],
+    };
+  })()`);
+}
+
+async function installRottenHealDamageLatch(page) {
+  await page.evaluate(`(() => {
+    if (window.__FOXMAN_ROTTEN_HEAL_DAMAGE__) return true;
+    const observation = {
+      damaged: false,
+      firstDamagedHp: "",
+      attackCountAtFirstDamage: "",
+      skillUseCountAtFirstDamage: "",
+    };
+    window.__FOXMAN_ROTTEN_HEAL_DAMAGE__ = observation;
+    const sample = () => {
+      const data = document.body.dataset;
+      const [current, max] = String(data.rottenHp ?? "").split("/").map(Number);
+      if (!observation.damaged && Number.isFinite(current) && Number.isFinite(max) && current < max) {
+        observation.damaged = true;
+        observation.firstDamagedHp = data.rottenHp ?? "";
+        observation.attackCountAtFirstDamage = data.rottenAttackCount ?? "";
+        observation.skillUseCountAtFirstDamage = data.rottenSkillUseCount ?? "";
+      }
+      if (data.rottenPhase !== "dead" && data.rottenStage !== "2") {
+        requestAnimationFrame(sample);
+      }
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenHealDamageLatch(page) {
+  return page.evaluate(`(() => ({
+    ...window.__FOXMAN_ROTTEN_HEAL_DAMAGE__,
+  }))()`);
+}
+
+async function releaseRottenSelectionKeys(page) {
+  for (const key of ["1", "2", "3", "4", "5", "6", "7", "Enter"]) {
+    await page.keyUp(key);
+  }
+  await page.evaluate("new Promise((resolve) => requestAnimationFrame(() => resolve(true)))");
+}
+
+async function waitForOpenRottenMarket(page, timeoutMs = 40_000) {
+  const keys = [
+    "rottenPhase",
+    "rottenStage",
+    "rottenMarketStatus",
+    "rottenRewardDecisionCount",
+    "rottenMarketChoice",
+    "rottenWave",
+    "rottenWavesCleared",
+    "rottenHp",
+    "rottenLivingEnemies",
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenCombatObjectCount",
+  ];
+  const started = Date.now();
+  let stableFrames = 0;
+  let lastState;
+  while (Date.now() - started < timeoutMs) {
+    await page.evaluate("new Promise((resolve) => requestAnimationFrame(() => resolve(true)))");
+    lastState = await page.dataset(keys);
+    const open = lastState.rottenPhase === "reward-choice"
+      && lastState.rottenStage === "1"
+      && lastState.rottenMarketStatus === "open"
+      && lastState.rottenRewardDecisionCount === "0"
+      && lastState.rottenMarketChoice === "";
+    stableFrames = open ? stableFrames + 1 : 0;
+    if (stableFrames >= 2) {
+      const observed = await readRottenMarketPhaseLatch(page);
+      if (observed.resolvedBeforeIntended) {
+        throw new Error(`Rotten market resolved before intended input: ${JSON.stringify(observed)}`);
+      }
+      const staleRewardKeys = observed.keyEvents.filter(({ phase }) => phase === "reward-choice");
+      if (staleRewardKeys.length > 0) {
+        throw new Error(`Rotten market received stale reward keys: ${JSON.stringify(staleRewardKeys)}`);
+      }
+      if (observed.maxOpenFrames < 2) {
+        throw new Error(`Rotten market was not frame-stable: ${JSON.stringify(observed)}`);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 320));
+      const armedState = await page.dataset(keys);
+      const armedObservation = await readRottenMarketPhaseLatch(page);
+      const armedRewardKeys = armedObservation.keyEvents.filter(({ phase }) => phase === "reward-choice");
+      if (
+        armedState.rottenPhase !== "reward-choice"
+        || armedState.rottenMarketStatus !== "open"
+        || armedState.rottenRewardDecisionCount !== "0"
+        || armedObservation.resolvedBeforeIntended
+        || armedRewardKeys.length > 0
+      ) {
+        throw new Error(
+          `Rotten market did not remain armed before intended input: `
+          + `${JSON.stringify({ armedState, armedObservation })}`,
+        );
+      }
+      return { ...armedObservation, stableState: armedState };
+    }
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error(`Rotten market did not arm across two frames: ${JSON.stringify(lastState)}`);
+}
+
+function parseHealth(value, label) {
+  const [current, max] = String(value).split("/").map(Number);
+  if (!Number.isFinite(current) || !Number.isFinite(max)) {
+    throw new Error(`${label}: invalid HP ${value}`);
+  }
+  return [current, max];
+}
+
+function pickDataset(state, keys) {
+  return Object.fromEntries([...keys, "canvasCount"].map((key) => [key, state[key]]));
+}
+
 async function smokeRottenEnemyReacquisition(browser) {
   const page = await browser.open(
     "/?mode=rotten&seed=GAUNTLET-ALPHA&smoke=rottenReacquire",
@@ -319,11 +755,13 @@ async function smokeRottenEnemyReacquisition(browser) {
     throw new Error(`Rotten writ-runner did not reacquire both edges: ${JSON.stringify(runner)}`);
   }
   assertAtMostNumber(runner.lastReacquisitionMs, 750, "Rotten writ-runner reacquisition time");
-  await captureEvidence(page, "rotten-enemy-reacquired-1920x1080.png");
 
+  await page.holdKey("a", 420);
+  await page.holdKey("d", 90);
+  await new Promise((resolve) => setTimeout(resolve, 100));
   const beforeHit = await page.dataset(["rottenAttackCount", "rottenAttackHitCount"]);
-  for (let index = 0; index < 8; index += 1) {
-    await page.key("j");
+  for (let index = 0; index < 10; index += 1) {
+    await page.holdKey("j", 40);
     await new Promise((resolve) => setTimeout(resolve, 260));
     const hits = await page.dataset(["rottenAttackCount", "rottenAttackHitCount"]);
     if (Number(hits.rottenAttackHitCount) > Number(beforeHit.rottenAttackHitCount)) {
@@ -338,6 +776,7 @@ async function smokeRottenEnemyReacquisition(browser) {
         attacksAfter: Number(hits.rottenAttackCount),
         hitsAfter: Number(hits.rottenAttackHitCount),
       };
+      await captureEvidence(page, "rotten-enemy-reacquired-1920x1080.png");
       await page.close();
       return result;
     }
@@ -383,6 +822,7 @@ async function smokeRottenEnemyAnchoring(browser) {
     );
     await selectRottenBuild(page, "3", "6", testCase.routeKey);
     await page.waitForDataset("rottenSelectedRoute", testCase.routeId);
+    await installRottenObservationLatch(page);
     const traversed = Object.fromEntries(testCase.expectedRoles.map((role) => [role, new Set()]));
     let maxFeetY = Number.NEGATIVE_INFINITY;
     let maxBodyBottom = Number.NEGATIVE_INFINITY;
@@ -414,6 +854,12 @@ async function smokeRottenEnemyAnchoring(browser) {
             );
           }
           traversed[enemy.role]?.add(enemy.state);
+        }
+        const latched = await readRottenObservationLatch(page);
+        for (const [role, states] of Object.entries(latched.enemyStates)) {
+          for (const stateName of states) {
+            traversed[role]?.add(stateName);
+          }
         }
         const complete = testCase.expectedRoles.every((role) =>
           ["windup", "active", "recovery"].every((stateName) => traversed[role].has(stateName)));
@@ -522,6 +968,57 @@ async function selectRottenBuild(page, weaponKey, skillKey, routeKey) {
   await page.waitForDataset("rottenPhase", "encounter");
 }
 
+async function installRottenObservationLatch(page) {
+  await page.evaluate(`(() => {
+    if (window.__FOXMAN_ROTTEN_OBSERVATION__) return true;
+    const observation = { enemyTell: "", enemyStates: {} };
+    window.__FOXMAN_ROTTEN_OBSERVATION__ = observation;
+
+    const sample = () => {
+      const data = document.body.dataset;
+      const tell = data.rottenEnemyTell ?? "";
+      if (!observation.enemyTell && tell.includes(":windup:")) {
+        observation.enemyTell = tell;
+      }
+      for (const entry of String(data.rottenEnemyStates ?? "").split("|")) {
+        if (!entry) continue;
+        const [role, state] = entry.split(":");
+        observation.enemyStates[role] ??= [];
+        if (!observation.enemyStates[role].includes(state)) {
+          observation.enemyStates[role].push(state);
+        }
+      }
+      if (data.rottenPhase === "encounter") requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenObservationLatch(page) {
+  return page.evaluate(`(() => {
+    const observed = window.__FOXMAN_ROTTEN_OBSERVATION__ ?? { enemyTell: "", enemyStates: {} };
+    return {
+      enemyTell: observed.enemyTell,
+      enemyStates: Object.fromEntries(
+        Object.entries(observed.enemyStates).map(([role, states]) => [role, [...states]]),
+      ),
+    };
+  })()`);
+}
+
+async function waitForTwoAnimationFramesOfTruth(page, keys, predicate, timeoutMs) {
+  let stableFrames = 0;
+  let latest;
+  await waitFor(async () => {
+    await page.evaluate("new Promise((resolve) => requestAnimationFrame(() => resolve(true)))");
+    latest = await page.dataset(keys);
+    stableFrames = predicate(latest) ? stableFrames + 1 : 0;
+    return stableFrames >= 2;
+  }, timeoutMs, 20);
+  return latest;
+}
+
 async function smokeRottenRunRetry(browser) {
   const retryPage = await browser.open("/?mode=rotten&seed=GAUNTLET-ALPHA", {
     viewport: { width: 1366, height: 768 },
@@ -555,9 +1052,7 @@ async function smokeRottenRunRetry(browser) {
     throw new Error(`Rotten death did not retain owned encounter objects before retry: ${dead.rottenCombatObjectCount}`);
   }
   await retryPage.key("r");
-  await retryPage.waitForDataset("rottenPhase", "loadout", 8_000);
-  await retryPage.waitForDataset("rottenWeapon", "", 2_000);
-  const retried = await retryPage.dataset([
+  const retryKeys = [
     "rottenPhase",
     "rottenSeed",
     "rottenPlanId",
@@ -565,14 +1060,49 @@ async function smokeRottenRunRetry(browser) {
     "rottenSkill",
     "rottenWave",
     "rottenWavesCleared",
+    "rottenGraft",
+    "rottenUpgrades",
+    "rottenRouteHistory",
+    "rottenMarketStatus",
+    "rottenMarketChoice",
+    "rottenRewardDecisionCount",
+    "rottenOfferIds",
+    "rottenHp",
     "rottenCombatObjectCount",
-  ]);
+  ];
+  const retried = await waitForTwoAnimationFramesOfTruth(
+    retryPage,
+    retryKeys,
+    (state) => state.rottenPhase === "loadout"
+      && state.rottenWeapon === ""
+      && state.rottenSkill === ""
+      && state.rottenWave === "0"
+      && state.rottenWavesCleared === "0"
+      && state.rottenGraft === "3"
+      && state.rottenUpgrades === ""
+      && state.rottenRouteHistory === ""
+      && state.rottenMarketStatus === ""
+      && state.rottenMarketChoice === ""
+      && state.rottenRewardDecisionCount === "0"
+      && state.rottenOfferIds === ""
+      && state.rottenHp === ""
+      && state.rottenCombatObjectCount === "0",
+    8_000,
+  );
   assertEqual(retried.rottenSeed, dead.rottenSeed, "Rotten retry seed");
   assertEqual(retried.rottenPlanId, dead.rottenPlanId, "Rotten retry plan");
   assertEqual(retried.rottenWeapon, "", "Rotten retry weapon reset");
   assertEqual(retried.rottenSkill, "", "Rotten retry skill reset");
   assertEqual(retried.rottenWave, "0", "Rotten retry wave reset");
   assertEqual(retried.rottenWavesCleared, "0", "Rotten retry clear count reset");
+  assertEqual(retried.rottenGraft, "3", "Rotten retry graft reset");
+  assertEqual(retried.rottenUpgrades, "", "Rotten retry upgrades reset");
+  assertEqual(retried.rottenRouteHistory, "", "Rotten retry route history reset");
+  assertEqual(retried.rottenMarketStatus, "", "Rotten retry market status reset");
+  assertEqual(retried.rottenMarketChoice, "", "Rotten retry market choice reset");
+  assertEqual(retried.rottenRewardDecisionCount, "0", "Rotten retry market decision count reset");
+  assertEqual(retried.rottenOfferIds, "", "Rotten retry offers reset");
+  assertEqual(retried.rottenHp, "", "Rotten retry HP modifiers reset");
   assertEqual(retried.rottenCombatObjectCount, "0", "Rotten retry stale combat objects");
   await captureEvidence(retryPage, "rotten-encounter-retry-clean-1366x768.png");
   await retryPage.key("r");
@@ -663,8 +1193,66 @@ async function smokePlatformRoute(browser) {
 
 async function smokeDashRoute(browser) {
   const page = await browser.open("/?smokeAuto=1&smoke=dash");
+  await page.waitForDataset("scene", "RunScene");
+  await page.evaluate(`(() => {
+    const observation = {
+      active: true,
+      samples: 0,
+      peakAbsoluteVelocityX: 0,
+      peakVelocityX: 0,
+      peakPlayerState: "",
+      peakDashCount: "",
+      peakDashTrailCount: "",
+      peakDashCueCount: "",
+    };
+    window.__FOXMAN_DASH_OBSERVATION__ = observation;
+    const sample = () => {
+      if (!observation.active) return;
+      const dataset = document.body?.dataset;
+      const velocityX = Number(dataset?.playerVelocityX);
+      if (Number.isFinite(velocityX)) {
+        observation.samples += 1;
+        const absoluteVelocityX = Math.abs(velocityX);
+        if (absoluteVelocityX > observation.peakAbsoluteVelocityX) {
+          observation.peakAbsoluteVelocityX = absoluteVelocityX;
+          observation.peakVelocityX = velocityX;
+          observation.peakPlayerState = dataset.playerState ?? "";
+          observation.peakDashCount = dataset.playerDashCount ?? "";
+          observation.peakDashTrailCount = dataset.playerDashTrailCount ?? "";
+          observation.peakDashCueCount = dataset.playerDashCueCount ?? "";
+        }
+      }
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
   await page.waitForDataset("playerDashCount", "1", 5000);
-  await new Promise((resolve) => setTimeout(resolve, 80));
+  let waitResolved;
+  await waitFor(async () => {
+    const observation = await page.evaluate("window.__FOXMAN_DASH_OBSERVATION__");
+    const feedback = await page.dataset([
+      "playerX",
+      "playerDashCount",
+      "playerDashTrailCount",
+      "playerDashCueCount",
+    ]);
+    const resolved = Number(observation.peakAbsoluteVelocityX) >= 500
+      && Number(feedback.playerX) >= 260
+      && feedback.playerDashCount === "1"
+      && Number(feedback.playerDashTrailCount) >= 3
+      && feedback.playerDashCueCount === "1";
+    if (resolved) {
+      waitResolved = {
+        playerX: feedback.playerX,
+        peakAbsoluteVelocityX: observation.peakAbsoluteVelocityX,
+        playerDashCount: feedback.playerDashCount,
+        playerDashTrailCount: feedback.playerDashTrailCount,
+        playerDashCueCount: feedback.playerDashCueCount,
+      };
+    }
+    return resolved;
+  }, 5000, 16);
   const state = await page.dataset([
     "scene",
     "playerState",
@@ -675,16 +1263,21 @@ async function smokeDashRoute(browser) {
     "playerDashTrailCount",
     "playerDashCueCount",
   ]);
+  const observation = await page.evaluate(`(() => {
+    const observed = window.__FOXMAN_DASH_OBSERVATION__;
+    observed.active = false;
+    return { ...observed };
+  })()`);
   assertEqual(state.scene, "RunScene", "dash route scene");
   assertEqual(state.playerDashCount, "1", "dash route count");
   assertAtLeastNumber(state.playerX, 260, "dash route movement");
-  assertAtLeastNumber(Math.abs(Number(state.playerVelocityX)), 500, "dash route burst speed");
+  assertAtLeastNumber(observation.peakAbsoluteVelocityX, 500, "dash route peak burst speed");
   assertAtLeastNumber(state.playerDashTrailCount, 3, "dash route trail images");
   assertEqual(state.playerDashCueCount, "1", "dash route audio cue count");
   await captureEvidence(page, "dash-feedback.png");
   await page.close();
 
-  return { route: "/?smokeAuto=1&smoke=dash", state };
+  return { route: "/?smokeAuto=1&smoke=dash", waitResolved, state, observation };
 }
 
 async function smokeSumpWarrens(browser) {
@@ -1840,17 +2433,16 @@ class CdpPage {
     const isDigit = /^[0-9]$/.test(key);
     const virtualKeyCode = special?.virtualKeyCode ?? upper.charCodeAt(0);
     const code = special?.code ?? (isDigit ? `Digit${key}` : `Key${upper}`);
-    const printable = isSingleLetter ? eventKey : undefined;
     const event = {
       key: eventKey,
       code,
       windowsVirtualKeyCode: virtualKeyCode,
-      nativeVirtualKeyCode: virtualKeyCode,
-      text: printable,
-      unmodifiedText: printable,
     };
 
-    await this.send("Input.dispatchKeyEvent", { ...event, type });
+    await this.send("Input.dispatchKeyEvent", {
+      ...event,
+      type: type === "keyDown" ? "rawKeyDown" : type,
+    });
   }
 }
 
@@ -1881,6 +2473,14 @@ function assertEqual(actual, expected, label) {
   }
 }
 
+function assertDeepEqual(actual, expected, label) {
+  const actualJson = JSON.stringify(actual);
+  const expectedJson = JSON.stringify(expected);
+  if (actualJson !== expectedJson) {
+    throw new Error(`${label}: expected ${expectedJson}, got ${actualJson}`);
+  }
+}
+
 function assertAtLeastNumber(actual, expected, label) {
   const value = Number(actual);
   if (!Number.isFinite(value) || value < expected) {
@@ -1902,6 +2502,8 @@ try {
   const results = [];
   if (process.env.FOXMAN_SMOKE_ONLY === "sumpDeath") {
     results.push(await smokeSumpDeathRestart(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "dash") {
+    results.push(await smokeDashRoute(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenContract") {
     results.push(await smokeRottenRunContract(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenEnemyCycle") {
@@ -1913,6 +2515,16 @@ try {
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenEncounter") {
     results.push(await smokeRottenRunRetry(browser));
     results.push(await smokeRottenRunEncounter(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarketPurchase") {
+    results.push(await smokeRottenMarketPurchase(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarketHeal") {
+    results.push(await smokeRottenMarketHeal(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarketBank") {
+    results.push(await smokeRottenMarketBank(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarketPoor") {
+    results.push(await smokeRottenMarketRejected(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenMarket") {
+    results.push(await smokeRottenRunMarket(browser));
   } else {
     results.push(await smokeRottenRunRetry(browser));
     results.push(await smokeTitlePause(browser));
@@ -1940,6 +2552,7 @@ try {
     results.push(await smokeBossDeathRestart(browser));
     results.push(await smokeRottenRunContract(browser));
     results.push(await smokeRottenRunEncounter(browser));
+    results.push(await smokeRottenRunMarket(browser));
   }
 
   const payload = { ok: true, results };

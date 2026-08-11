@@ -1,5 +1,6 @@
+import type { RottenBuildSummary } from "./build";
 import type { RottenSkillId, RottenWeaponId, RottenWeaponStyle } from "./loadout";
-import type { RottenRouteId } from "./routes";
+import type { RottenRouteId, RottenStageNumber } from "./routes";
 import type { RottenUpgradeId } from "./upgrades";
 
 export type RottenRunPhase = "loadout" | "route-choice" | "encounter" | "reward-choice" | "dead";
@@ -10,12 +11,13 @@ export interface RottenRunDebugSnapshot {
   readonly schemaVersion: number;
   readonly seed: string;
   readonly planId: string;
-  readonly stage: 1;
+  readonly stage: RottenStageNumber;
   readonly routeOptions: readonly [RottenRouteId, RottenRouteId];
   readonly selectedRoute: RottenRouteId | null;
   readonly weapon: RottenWeaponId | null;
   readonly skill: RottenSkillId | null;
   readonly upgrades: readonly RottenUpgradeId[];
+  readonly buildSummary: RottenBuildSummary;
   readonly graft: number;
   readonly hp: { readonly current: number; readonly max: number } | null;
   readonly livingEnemies: number;
@@ -42,5 +44,16 @@ export interface RottenRunDebugSnapshot {
   readonly skillHitCount: number;
   readonly skillReady: boolean;
   readonly offerIds: readonly RottenUpgradeId[];
+  readonly offerPrices: readonly number[];
+  readonly healAvailable: boolean;
+  readonly marketStatus: "" | "open" | "resolved";
+  readonly marketStage: 1 | null;
+  readonly marketRoute: RottenRouteId | null;
+  readonly marketChoice: string;
+  readonly marketTraceEvent: string;
+  readonly routeHistory: readonly string[];
+  readonly rewardFeedback: string;
+  readonly rewardFeedbackReason: string;
+  readonly rewardDecisionCount: 0 | 1;
   readonly combatObjectCount: number;
 }
