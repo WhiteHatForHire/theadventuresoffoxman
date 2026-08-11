@@ -4,14 +4,21 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "leaf-001-builder",
+  "currentGate": "leaf-002-builder",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 178739,
-  "usageCoverage": "Exact platform telemetry for the visible lead through seeded-contract freeze; no descendant launched yet.",
+  "knownTokensUsed": 281467,
+  "usageCoverage": "Platform goal telemetry through LEAF-001 promotion; descendant-specific breakdown is unavailable.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": "LEAF-001",
-  "lastAcceptedCommit": "6d5b09170a9f9f483284e5c36bb0765cf10e9129",
+  "activeLeaf": "LEAF-002",
+  "lastAcceptedCommit": "fa94e973ee29a32de44e1797e9484a295c4de2e1",
+  "promotedLeaves": ["LEAF-001"],
+  "lastCriticVerdict": {
+    "leaf": "LEAF-001",
+    "verdict": "pass",
+    "largestGap": null,
+    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-001/critic-receipt.md"
+  },
   "baseline": {
     "branch": "main",
     "head": "779f93571b22f4b7606328d82626719220e31ac9",
@@ -19,6 +26,6 @@
     "worktree": "clean",
     "campaignBrowserRoutesPassed": 23
   },
-  "updatedAt": "2026-08-11T04:16:09Z",
-  "nextSafeAction": "Commit and push the frozen seeded contract, then launch the bounded LEAF-001 builder from that clean accepted head."
+  "updatedAt": "2026-08-11T04:47:15Z",
+  "nextSafeAction": "Commit the LEAF-001 promotion state and LEAF-002 brief, then launch the bounded Stage 1 combat builder from clean main."
 }

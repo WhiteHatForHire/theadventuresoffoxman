@@ -102,3 +102,40 @@ Continue. Exact visible-lead usage is `178739`, far below the first `25000000` a
 `Commit and push the frozen contract, verify a clean accepted head, then launch exactly one LEAF-001 builder with bounded context and no commit/push authority.`
 
 Prerequisites: staged diff passes JSON and whitespace validation; campaign implementation remains untouched.
+
+## Checkpoint 3 - LEAF-001 Promoted
+
+Updated: `2026-08-11T04:47:15Z`
+
+### Builder And Critic Verdicts
+
+- Builder: passed all scoped checks; no control-file, campaign-scene, package, commit, or push authority used.
+- Lead deterministic review: scoped diff, `npm test` 27/27, `npm run typecheck`, evidence JSON integrity, and visual capture inspection passed.
+- Fresh blind critic: `pass`; largest gap `none` after live browser use at 1366×768 and 1920×1080.
+- Real keys verified: Enter -> Campaign, R -> Rotten Run, 1 -> `unfiled-alley`, 2 -> `bailiffs-ramp`.
+- Fixed seed verified: `GAUNTLET-ALPHA` -> `RR1-1C93B57F`.
+- Full browser result: 24/24 routes, including all 23 accepted campaign routes; zero guarded console/network errors.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-009` | `RR-STEP-008` | builder | Implement pure deterministic plan and separate shell | Pass | bounded turn | per-descendant exact unavailable | scoped source/tests |
+| `RR-STEP-010` | `RR-STEP-009` | lead | Run cheap checks and inspect captures/diff | Pass | `~3m` | platform total below | unit/type checks and candidate diff |
+| `RR-STEP-011` | `RR-STEP-010` | blind critic | Operate both desktop viewports and full regression | Pass | `~10m` | per-descendant exact unavailable | `evidence/leaf-001/critic-receipt.md` |
+| `RR-STEP-012` | `RR-STEP-011` | lead | Promote implementation and push | Pass | `<2m` | `281467 / 1250000000` platform goal telemetry | commit `fa94e97`, origin push |
+
+### Token Decision
+
+Continue. Platform goal telemetry reports `281467` tokens, far below the first `25000000` autonomous trajectory audit. Per-descendant token breakdown is not exposed.
+
+### External Actions
+
+- Pushed accepted commit `fa94e97` to `origin/main`.
+- No public deployment, domain, paid service, credential change, destructive history action, or campaign deletion occurred.
+
+### Next Safe Action
+
+`Promote the control-state checkpoint, then launch LEAF-002 for the bounded loadout and real Stage 1 two-wave combat loop.`
+
+Prerequisites: clean `main` and `origin/main`, one active descendant maximum, campaign matrix preserved.

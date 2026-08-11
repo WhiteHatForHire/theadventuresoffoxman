@@ -1,7 +1,7 @@
 # Foxman Rotten Run Bounded Context Packet
 
 Run ID: `foxman-rotten-run-gauntlet-2026-08-11`
-Freshness: `2026-08-11T04:16:09Z`
+Freshness: `2026-08-11T04:47:15Z`
 Context policy: each leaf receives this shared truth plus only its directly required source files.
 
 ## Goal
@@ -11,10 +11,10 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 ## Current Truth
 
 - Launch controls were accepted and pushed as `6d5b091` from prepared baseline `779f935`.
-- Fresh `npm run smoke:all` passes all 23 existing browser routes.
+- Fresh broad validation passes all 23 accepted campaign routes plus the promoted Rotten Run contract route.
 - Current stack is Vite, TypeScript, Phaser 3; no stack change is authorized.
 - Campaign scenes already provide movement, dash, melee/ranged combat, one skill, two mutations, enemies, an elite, a boss, death/restart, progress persistence, and a browser state harness.
-- Rotten Run runtime implementation does not yet exist.
+- `LEAF-001` is promoted at `fa94e97`: deterministic plan, separate title/direct entry, namespaced state, and 24-route browser regression are accepted.
 
 ## Active Decisions
 
@@ -26,6 +26,8 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 - `RR-DEC-006`: additive pure core and separate scene; no campaign refactor.
 - `RR-DEC-007`: fixed three-stage, two-wave, two-route-choice topology plus one boss.
 - `RR-DEC-008`: fixed content budget and mechanics in the seeded product contract.
+- `RR-DEC-009`: preserve `smoke=rottenContract` while normal flow advances through loadout.
+- `RR-DEC-010`: Stage 1 combat stays isolated under Rotten Run content/runtime modules.
 
 ## Required Sources
 

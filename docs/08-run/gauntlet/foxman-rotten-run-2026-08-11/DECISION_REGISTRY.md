@@ -82,3 +82,27 @@ Status: active
 **Rationale:** Four weapons, three skills, eight upgrades, five enemy roles, two elites, and one boss meet the promise without opening unlimited content production.
 **Affected surfaces:** all Rotten Run registries, offers, combat, proof matrix.
 **Constraints:** exact mechanics and cuts are frozen in `SEEDED_RUN_CONTRACT.md`; additions require a recorded replacement decision, not scope accumulation.
+
+### RR-DEC-009 - Preserve The Contract Fixture While Normal Flow Advances
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** LEAF-001's deterministic route shell is useful regression truth, while the actual product must advance through loadout before route choice.
+**Affected surfaces:** Rotten Run scene initialization and browser routes.
+**Constraints:** `smoke=rottenContract` retains the exact `GAUNTLET-ALPHA` route-choice fixture; normal title/direct entry advances to loadout in LEAF-002 and receives a separately reviewed browser contract.
+
+### RR-DEC-010 - Isolated Stage 1 Combat Runtime
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** New enemy roles and weapon/skill behaviors must not widen campaign classes or turn the flow scene into another monolith.
+**Affected surfaces:** `src/game/rotten/` runtime/content modules and `RottenRunScene` composition.
+**Constraints:** no edits to campaign actors/scenes; pure registries own content, runtime modules own enemy/combat behavior, and the scene owns transitions.
+
+## Promotion Notes
+
+- `LEAF-001` accepted by a fresh blind critic with no largest gap.
+- Accepted product commit: `fa94e97`.
+- Evidence: `evidence/leaf-001/critic-receipt.md` and the focused/full browser results beside it.

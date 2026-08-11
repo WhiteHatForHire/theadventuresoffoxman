@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active — launch baseline accepted; deterministic seeded-run contract audit next
+**Status:** Active — LEAF-001 accepted; LEAF-002 playable Stage 1 combat next
 **Priority:** P0
 **Type:** Product / Runtime / QA
 

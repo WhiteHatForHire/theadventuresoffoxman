@@ -12,6 +12,7 @@ Last reviewed: 2026-08-11
 - Workers never edit Gauntlet control files; only the visible lead updates state, decisions, receipts, commits, and pushes.
 - A critic operates the live artifact and is read-only; it does not inherit builder rationale.
 - Rotten Run uses an additive pure core under `src/game/rotten/` and a separate scene; do not refactor campaign scenes during the bounded slice.
+- Stable fixture: `GAUNTLET-ALPHA` -> `RR1-1C93B57F`; Stage 1 options are `unfiled-alley|bailiffs-ramp`.
 
 ## Active Decision IDs
 
@@ -23,6 +24,8 @@ Last reviewed: 2026-08-11
 - `RR-DEC-006` - additive pure core and separate scene.
 - `RR-DEC-007` - fixed three-stage topology.
 - `RR-DEC-008` - fixed content budget; no accumulation beyond proof.
+- `RR-DEC-009` - preserve the contract smoke fixture as normal flow grows.
+- `RR-DEC-010` - isolated Rotten Run combat runtime; campaign actors remain unchanged.
 
 ## Local Traps
 

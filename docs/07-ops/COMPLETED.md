@@ -32,6 +32,27 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-11 - Rotten Run Deterministic Mode Shell Accepted
+
+**Type:** App / Product / QA / Ops
+**Source:** Codex builder + fresh blind critic
+**Related Files:**
+
+- `src/game/rotten/`
+- `src/game/scenes/RottenRunScene.ts`
+- `tests/unit/rotten-run-contract.test.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-001/`
+
+**Summary:**
+
+Added a separate, seed-addressable Rotten Run shell without changing campaign scenes. The same normalized seed now produces a stable three-stage, two-choice route plan and fixed boss plan ID; the title keeps Campaign on Enter and exposes Rotten Run on R; real keys choose routes through namespaced browser state. A fresh blind critic passed the live artifact at 1366×768 and 1920×1080, and the full browser matrix passes all 23 campaign routes plus the new Rotten Run contract route.
+
+**Follow-Ups:**
+
+- [ ] Add the bounded loadout and real two-wave Stage 1 combat leaf.
+- [ ] Preserve the stable `GAUNTLET-ALPHA` plan fixture and campaign matrix while advancing normal mode flow.
+
 ## 2026-08-11 - Rotten Run Gauntlet Launch Baseline Accepted
 
 **Type:** Ops / QA / Decision
