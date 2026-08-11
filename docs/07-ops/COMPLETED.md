@@ -32,6 +32,26 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-11 - Rotten Run Gauntlet Launch Baseline Accepted
+
+**Type:** Ops / QA / Decision
+**Source:** Codex
+**Related Files:**
+
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/RUN_RECEIPT.md`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/RUN_STATE.json`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/DECISION_REGISTRY.md`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/CONTEXT_PACKET.md`
+
+**Summary:**
+
+Created the exact bounded Gauntlet goal and token ceiling, verified clean local and remote-tracking heads at prepared commit `779f935`, reran the accepted campaign's full build and 23-route real-browser smoke matrix, and recorded the launch, recovery, decision, context, review, and token-control receipts. No Rotten Run implementation or public external action occurred before this checkpoint.
+
+**Follow-Ups:**
+
+- [ ] Freeze the deterministic seeded-run state contract and launch the first bounded implementation leaf.
+- [ ] Preserve all 23 accepted campaign routes at each promotion gate.
+
 ## 2026-08-08 - Sump Warrens Act 2 Closure And Dash Feedback Completed
 
 **Type:** App / Campaign / Gameplay / QA / Ops

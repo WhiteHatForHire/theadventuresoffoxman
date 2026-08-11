@@ -3,14 +3,22 @@
   "runId": "foxman-rotten-run-gauntlet-2026-08-11",
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
-  "status": "prepared",
-  "currentGate": "baseline-audit",
+  "status": "active",
+  "currentGate": "seeded-contract-audit",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 0,
-  "usageCoverage": "No goal or descendants launched at this checkpoint.",
+  "knownTokensUsed": 76883,
+  "usageCoverage": "Exact platform telemetry for the visible lead through launch checkpoint; no descendant launched yet.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
+  "nextAutonomousAuditAt": 25000000,
   "activeLeaf": null,
-  "updatedAt": "2026-08-11T03:54:07Z",
-  "nextSafeAction": "Visible lead creates the exact goal, audits the clean main baseline, records the baseline receipt, and decomposes the first playable-spine leaf."
+  "lastAcceptedCommit": "779f93571b22f4b7606328d82626719220e31ac9",
+  "baseline": {
+    "branch": "main",
+    "head": "779f93571b22f4b7606328d82626719220e31ac9",
+    "originHead": "779f93571b22f4b7606328d82626719220e31ac9",
+    "worktree": "clean",
+    "campaignBrowserRoutesPassed": 23
+  },
+  "updatedAt": "2026-08-11T04:09:00Z",
+  "nextSafeAction": "Audit the current gameplay architecture and write the deterministic seeded-run contract before launching LEAF-001."
 }
-

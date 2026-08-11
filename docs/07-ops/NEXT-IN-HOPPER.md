@@ -31,7 +31,7 @@ preserving the accepted campaign baseline.
 
 ## 1. Rotten Run Gauntlet
 
-**Status:** Active
+**Status:** Active — launch baseline accepted; deterministic seeded-run contract audit next
 **Priority:** P0
 **Type:** Product / Runtime / QA
 

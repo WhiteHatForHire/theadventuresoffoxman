@@ -10,13 +10,8 @@ Do not use this as the near-term execution list. Active work belongs in `NEXT-IN
 
 ## Product
 
-- Roguelite run structure.
-- Biome map with branching rooms.
 - NPC dialogue system for rude ambient chatter.
-- Boss encounters.
 - Meta progression.
-- Accessibility menu.
-- Settings menu.
 
 ## Design
 
@@ -30,12 +25,9 @@ Do not use this as the near-term execution list. Active work belongs in `NEXT-IN
 
 ## Engineering
 
-- Save system.
 - Level editor workflow.
 - Tiled map import.
 - Input remapping.
-- Audio mixer.
-- Replayable debug tools.
 - Performance profiler overlay.
 - Compress or further split large runtime art before demo release.
 - Convert in-app browser smoke paths into repeatable scripted browser tests.
@@ -44,7 +36,6 @@ Do not use this as the near-term execution list. Active work belongs in `NEXT-IN
 
 - Asset prompt batch runner if CLI fallback is explicitly approved.
 - Automated screenshot comparison for art regressions.
-- Automated playable smoke tests through browser tooling.
 - Sprite-sheet packing pipeline.
 
 ## Backend / Infra
