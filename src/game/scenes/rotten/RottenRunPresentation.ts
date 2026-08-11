@@ -33,20 +33,20 @@ export function createRottenArenaPresentation(
       646,
       GAME_WIDTH,
       148,
-      spec.stage === 2 ? 0x10200d : 0x09080a,
-      spec.stage === 2 ? 0.58 : 0.44,
+      spec.stage === 2 ? 0x10200d : spec.stage === 3 ? 0x2a0d14 : 0x09080a,
+      spec.stage === 2 ? 0.58 : spec.stage === 3 ? 0.62 : 0.44,
     ).setDepth(0.4),
   );
 
   addTrackedPlatform(scene, platforms, objects, GAME_WIDTH / 2, 650, GAME_WIDTH, 140, {
-    accent: spec.stage === 2 ? "ember" : "brass",
+    accent: spec.stage === 2 || spec.stage === 3 ? "ember" : "brass",
   });
   if (spec.stage === 1) {
     addTrackedPlatform(scene, platforms, objects, 690, 490, 300, 32, {
       accent: "audit",
       oneWay: true,
     });
-  } else {
+  } else if (spec.stage === 2) {
     addTrackedPlatform(scene, platforms, objects, 410, 466, 248, 30, {
       accent: "ember",
       oneWay: true,
@@ -71,6 +71,43 @@ export function createRottenArenaPresentation(
         color: "#a6d34a",
         align: "center",
         backgroundColor: "#161315aa",
+        padding: { x: 8, y: 5 },
+      }).setDepth(3),
+    );
+  } else {
+    addTrackedPlatform(scene, platforms, objects, 330, 470, 250, 30, {
+      accent: "brass",
+      oneWay: true,
+    });
+    addTrackedPlatform(scene, platforms, objects, 790, 420, 310, 30, {
+      accent: "ember",
+      oneWay: true,
+    });
+    addTrackedPlatform(scene, platforms, objects, 1_105, 500, 210, 30, {
+      accent: "audit",
+      oneWay: true,
+    });
+    const routeAccent = spec.routeId === "collection-parade"
+      ? 0xc59cff
+      : spec.routeId === "appeal-furnace"
+        ? 0xff8a68
+        : 0xf0c66f;
+    objects.push(
+      scene.add.rectangle(170, 330, 170, 440, 0x32131b, 0.3)
+        .setStrokeStyle(4, routeAccent, 0.28)
+        .setDepth(1.25),
+      scene.add.rectangle(1_118, 320, 196, 460, 0x32131b, 0.3)
+        .setStrokeStyle(4, routeAccent, 0.28)
+        .setDepth(1.25),
+      scene.add.rectangle(645, 565, 360, 18, routeAccent, 0.2)
+        .setStrokeStyle(3, routeAccent, 0.58)
+        .setDepth(2),
+      scene.add.text(1_002, 145, `FINAL FILING\n${spec.routeId.replaceAll("-", " ").toUpperCase()}`, {
+        fontFamily: "Menlo, Consolas, monospace",
+        fontSize: "13px",
+        color: `#${routeAccent.toString(16).padStart(6, "0")}`,
+        align: "center",
+        backgroundColor: "#161315bb",
         padding: { x: 8, y: 5 },
       }).setDepth(3),
     );
@@ -149,7 +186,8 @@ export function renderRottenRoutePresentation(
     const waves = spec
       ? `W1 ${spec.waves[0].map(({ roleId, eliteVariant }) =>
         `${roleId}${eliteVariant ? `(${eliteVariant})` : ""}`).join(" + ")}\n`
-        + `W2 ${spec.waves[1].map(({ roleId }) => roleId).join(" + ")}\n`
+        + `W2 ${spec.waves[1].map(({ roleId, eliteVariant }) =>
+          `${roleId}${eliteVariant ? `(${eliteVariant})` : ""}`).join(" + ")}\n`
       : "ENCOUNTER NOT OPERATIVE IN THIS LEAF\n";
     objects.push(scene.add.text(x + 20, cardY + 66,
       `${route.encounterSummary}\n\n${waves}`
@@ -174,7 +212,7 @@ export function renderRottenRoutePresentation(
 }
 
 export interface RottenMarketPresentationInput {
-  readonly stage: 1 | 2;
+  readonly stage: RottenStageNumber;
   readonly route: RottenRouteDefinition;
   readonly offers: readonly RottenUpgradeOffer[];
   readonly health: RottenHealthState;
@@ -250,6 +288,93 @@ export function renderRottenMarketPresentation(
       fontSize: "13px",
       color: input.feedback ? "#f0c66f" : "#d59776",
     }).setDepth(42));
+  return objects;
+}
+
+export interface RottenCommissionerDossierPresentationInput {
+  readonly seed: string;
+  readonly planId: string;
+  readonly bossName: string;
+  readonly activeMilliseconds: number;
+  readonly health: RottenHealthState;
+  readonly graft: number;
+  readonly loadout: string;
+  readonly routeHistory: string;
+  readonly marketHistory: string;
+  readonly upgrades: string;
+  readonly build: string;
+  readonly kills: number;
+  readonly eliteHistory: string;
+  readonly eliteBounty: number;
+  readonly traceDigest: string;
+}
+
+export function renderRottenCommissionerDossier(
+  scene: Phaser.Scene,
+  input: RottenCommissionerDossierPresentationInput,
+): Phaser.GameObjects.GameObject[] {
+  const objects: Phaser.GameObjects.GameObject[] = [];
+  objects.push(
+    scene.add.rectangle(GAME_WIDTH / 2, 398, 1_190, 548, 0x171319, 0.97)
+      .setStrokeStyle(4, 0xc59cff, 0.82)
+      .setDepth(35),
+    scene.add.text(70, 112, "COMMISSIONER OF CONSEQUENCES", {
+      fontFamily: "Georgia, serif",
+      fontSize: "33px",
+      color: "#f2e7bc",
+      stroke: "#161315",
+      strokeThickness: 6,
+    }).setDepth(42),
+    scene.add.text(70, 158, "FINAL DOSSIER SEALED — THE HEARING HAS NOT STARTED", {
+      fontFamily: "Menlo, Consolas, monospace",
+      fontSize: "14px",
+      color: "#c59cff",
+    }).setDepth(42),
+    scene.add.rectangle(70, 202, 558, 310, 0x241b22, 0.94)
+      .setOrigin(0, 0)
+      .setStrokeStyle(2, 0xb88a3b, 0.72)
+      .setDepth(38),
+    scene.add.rectangle(652, 202, 560, 310, 0x201b24, 0.94)
+      .setOrigin(0, 0)
+      .setStrokeStyle(2, 0xc59cff, 0.72)
+      .setDepth(38),
+    scene.add.text(92, 224,
+      `SEED  ${input.seed}\nPLAN  ${input.planId}\nACTIVE  ${input.activeMilliseconds}MS\n\n`
+      + `HP  ${input.health.current}/${input.health.max}    GRAFT  ${input.graft}\n`
+      + `LOADOUT  ${input.loadout}\n\n`
+      + `ROUTES\n${input.routeHistory}\n\nMARKETS\n${input.marketHistory}`, {
+        fontFamily: "Menlo, Consolas, monospace",
+        fontSize: "13px",
+        color: "#e4d6a2",
+        lineSpacing: 5,
+        wordWrap: { width: 514 },
+      }).setDepth(42),
+    scene.add.text(674, 224,
+      `CARRIED BUILD\n${input.upgrades}\n${input.build}\n\n`
+      + `DEFEATS  ${input.kills}\nELITES  ${input.eliteHistory}\n`
+      + `ELITE BOUNTY  ${input.eliteBounty} GRAFT\n\n`
+      + `TRACE  ${input.traceDigest}\nBOSS HEALTH  NOT CREATED\nBOSS PHASE  NOT STARTED`, {
+        fontFamily: "Menlo, Consolas, monospace",
+        fontSize: "13px",
+        color: "#dfc9e8",
+        lineSpacing: 6,
+        wordWrap: { width: 514 },
+      }).setDepth(42),
+    scene.add.text(GAME_WIDTH / 2, 570,
+      `${input.bossName.toUpperCase()} DOSSIER READY  •  NO BOSS ACTOR  •  NO RESULT RECORDED`, {
+        fontFamily: "Georgia, serif",
+        fontSize: "20px",
+        color: "#ffb06b",
+        align: "center",
+      }).setOrigin(0.5).setDepth(42),
+    scene.add.text(GAME_WIDTH / 2, 616,
+      "ROUTE, MARKET, ENTER, WEAPON, AND SKILL INPUTS ARE SEALED UNTIL THE HEARING OPENS.", {
+        fontFamily: "Menlo, Consolas, monospace",
+        fontSize: "12px",
+        color: "#a98f9f",
+        align: "center",
+      }).setOrigin(0.5).setDepth(42),
+  );
   return objects;
 }
 

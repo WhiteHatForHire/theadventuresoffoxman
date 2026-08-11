@@ -45,14 +45,14 @@ export type RottenMarketChoice =
   | RottenBankMarketChoice;
 
 export interface RottenRouteHistoryEntry {
-  readonly stage: 1 | 2;
+  readonly stage: RottenStageNumber;
   readonly routeId: RottenRouteId;
   readonly marketChoice: RottenMarketChoice | null;
 }
 
 export interface RottenMarketState {
   readonly status: "open" | "resolved";
-  readonly stage: 1 | 2;
+  readonly stage: RottenStageNumber;
   readonly routeId: RottenRouteId;
   readonly offers: readonly [RottenUpgradeOffer, RottenUpgradeOffer, RottenUpgradeOffer];
   readonly acceptedChoice: RottenMarketChoice | null;
@@ -77,12 +77,14 @@ export interface RottenPureRunState {
   readonly buildSummary: RottenBuildSummary;
   readonly routeHistory: readonly RottenRouteHistoryEntry[];
   readonly market: RottenMarketState | null;
+  readonly bossId: RottenRunPlan["finalBossId"] | null;
+  readonly bossDossierReady: boolean;
   readonly trace: readonly string[];
 }
 
 export interface CreateRottenRewardMarketInput {
   readonly plan: RottenRunPlan;
-  readonly stage: 1 | 2;
+  readonly stage: RottenStageNumber;
   readonly routeId: RottenRouteId;
   readonly weapon: RottenWeaponId;
   readonly skill: RottenSkillId;
@@ -134,6 +136,8 @@ export function createRottenRunBaseline(plan: RottenRunPlan): RottenPureRunState
     buildSummary: summarizeRottenBuild([]),
     routeHistory: [],
     market: null,
+    bossId: null,
+    bossDossierReady: false,
     trace: [`plan:${plan.planId}`],
   };
 }
@@ -217,6 +221,8 @@ export function createRottenRewardMarket({
       { stage, routeId, marketChoice: null },
     ],
     market,
+    bossId: null,
+    bossDossierReady: false,
     trace: [...trace, `offers:${offers.map(({ id }) => id).join(",")}`],
   };
 }
@@ -354,7 +360,9 @@ function accept(
       ? { ...entry, marketChoice: choice }
       : entry
   );
-  const nextStage = (market.stage + 1) as 2 | 3;
+  const entersBossDossier = market.stage === 3;
+  const nextStage = entersBossDossier ? 3 : (market.stage + 1) as 2 | 3;
+  const bossDossierEvent = `boss:${state.plan.finalBossId}:dossier-ready`;
 
   return {
     accepted: true,
@@ -362,16 +370,22 @@ function accept(
     feedback,
     state: {
       ...state,
-      phase: "route-choice",
+      phase: entersBossDossier ? "boss" : "route-choice",
       stage: nextStage,
-      routeOptions: routeIdsForStage(state.plan, nextStage),
+      routeOptions: entersBossDossier
+        ? state.routeOptions
+        : routeIdsForStage(state.plan, nextStage),
       health,
       graft,
       upgrades: [...upgrades],
       buildSummary: summarizeRottenBuild(upgrades),
       routeHistory,
       market,
-      trace: [...state.trace, traceEvent],
+      bossId: entersBossDossier ? state.plan.finalBossId : null,
+      bossDossierReady: entersBossDossier,
+      trace: entersBossDossier
+        ? [...state.trace, traceEvent, bossDossierEvent]
+        : [...state.trace, traceEvent],
     },
   };
 }
@@ -411,7 +425,7 @@ function routeIdsForStage(
 
 function validateRewardOpening(
   plan: RottenRunPlan,
-  stage: 1 | 2,
+  stage: RottenStageNumber,
   routeId: RottenRouteId,
   health: RottenHealthState,
   graft: number,

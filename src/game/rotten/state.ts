@@ -1,9 +1,16 @@
 import type { RottenBuildSummary } from "./build";
+import type { RottenEnemyRoleId } from "./enemyRoles";
 import type { RottenSkillId, RottenWeaponId, RottenWeaponStyle } from "./loadout";
 import type { RottenRouteId, RottenStageNumber } from "./routes";
 import type { RottenUpgradeId } from "./upgrades";
 
-export type RottenRunPhase = "loadout" | "route-choice" | "encounter" | "reward-choice" | "dead";
+export type RottenRunPhase =
+  | "loadout"
+  | "route-choice"
+  | "encounter"
+  | "reward-choice"
+  | "boss"
+  | "dead";
 
 export interface RottenRunDebugSnapshot {
   readonly scene: "RottenRunScene";
@@ -25,13 +32,18 @@ export interface RottenRunDebugSnapshot {
   readonly currentEliteCount: number;
   readonly eliteDefeatedCount: number;
   readonly eliteDefeatedVariants: readonly string[];
+  readonly eliteDefeatedRoles: readonly RottenEnemyRoleId[];
   readonly eliteBountyGraft: number;
   readonly eliteArmorBreakCount: number;
   readonly eliteEnrageCount: number;
   readonly bossHealth: null;
   readonly bossPhase: null;
+  readonly bossId: "commissioner-of-consequences" | null;
+  readonly bossDossierReady: boolean;
+  readonly bossObjectCount: number;
   readonly elapsedActiveMilliseconds: number;
   readonly result: null;
+  readonly killCount: number;
   readonly traceDigest: string;
   readonly wave: 0 | 1 | 2;
   readonly stageWavesCleared: number;
@@ -79,14 +91,14 @@ export interface RottenRunDebugSnapshot {
   readonly offerPrices: readonly number[];
   readonly healAvailable: boolean;
   readonly marketStatus: "" | "open" | "resolved";
-  readonly marketStage: 1 | 2 | null;
+  readonly marketStage: RottenStageNumber | null;
   readonly marketRoute: RottenRouteId | null;
   readonly marketChoice: string;
   readonly marketTraceEvent: string;
   readonly routeHistory: readonly string[];
   readonly rewardFeedback: string;
   readonly rewardFeedbackReason: string;
-  readonly rewardDecisionCount: 0 | 1 | 2;
+  readonly rewardDecisionCount: 0 | 1 | 2 | 3;
   readonly combatObjectCount: number;
   readonly canvasCount: number;
 }

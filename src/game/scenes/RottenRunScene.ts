@@ -32,10 +32,12 @@ import {
 } from "../rotten/market";
 import { buildRottenRunPlan, type RottenRunPlan } from "../rotten/plan";
 import type { RottenRouteDefinition } from "../rotten/routes";
+import type { RottenEnemyRoleId } from "../rotten/enemyRoles";
 import type { RottenRunDebugSnapshot, RottenRunPhase } from "../rotten/state";
 import { ROTTEN_UPGRADES, type RottenUpgradeOffer } from "../rotten/upgrades";
 import {
   createRottenArenaPresentation,
+  renderRottenCommissionerDossier,
   renderRottenMarketPresentation,
   renderRottenRoutePresentation,
 } from "./rotten/RottenRunPresentation";
@@ -73,6 +75,7 @@ export class RottenRunScene extends Phaser.Scene {
   private marketHealAutomationArmed = false;
   private poorMarketSmoke = false;
   private stageTwoDeathSmoke = false;
+  private stageThreeDeathSmoke = false;
   private reacquisitionSmoke = false;
   private reacquisitionSmokeStage = 0;
   private selectedWeapon: RottenWeaponId | null = null;
@@ -106,7 +109,13 @@ export class RottenRunScene extends Phaser.Scene {
   private rewardFeedbackReason: "" | RottenRewardDecisionResult["reason"] = "";
   private eliteBountyGraft = 0;
   private readonly defeatedEliteVariants: RottenEliteVariant[] = [];
+  private readonly defeatedEliteRoles: RottenEnemyRoleId[] = [];
+  private killCount = 0;
   private readonly keyboardBindings: Array<{ event: string; handler: () => void }> = [];
+  private numericKeyDownBinding?: (event: KeyboardEvent) => void;
+  private numericKeyUpBinding?: (event: KeyboardEvent) => void;
+  private readonly heldNumericKeys = new Set<number>();
+  private routeDocketAwaitingNumericRelease = false;
 
   constructor() {
     super("RottenRunScene");
@@ -122,6 +131,7 @@ export class RottenRunScene extends Phaser.Scene {
     this.marketHealAutomationArmed = false;
     this.poorMarketSmoke = false;
     this.stageTwoDeathSmoke = false;
+    this.stageThreeDeathSmoke = false;
     this.reacquisitionSmoke = false;
     this.reacquisitionSmokeStage = 0;
     this.selectedWeapon = null;
@@ -155,7 +165,10 @@ export class RottenRunScene extends Phaser.Scene {
     this.rewardFeedbackReason = "";
     this.eliteBountyGraft = 0;
     this.defeatedEliteVariants.length = 0;
+    this.defeatedEliteRoles.length = 0;
+    this.killCount = 0;
     this.keyboardBindings.length = 0;
+    this.clearNumericInputState();
   }
 
   create(): void {
@@ -166,15 +179,18 @@ export class RottenRunScene extends Phaser.Scene {
       || smoke === "rottenMarket"
       || smoke === "rottenMarketHeal"
       || smoke === "rottenMarketPoor"
-      || smoke?.startsWith("rottenStageTwo") === true;
+      || smoke?.startsWith("rottenStageTwo") === true
+      || smoke?.startsWith("rottenStageThree") === true;
     this.combatAutomationProfile = smoke === "rottenStageTwoRoles"
+      || smoke === "rottenStageThreeRoles"
       ? "role-proof"
-      : smoke === "rottenStageTwoBuilds"
+      : smoke === "rottenStageTwoBuilds" || smoke === "rottenStageThreeBuilds"
         ? "build-proof"
         : "clear";
     this.marketHealSmoke = smoke === "rottenMarketHeal";
     this.poorMarketSmoke = smoke === "rottenMarketPoor";
     this.stageTwoDeathSmoke = smoke === "rottenStageTwoRetry";
+    this.stageThreeDeathSmoke = smoke === "rottenStageThreeRetry";
     this.reacquisitionSmoke = smoke === "rottenReacquire";
     this.plan = buildRottenRunPlan(this.incomingSeed ?? query.get("seed") ?? undefined);
     this.pureState = createRottenRunBaseline(this.plan);
@@ -199,7 +215,8 @@ export class RottenRunScene extends Phaser.Scene {
     }
 
     const input = this.encounterSmoke
-      ? this.stageTwoDeathSmoke && this.selectedEncounter?.stage === 2
+      ? (this.stageTwoDeathSmoke && this.selectedEncounter?.stage === 2)
+        || (this.stageThreeDeathSmoke && this.selectedEncounter?.stage === 3 && this.wave === 2)
         ? ROTTEN_NEUTRAL_INPUT
         : this.marketHealSmoke && !this.marketHealAutomationArmed
         ? ROTTEN_NEUTRAL_INPUT
@@ -252,13 +269,48 @@ export class RottenRunScene extends Phaser.Scene {
   }
 
   private createKeyboardBindings(): void {
-    const keyNames = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN"];
-    keyNames.forEach((keyName, index) => {
-      this.bindKeyboard(`keydown-${keyName}`, () => this.handleNumber(index + 1));
-    });
+    this.createNumericKeyboardBindings();
     this.bindKeyboard("keydown-ENTER", () => this.confirmLoadout());
     this.bindKeyboard("keyup-R", () => this.retrySameSeed());
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdownSceneRuntime, this);
+  }
+
+  private createNumericKeyboardBindings(): void {
+    this.releaseNumericKeyboardBindings();
+    this.numericKeyDownBinding = (event) => {
+      const number = this.numberFromKeyboardEvent(event);
+      if (number !== null) {
+        this.handleNumericKeyDown(number, event);
+      }
+    };
+    this.numericKeyUpBinding = (event) => {
+      const number = this.numberFromKeyboardEvent(event);
+      if (number !== null) {
+        this.handleNumericKeyUp(number);
+      }
+    };
+    window.addEventListener("keydown", this.numericKeyDownBinding);
+    window.addEventListener("keyup", this.numericKeyUpBinding);
+  }
+
+  private numberFromKeyboardEvent(event: KeyboardEvent): number | null {
+    const match = /^Digit([1-7])$/.exec(event.code);
+    return match ? Number(match[1]) : null;
+  }
+
+  private handleNumericKeyDown(number: number, event: KeyboardEvent): void {
+    if (event.repeat || this.heldNumericKeys.has(number)) {
+      return;
+    }
+    this.heldNumericKeys.add(number);
+    this.handleNumber(number);
+  }
+
+  private handleNumericKeyUp(number: number): void {
+    this.heldNumericKeys.delete(number);
+    if (this.routeDocketAwaitingNumericRelease && this.heldNumericKeys.size === 0) {
+      this.routeDocketAwaitingNumericRelease = false;
+    }
   }
 
   private handleNumber(number: number): void {
@@ -286,7 +338,8 @@ export class RottenRunScene extends Phaser.Scene {
 
     if (
       this.phase === "route-choice"
-      && ((this.pureState?.stage ?? 1) === 1 || this.pureState?.stage === 2)
+      && !this.routeDocketAwaitingNumericRelease
+      && (this.pureState?.stage ?? 1) <= 3
       && (number === 1 || number === 2)
     ) {
       if (this.compatibilityMode) {
@@ -382,7 +435,7 @@ export class RottenRunScene extends Phaser.Scene {
     if (!stage) {
       throw new Error(`Rotten plan is missing Stage ${stageNumber}.`);
     }
-    const operative = stageNumber <= 2;
+    const operative = stageNumber <= 3;
     const specs = stage.options.map((route) =>
       operative ? getRottenEncounterSpec(this.plan.seed, route.id) : null
     ) as [RottenEncounterSpec | null, RottenEncounterSpec | null];
@@ -420,7 +473,7 @@ export class RottenRunScene extends Phaser.Scene {
       return;
     }
     const stageNumber = this.pureState?.stage ?? 1;
-    if (stageNumber > 2) {
+    if (stageNumber > 3) {
       return;
     }
     const stage = this.plan.stages.find((candidate) => candidate.stage === stageNumber);
@@ -473,12 +526,18 @@ export class RottenRunScene extends Phaser.Scene {
           this.eliteBountyGraft += graft;
           this.graft += graft;
           this.defeatedEliteVariants.push(variant);
+          const defeatedRole = this.selectedEncounter?.waves
+            .flat()
+            .find((spawn) => spawn.eliteVariant === variant)?.roleId;
+          if (defeatedRole) {
+            this.defeatedEliteRoles.push(defeatedRole);
+          }
         },
         onTrace: (event) => this.trace.push(event),
       },
       this.combatAutomationProfile,
     );
-    this.encounterStartedAt = this.time.now;
+    this.encounterStartedAt = this.time.now - this.elapsedActiveMilliseconds;
     this.stageWavesCleared = 0;
     this.wave = 1;
     this.spawnWave(1);
@@ -524,7 +583,9 @@ export class RottenRunScene extends Phaser.Scene {
     }
     const spawns = this.selectedEncounter.waves[wave - 1];
     const roles = spawns.map(({ roleId }) => roleId);
-    const waveKey = this.selectedEncounter.stage === 1 ? String(wave) : `2.${wave}`;
+    const waveKey = this.selectedEncounter.stage === 1
+      ? String(wave)
+      : `${this.selectedEncounter.stage}.${wave}`;
     this.spawnHistory.push(`${waveKey}:${roles.join(",")}`);
     this.combat.spawnWave(spawns, wave);
     this.wave = wave;
@@ -538,6 +599,7 @@ export class RottenRunScene extends Phaser.Scene {
     }
     this.wavesCleared += 1;
     this.stageWavesCleared += 1;
+    this.killCount += this.selectedEncounter?.waves[this.wave - 1].length ?? 0;
     this.lastCombatDebug = this.combat?.debugState(this.time.now);
     this.trace.push(`wave-${this.selectedEncounter?.stage ?? 1}.${this.wave}:cleared`);
     this.interwave = true;
@@ -578,7 +640,7 @@ export class RottenRunScene extends Phaser.Scene {
     }
     this.destroyEncounterPresentation();
     const clearedStage = this.selectedEncounter?.stage;
-    if (clearedStage !== 1 && clearedStage !== 2) {
+    if (clearedStage !== 1 && clearedStage !== 2 && clearedStage !== 3) {
       throw new Error("A Rotten reward requires a completed operative stage.");
     }
     this.graft += this.selectedRoute.graftReward;
@@ -641,7 +703,12 @@ export class RottenRunScene extends Phaser.Scene {
     this.selectedRoute = null;
     this.selectedEncounter = undefined;
     this.combatBuild = undefined;
-    this.renderCurrentRouteDocket(false);
+    this.routeDocketAwaitingNumericRelease = this.phase === "route-choice";
+    if (this.phase === "boss") {
+      this.renderCommissionerDossier();
+    } else {
+      this.renderCurrentRouteDocket(false);
+    }
     this.publishSnapshot();
   }
 
@@ -677,6 +744,58 @@ export class RottenRunScene extends Phaser.Scene {
       + `ROUTES  ${history}\n`
       + `OWNED  ${upgrades}  •  BUILD HP+${build.maxHealthBonus} / HEAL ${build.healPerClearedWave} / DISCOUNT ${build.marketDiscount}`
       + `  •  ELITE BOUNTY ${this.eliteBountyGraft} (${this.defeatedEliteVariants.join(",") || "none"})`;
+  }
+
+  private renderCommissionerDossier(): void {
+    this.clearPhaseUi();
+    const state = this.pureState;
+    if (
+      !state?.bossDossierReady
+      || state.phase !== "boss"
+      || !state.bossId
+      || !state.health
+      || !state.weapon
+      || !state.skill
+    ) {
+      throw new Error("The Commissioner dossier requires a complete carried boss boundary.");
+    }
+    const routeHistory = state.routeHistory
+      .map(({ stage, routeId }) => `S${stage} ${routeId}`)
+      .join("  •  ");
+    const marketHistory = state.routeHistory
+      .map(({ stage, marketChoice }) => `S${stage} ${describeRottenMarketChoice(marketChoice)}`)
+      .join("  •  ");
+    const upgrades = state.upgrades.length > 0
+      ? state.upgrades.map((id) => ROTTEN_UPGRADES[id].name).join(", ")
+      : "No upgrades purchased";
+    const build = state.buildSummary;
+    const buildTruth = `HP+${build.maxHealthBonus}  WAVE HEAL ${build.healPerClearedWave}  `
+      + `DISCOUNT ${build.marketDiscount}  PATTERN ${build.weaponPatternRepeatOrPierce ? "MODIFIED" : "BASE"}`;
+    const traceDigest = hashDeterministicText(this.trace.join("|"))
+      .toString(16)
+      .padStart(8, "0")
+      .toUpperCase();
+    const eliteHistory = this.defeatedEliteVariants.length > 0
+      ? this.defeatedEliteVariants.map((variant, index) =>
+        `${this.defeatedEliteRoles[index] ?? "unknown"}(${variant})`).join(", ")
+      : "none";
+    this.phaseObjects.push(...renderRottenCommissionerDossier(this, {
+      seed: state.seed,
+      planId: state.planId,
+      bossName: state.bossId.replaceAll("-", " "),
+      activeMilliseconds: this.elapsedActiveMilliseconds,
+      health: state.health,
+      graft: state.graft,
+      loadout: `${ROTTEN_WEAPONS[state.weapon].name} + ${ROTTEN_SKILLS[state.skill].name}`,
+      routeHistory,
+      marketHistory,
+      upgrades,
+      build: buildTruth,
+      kills: this.killCount,
+      eliteHistory,
+      eliteBounty: this.eliteBountyGraft,
+      traceDigest,
+    }));
   }
 
   private enterDeadState(): void {
@@ -746,6 +865,9 @@ export class RottenRunScene extends Phaser.Scene {
     this.rewardFeedbackReason = "";
     this.eliteBountyGraft = 0;
     this.defeatedEliteVariants.length = 0;
+    this.defeatedEliteRoles.length = 0;
+    this.killCount = 0;
+    this.clearNumericInputState();
     this.renderLoadout();
     this.publishSnapshot();
   }
@@ -808,13 +930,18 @@ export class RottenRunScene extends Phaser.Scene {
       currentEliteCount: debug?.currentEliteCount ?? 0,
       eliteDefeatedCount: debug?.eliteDefeatedCount ?? this.defeatedEliteVariants.length,
       eliteDefeatedVariants: debug?.eliteDefeatedVariants ?? [...this.defeatedEliteVariants],
+      eliteDefeatedRoles: [...this.defeatedEliteRoles],
       eliteBountyGraft: this.eliteBountyGraft,
       eliteArmorBreakCount: debug?.eliteArmorBreakCount ?? 0,
       eliteEnrageCount: debug?.eliteEnrageCount ?? 0,
       bossHealth: null,
       bossPhase: null,
+      bossId: pureState.bossId,
+      bossDossierReady: pureState.bossDossierReady,
+      bossObjectCount: 0,
       elapsedActiveMilliseconds: this.elapsedActiveMilliseconds,
       result: null,
+      killCount: this.killCount,
       traceDigest,
       wave: this.wave,
       stageWavesCleared: this.stageWavesCleared,
@@ -901,9 +1028,9 @@ export class RottenRunScene extends Phaser.Scene {
       rewardFeedback: this.rewardFeedback,
       rewardFeedbackReason: this.rewardFeedbackReason,
       rewardDecisionCount: Math.min(
-        2,
+        3,
         pureState.routeHistory.filter(({ marketChoice: choice }) => Boolean(choice)).length,
-      ) as 0 | 1 | 2,
+      ) as 0 | 1 | 2 | 3,
       combatObjectCount:
         (this.combat ? debug?.combatObjectCount ?? 0 : 0) + this.countEncounterPresentationObjects(),
       canvasCount: document.querySelectorAll("canvas").length,
@@ -928,13 +1055,18 @@ export class RottenRunScene extends Phaser.Scene {
     document.body.dataset.rottenCurrentEliteCount = String(snapshot.currentEliteCount);
     document.body.dataset.rottenEliteDefeatedCount = String(snapshot.eliteDefeatedCount);
     document.body.dataset.rottenEliteDefeatedVariants = snapshot.eliteDefeatedVariants.join("|");
+    document.body.dataset.rottenEliteDefeatedRoles = snapshot.eliteDefeatedRoles.join("|");
     document.body.dataset.rottenEliteBountyGraft = String(snapshot.eliteBountyGraft);
     document.body.dataset.rottenEliteArmorBreakCount = String(snapshot.eliteArmorBreakCount);
     document.body.dataset.rottenEliteEnrageCount = String(snapshot.eliteEnrageCount);
     document.body.dataset.rottenBossHealth = snapshot.bossHealth ?? "";
     document.body.dataset.rottenBossPhase = snapshot.bossPhase ?? "";
+    document.body.dataset.rottenBossId = snapshot.bossId ?? "";
+    document.body.dataset.rottenBossDossierReady = String(snapshot.bossDossierReady);
+    document.body.dataset.rottenBossObjectCount = String(snapshot.bossObjectCount);
     document.body.dataset.rottenElapsedActiveMilliseconds = String(snapshot.elapsedActiveMilliseconds);
     document.body.dataset.rottenResult = snapshot.result ?? "";
+    document.body.dataset.rottenKillCount = String(snapshot.killCount);
     document.body.dataset.rottenTraceDigest = snapshot.traceDigest;
     document.body.dataset.rottenWave = String(snapshot.wave);
     document.body.dataset.rottenStageWavesCleared = String(snapshot.stageWavesCleared);
@@ -1028,6 +1160,22 @@ export class RottenRunScene extends Phaser.Scene {
     this.input.keyboard?.on(event, handler);
   }
 
+  private clearNumericInputState(): void {
+    this.heldNumericKeys.clear();
+    this.routeDocketAwaitingNumericRelease = false;
+  }
+
+  private releaseNumericKeyboardBindings(): void {
+    if (this.numericKeyDownBinding) {
+      window.removeEventListener("keydown", this.numericKeyDownBinding);
+      this.numericKeyDownBinding = undefined;
+    }
+    if (this.numericKeyUpBinding) {
+      window.removeEventListener("keyup", this.numericKeyUpBinding);
+      this.numericKeyUpBinding = undefined;
+    }
+  }
+
   private releaseKeyboardBindings(): void {
     for (const { event, handler } of this.keyboardBindings) {
       this.input.keyboard?.off(event, handler);
@@ -1037,6 +1185,8 @@ export class RottenRunScene extends Phaser.Scene {
 
   private shutdownSceneRuntime(): void {
     this.releaseKeyboardBindings();
+    this.releaseNumericKeyboardBindings();
+    this.clearNumericInputState();
     this.combat?.destroy();
     this.combat = undefined;
     this.destroyEncounterPresentation();

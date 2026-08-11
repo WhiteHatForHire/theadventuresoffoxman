@@ -1269,54 +1269,7 @@ async function smokeRottenStageTwoMarket(browser) {
   );
   await healPage.close();
 
-  const bankPage = await browser.open(
-    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoMarket",
-    { viewport: { width: 1366, height: 768 } },
-  );
-  await bankPage.waitForDataset("rottenPhase", "loadout");
-  await enterRottenStageTwo(bankPage, {
-    label: "Stage 2 bank",
-    weaponKey: "3",
-    skillKey: "6",
-    stageOneRouteKey: "2",
-    stageOneMarketKey: "1",
-    stageTwoRouteKey: "1",
-  });
-  const bankBefore = await waitForOpenRottenStageTwoMarket(bankPage, "Stage 2 bank");
-  assertEqual(bankBefore.rottenGraft, "5", "Stage 2 bank purse after Stage 1 purchase");
-  assertEqual(bankBefore.rottenUpgrades, "dead-letter", "Stage 2 bank carried upgrade");
-  assertEqual(
-    bankBefore.rottenOfferIds,
-    "counterfeit-soles|compound-interest|petty-grudge",
-    "Stage 2 bank ownership-excluding offers",
-  );
-  assertEqual(bankBefore.rottenOfferPrices, "4|6|5", "Stage 2 bank offer prices");
-  const bankTruth = pickDataset(bankBefore, rottenStageTwoMarketTruthKeys());
-  await bankPage.key("2");
-  await bankPage.waitForDataset("rottenRewardFeedbackReason", "unaffordable", 2_000);
-  const unaffordable = await bankPage.dataset(rottenStageTwoMarketTruthKeys());
-  assertDeepEqual(
-    pickDataset(unaffordable, rottenStageTwoMarketTruthKeys()),
-    bankTruth,
-    "Stage 2 unaffordable purchase strict no-op",
-  );
-  await bankPage.key("5");
-  await bankPage.waitForDataset("rottenStage", "3", 5_000);
-  const bank = await assertRottenStageThreeDocket(bankPage, {
-    label: "Stage 2 bank",
-    expectedRoutes: "collection-parade|garnish-gallery",
-    expectedHistory: "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:bank",
-    evidence: "rotten-stage-three-after-bank-1366x768.png",
-  });
-  assertEqual(bank.rottenGraft, "5", "Stage 2 bank preserves purse");
-  assertEqual(bank.rottenUpgrades, "dead-letter", "Stage 2 bank preserves ownership");
-  assertEqual(bank.rottenMarketChoice, "bank", "Stage 2 bank choice");
-  assertEqual(
-    bank.rottenMarketTraceEvent,
-    "market:2:seized-goods-lift:bank:spent-0",
-    "Stage 2 bank trace",
-  );
-  await bankPage.close();
+  const bankBoundary = await smokeRottenStageTwoMarketBoundary(browser);
 
   const fullPage = await browser.open(
     "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageTwoMarket",
@@ -1361,9 +1314,169 @@ async function smokeRottenStageTwoMarket(browser) {
     route: "Rotten Stage 2 purchase, heal, bank, no-ops, and inert Stage 3 docket",
     purchase: { before: purchaseBefore, invalid: purchaseInvalid, after: purchase },
     heal: { before: healBefore, after: heal },
-    bank: { before: bankBefore, unaffordable, after: bank },
+    bank: {
+      before: bankBoundary.before,
+      unaffordable: bankBoundary.unaffordable,
+      keyLedger: bankBoundary.keyLedger,
+      docketHold: bankBoundary.docketHold,
+      after: bankBoundary.after,
+    },
     fullHealth: { before: fullBefore, rejected: fullHealth, after: fullBank },
   };
+}
+
+async function smokeRottenStageTwoMarketBoundary(browser) {
+  const page = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageTwoMarket",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await page.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageTwo(page, {
+    label: "Stage 2 bank",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "1",
+    stageTwoRouteKey: "1",
+  });
+  const before = await waitForOpenRottenStageTwoMarket(page, "Stage 2 bank");
+  assertEqual(before.rottenGraft, "5", "Stage 2 bank purse after Stage 1 purchase");
+  assertEqual(before.rottenUpgrades, "dead-letter", "Stage 2 bank carried upgrade");
+  assertEqual(
+    before.rottenOfferIds,
+    "counterfeit-soles|compound-interest|petty-grudge",
+    "Stage 2 bank ownership-excluding offers",
+  );
+  assertEqual(before.rottenOfferPrices, "4|6|5", "Stage 2 bank offer prices");
+  const bankTruth = pickDataset(before, rottenStageTwoMarketTruthKeys());
+  await installRottenNumericKeyLedger(page);
+  await page.key("2");
+  await page.waitForDataset("rottenRewardFeedbackReason", "unaffordable", 2_000);
+  const unaffordable = await page.dataset(rottenStageTwoMarketTruthKeys());
+  assertDeepEqual(
+    pickDataset(unaffordable, rottenStageTwoMarketTruthKeys()),
+    bankTruth,
+    "Stage 2 unaffordable purchase strict no-op",
+  );
+  await page.key("5");
+  await page.waitForDataset("rottenStage", "3", 5_000);
+  const expectedKeyLedger = [
+    { type: "keydown", key: "2", code: "Digit2", repeat: false },
+    { type: "keyup", key: "2", code: "Digit2", repeat: false },
+    { type: "keydown", key: "5", code: "Digit5", repeat: false },
+    { type: "keyup", key: "5", code: "Digit5", repeat: false },
+  ];
+  const keyLedger = await readRottenNumericKeyLedger(page);
+  assertDeepEqual(
+    keyLedger,
+    expectedKeyLedger,
+    "Stage 2 rejected 2 and bank 5 exact non-repeating DOM key ledger",
+  );
+  const docketHold = await holdRottenStageThreeDocketWithoutInput(page, {
+    label: "Stage 2 rejected 2 then bank 5",
+    durationMs: 2_200,
+  });
+  const keyLedgerAfterHold = await readRottenNumericKeyLedger(page);
+  assertDeepEqual(
+    keyLedgerAfterHold,
+    expectedKeyLedger,
+    "Stage 2 bank docket hold received no new route key",
+  );
+  const after = await assertRottenStageThreeDocket(page, {
+    label: "Stage 2 bank",
+    expectedRoutes: "collection-parade|garnish-gallery",
+    expectedHistory: "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:bank",
+    evidence: "rotten-stage-three-after-bank-1366x768.png",
+  });
+  assertEqual(after.rottenGraft, "5", "Stage 2 bank preserves purse");
+  assertEqual(after.rottenUpgrades, "dead-letter", "Stage 2 bank preserves ownership");
+  assertEqual(after.rottenMarketChoice, "bank", "Stage 2 bank choice");
+  assertEqual(
+    after.rottenMarketTraceEvent,
+    "market:2:seized-goods-lift:bank:spent-0",
+    "Stage 2 bank trace",
+  );
+  await page.key("1");
+  await page.waitForDataset("rottenPhase", "encounter", 2_000);
+  const releasedRoute = await page.dataset([
+    "rottenPhase",
+    "rottenStage",
+    "rottenSelectedRoute",
+    "rottenLivingEnemies",
+    "rottenCombatObjectCount",
+  ]);
+  assertEqual(releasedRoute.rottenStage, "3", "Stage 2 bank released key enters Stage 3");
+  assertEqual(
+    releasedRoute.rottenSelectedRoute,
+    "collection-parade",
+    "Stage 2 bank released key selects exactly one intended route",
+  );
+  assertAtLeastNumber(
+    releasedRoute.rottenCombatObjectCount,
+    1,
+    "Stage 2 bank released key creates the intended encounter",
+  );
+  await page.close();
+
+  return {
+    route: "Rotten Stage 2 rejected-key to bank to inert Stage 3 docket boundary",
+    before,
+    unaffordable,
+    keyLedger: keyLedgerAfterHold,
+    docketHold,
+    after,
+    releasedRoute,
+  };
+}
+
+async function installRottenNumericKeyLedger(page) {
+  await page.evaluate(`(() => {
+    const ledger = [];
+    window.__FOXMAN_ROTTEN_NUMERIC_KEY_LEDGER__ = ledger;
+    const record = (event) => {
+      if (!/^Digit[1-7]$/.test(event.code)) return;
+      ledger.push({
+        type: event.type,
+        key: event.key,
+        code: event.code,
+        repeat: event.repeat,
+      });
+    };
+    window.addEventListener("keydown", record, true);
+    window.addEventListener("keyup", record, true);
+    return true;
+  })()`);
+}
+
+async function readRottenNumericKeyLedger(page) {
+  return page.evaluate(`(() => (
+    window.__FOXMAN_ROTTEN_NUMERIC_KEY_LEDGER__ ?? []
+  ).map((entry) => ({ ...entry })))()`);
+}
+
+async function holdRottenStageThreeDocketWithoutInput(page, { label, durationMs }) {
+  const startedAt = Date.now();
+  let samples = 0;
+  let state;
+  while (Date.now() - startedAt < durationMs) {
+    state = await page.dataset([
+      "rottenPhase",
+      "rottenStage",
+      "rottenSelectedRoute",
+      "rottenLivingEnemies",
+      "rottenCombatObjectCount",
+      "canvasCount",
+    ]);
+    assertEqual(state.rottenPhase, "route-choice", `${label} held phase`);
+    assertEqual(state.rottenStage, "3", `${label} held stage`);
+    assertEqual(state.rottenSelectedRoute, "", `${label} held route selection`);
+    assertEqual(state.rottenLivingEnemies, "0", `${label} held living enemies`);
+    assertEqual(state.rottenCombatObjectCount, "0", `${label} held combat objects`);
+    assertEqual(state.canvasCount, 1, `${label} held canvas`);
+    samples += 1;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  return { durationMs: Date.now() - startedAt, samples, state };
 }
 
 function rottenStageTwoMarketTruthKeys() {
@@ -1405,7 +1518,16 @@ async function assertRottenStageThreeDocket(page, {
   expectedHistory,
   evidence,
 }) {
-  await page.waitForDataset("rottenPhase", "route-choice", 2_000);
+  try {
+    await page.waitForDataset("rottenPhase", "route-choice", 2_000);
+  } catch (error) {
+    const stalled = await page.dataset([
+      ...rottenStageTwoMarketTruthKeys(),
+      "rottenRewardFeedback",
+      "rottenRewardFeedbackReason",
+    ]);
+    throw new Error(`${label} did not hold the Stage 3 docket: ${JSON.stringify(stalled)}; ${error}`);
+  }
   await new Promise((resolve) => setTimeout(resolve, 180));
   const state = await page.dataset([
     ...rottenStageTwoMarketTruthKeys(),
@@ -1431,7 +1553,7 @@ async function assertRottenStageThreeDocket(page, {
     "rottenRewardFeedback",
     "rottenRewardFeedbackReason",
   ]);
-  for (const key of ["1", "2", "5"]) {
+  for (const key of ["4", "5"]) {
     await page.key(key);
   }
   await new Promise((resolve) => setTimeout(resolve, 180));
@@ -1447,7 +1569,7 @@ async function assertRottenStageThreeDocket(page, {
       "rottenRewardFeedbackReason",
     ]),
     inertTruth,
-    `${label} repeated and late Stage 3 inputs are inert`,
+    `${label} late resolved-market inputs are inert at the operative Stage 3 docket`,
   );
   return afterLateInput;
 }
@@ -1573,6 +1695,1037 @@ async function smokeRottenStageTwoRetry(browser) {
 
   return {
     route: "Rotten Stage 2 actual death to one-key same-seed clean retry",
+    initial,
+    entered,
+    dead,
+    retried,
+  };
+}
+
+async function enterRottenStageThree(page, {
+  label = "Stage 3 helper",
+  weaponKey,
+  skillKey,
+  stageOneRouteKey,
+  stageOneMarketKey,
+  stageTwoRouteKey,
+  stageTwoMarketKey,
+  stageThreeRouteKey,
+}) {
+  await enterRottenStageTwo(page, {
+    label,
+    weaponKey,
+    skillKey,
+    stageOneRouteKey,
+    stageOneMarketKey,
+    stageTwoRouteKey,
+  });
+  try {
+    await page.waitForDataset("rottenPhase", "reward-choice", 50_000);
+    await page.waitForDataset("rottenStage", "2", 2_000);
+  } catch (error) {
+    const stalled = await page.dataset(rottenStageThreeTruthKeys());
+    throw new Error(`${label} did not reach the second market: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 340));
+  const secondMarket = await page.dataset(rottenStageThreeTruthKeys());
+  assertEqual(secondMarket.rottenMarketStage, "2", `${label} second market stage`);
+  assertEqual(secondMarket.rottenRewardDecisionCount, "1", `${label} first decision carry`);
+  assertEqual(secondMarket.rottenCombatObjectCount, "0", `${label} second market cleanup`);
+  const resolvedStageTwoMarketKey = stageTwoMarketKey === "heal-or-bank"
+    ? secondMarket.rottenHealAvailable === "true" ? "4" : "5"
+    : stageTwoMarketKey;
+  await page.key(resolvedStageTwoMarketKey);
+  await page.waitForDataset("rottenStage", "3", 5_000);
+  await page.waitForDataset("rottenPhase", "route-choice", 5_000);
+  const docket = await page.dataset(rottenStageThreeTruthKeys());
+  assertEqual(docket.rottenRewardDecisionCount, "2", `${label} second decision carry`);
+  assertEqual(docket.rottenCombatObjectCount, "0", `${label} Stage 3 docket cleanup`);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  await page.key(stageThreeRouteKey);
+  await page.waitForDataset("rottenPhase", "encounter", 5_000);
+  await page.waitForDataset("rottenStage", "3", 5_000);
+  return { secondMarket, docket, resolvedStageTwoMarketKey };
+}
+
+function rottenStageThreeTruthKeys() {
+  return [
+    ...rottenStageTwoMarketTruthKeys(),
+    "rottenKillCount",
+    "rottenEnemyStates",
+    "rottenEnemyGeometry",
+    "rottenEnemyReacquisition",
+    "rottenStageWavesCleared",
+    "rottenEliteCount",
+    "rottenCurrentEliteCount",
+    "rottenEliteDefeatedCount",
+    "rottenEliteDefeatedRoles",
+    "rottenBossId",
+    "rottenBossDossierReady",
+    "rottenBossObjectCount",
+    "rottenBossHealth",
+    "rottenBossPhase",
+    "rottenElapsedActiveMilliseconds",
+    "rottenResult",
+  ];
+}
+
+async function smokeRottenStageThreeTopology(browser) {
+  const cases = [
+    {
+      seed: "GAUNTLET-ALPHA",
+      planId: "RR1-1C93B57F",
+      stageOneRouteKey: "2",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "1",
+      stageTwoRoute: "seized-goods-lift",
+      stageThreeRouteKey: "1",
+      stageThreeRoute: "collection-parade",
+      stageThreeOptions: "collection-parade|garnish-gallery",
+      waves: [
+        "3.1:clerk,writ-runner,shield-auditor",
+        "3.2:writ-runner,bailiff,sump-scribe",
+      ],
+      graft: "21",
+      eliteCount: "2",
+      eliteVariants: "gilded|overdue",
+      eliteRoles: "clerk|writ-runner",
+      kills: "15",
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-stage-three-collection-live-1366x768.png",
+    },
+    {
+      seed: "GAUNTLET-ALPHA",
+      planId: "RR1-1C93B57F",
+      stageOneRouteKey: "2",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "1",
+      stageTwoRoute: "seized-goods-lift",
+      stageThreeRouteKey: "2",
+      stageThreeRoute: "garnish-gallery",
+      stageThreeOptions: "collection-parade|garnish-gallery",
+      waves: [
+        "3.1:clerk,writ-runner",
+        "3.2:clerk,sump-scribe,shield-auditor",
+      ],
+      graft: "18",
+      eliteCount: "0",
+      eliteVariants: "",
+      eliteRoles: "",
+      kills: "14",
+      viewport: { width: 1920, height: 1080 },
+      evidence: "rotten-stage-three-garnish-live-1920x1080.png",
+    },
+    {
+      seed: "BILE-PROOF",
+      planId: "RR1-91887DBF",
+      stageOneRouteKey: "1",
+      stageOneRoute: "bailiffs-ramp",
+      stageTwoRouteKey: "2",
+      stageTwoRoute: "bile-registry",
+      stageThreeRouteKey: "1",
+      stageThreeRoute: "appeal-furnace",
+      stageThreeOptions: "appeal-furnace|collection-parade",
+      waves: [
+        "3.1:sump-scribe,bailiff",
+        "3.2:sump-scribe,clerk,shield-auditor",
+      ],
+      graft: "18",
+      eliteCount: "0",
+      eliteVariants: "",
+      eliteRoles: "",
+      kills: "14",
+      viewport: { width: 1366, height: 768 },
+      evidence: "rotten-stage-three-appeal-live-1366x768.png",
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageThreeTopology`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    await enterRottenStageThree(page, {
+      label: testCase.stageThreeRoute,
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: "5",
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+      stageTwoMarketKey: "5",
+      stageThreeRouteKey: testCase.stageThreeRouteKey,
+    });
+    const entered = await page.dataset(rottenStageThreeTruthKeys());
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.stageThreeRoute} plan`);
+    assertEqual(entered.rottenRouteOptions, testCase.stageThreeOptions, `${testCase.stageThreeRoute} options`);
+    assertEqual(entered.rottenSelectedRoute, testCase.stageThreeRoute, `${testCase.stageThreeRoute} real key`);
+    if (!String(entered.rottenSpawnHistory).includes(testCase.waves[0])) {
+      throw new Error(`${testCase.stageThreeRoute} missing first roster: ${entered.rottenSpawnHistory}`);
+    }
+    if (Number(entered.rottenCombatObjectCount) <= 0) {
+      throw new Error(`${testCase.stageThreeRoute} did not own live combat objects`);
+    }
+    await assertNoMissingTextureGreen(page, `${testCase.stageThreeRoute} live arena`);
+    await captureEvidence(page, testCase.evidence);
+
+    await page.waitForDataset("rottenPhase", "reward-choice", 55_000);
+    const reward = await page.dataset(rottenStageThreeTruthKeys());
+    assertEqual(reward.rottenStageWavesCleared, "2", `${testCase.stageThreeRoute} stage waves`);
+    assertEqual(reward.rottenWavesCleared, "6", `${testCase.stageThreeRoute} cumulative waves`);
+    for (const roster of testCase.waves) {
+      if (!String(reward.rottenSpawnHistory).includes(roster)) {
+        throw new Error(`${testCase.stageThreeRoute} missing frozen roster ${roster}`);
+      }
+    }
+    assertEqual(reward.rottenGraft, testCase.graft, `${testCase.stageThreeRoute} graft`);
+    assertEqual(reward.rottenEliteCount, testCase.eliteCount, `${testCase.stageThreeRoute} elite count`);
+    assertEqual(reward.rottenEliteDefeatedVariants, testCase.eliteVariants, `${testCase.stageThreeRoute} elite variants`);
+    assertEqual(reward.rottenEliteDefeatedRoles, testCase.eliteRoles, `${testCase.stageThreeRoute} elite roles`);
+    assertEqual(reward.rottenKillCount, testCase.kills, `${testCase.stageThreeRoute} kill count`);
+    assertEqual(reward.rottenRewardDecisionCount, "2", `${testCase.stageThreeRoute} prior decisions`);
+    assertEqual(reward.rottenMarketStage, "3", `${testCase.stageThreeRoute} third market`);
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.stageThreeRoute} reward cleanup`);
+    assertEqual(reward.rottenBossObjectCount, "0", `${testCase.stageThreeRoute} no boss object`);
+    assertEqual(reward.canvasCount, 1, `${testCase.stageThreeRoute} one canvas`);
+    if (!String(reward.rottenRouteHistory).endsWith(`3:${testCase.stageThreeRoute}:pending`)) {
+      throw new Error(`${testCase.stageThreeRoute} pending third history mismatch: ${reward.rottenRouteHistory}`);
+    }
+    await captureEvidence(
+      page,
+      `rotten-stage-three-${testCase.stageThreeRoute}-market-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+    await page.close();
+    results.push({ ...testCase, entered, reward });
+  }
+
+  return { route: "Rotten Stage 3 all frozen route topologies", cases: results };
+}
+
+async function smokeRottenStageThreeElites(browser) {
+  const cases = [
+    {
+      label: "Collection double elite",
+      seed: "GAUNTLET-ALPHA",
+      planId: "RR1-1C93B57F",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "5",
+      stageTwoRouteKey: "1",
+      stageTwoMarketKey: "5",
+      stageThreeRouteKey: "1",
+      expectedRoles: ["clerk", "writ-runner"],
+      expectedVariants: ["gilded", "overdue"],
+      enteredGraft: "12",
+      rewardGraft: "21",
+      enteredBounty: "0",
+      rewardBounty: "2",
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      label: "Collection Graft Dividend",
+      seed: "DIVIDEND-CHAPEL-1",
+      planId: "RR1-D66285FF",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "1",
+      stageTwoMarketKey: "5",
+      stageThreeRouteKey: "2",
+      expectedRoles: ["clerk", "bailiff"],
+      expectedVariants: ["gilded", "overdue"],
+      enteredGraft: "9",
+      rewardGraft: "20",
+      enteredBounty: "2",
+      rewardBounty: "6",
+      viewport: { width: 1920, height: 1080 },
+      dividend: true,
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageThreeElites`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    await enterRottenStageThree(page, {
+      label: testCase.label,
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: testCase.stageOneMarketKey,
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+      stageTwoMarketKey: testCase.stageTwoMarketKey,
+      stageThreeRouteKey: testCase.stageThreeRouteKey,
+    });
+    await installRottenEliteLatch(page);
+    const entered = await page.dataset(rottenStageThreeTruthKeys());
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.label} plan`);
+    assertEqual(entered.rottenSelectedRoute, "collection-parade", `${testCase.label} route`);
+    assertEqual(entered.rottenGraft, testCase.enteredGraft, `${testCase.label} entered graft`);
+    assertEqual(entered.rottenEliteBountyGraft, testCase.enteredBounty, `${testCase.label} prior bounty`);
+    assertEqual(entered.rottenCurrentEliteCount, "1", `${testCase.label} one Wave 1 elite`);
+    if (!String(entered.rottenEnemyStates).includes(`:${testCase.expectedVariants[0]}:`)) {
+      throw new Error(`${testCase.label} missing Wave 1 elite treatment: ${entered.rottenEnemyStates}`);
+    }
+    await captureEvidence(
+      page,
+      `rotten-stage-three-collection-wave1-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+
+    await waitFor(async () => {
+      const state = await page.dataset(["rottenPhase", "rottenSpawnHistory", "rottenEnemyStates"]);
+      return state.rottenPhase === "encounter"
+        && String(state.rottenSpawnHistory).includes("3.2:")
+        && String(state.rottenEnemyStates).includes(`:${testCase.expectedVariants[1]}:`);
+    }, 35_000, 40);
+    await captureEvidence(
+      page,
+      `rotten-stage-three-collection-wave2-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+    await page.waitForDataset("rottenPhase", "reward-choice", 55_000);
+    const observation = await readRottenEliteLatch(page);
+    const reward = await page.dataset([
+      ...rottenStageThreeTruthKeys(),
+      "rottenEliteArmorBreakCount",
+      "rottenEliteEnrageCount",
+    ]);
+    assertEqual(reward.rottenGraft, testCase.rewardGraft, `${testCase.label} reward graft`);
+    assertEqual(reward.rottenEliteCount, "2", `${testCase.label} exact Stage 3 elites`);
+    assertEqual(reward.rottenEliteDefeatedCount, "2", `${testCase.label} exact defeats`);
+    assertEqual(
+      reward.rottenEliteDefeatedVariants,
+      testCase.expectedVariants.join("|"),
+      `${testCase.label} deterministic variant order`,
+    );
+    if (!String(reward.rottenEliteDefeatedRoles).endsWith(testCase.expectedRoles.join("|"))) {
+      throw new Error(`${testCase.label} deterministic role order mismatch: ${reward.rottenEliteDefeatedRoles}`);
+    }
+    assertEqual(reward.rottenEliteBountyGraft, testCase.rewardBounty, `${testCase.label} exact bounty`);
+    assertEqual(reward.rottenEliteArmorBreakCount, "1", `${testCase.label} gilded armor break`);
+    assertEqual(reward.rottenEliteEnrageCount, "1", `${testCase.label} overdue enrage`);
+    assertEqual(String(observation.maxArmorPips), "1", `${testCase.label} visible armor pip`);
+    assertEqual(String(observation.sawAliveEnraged), "true", `${testCase.label} live overdue enrage`);
+    for (const variant of testCase.expectedVariants) {
+      if (!observation.variants.includes(variant)) {
+        throw new Error(`${testCase.label} latch missed ${variant}: ${JSON.stringify(observation)}`);
+      }
+    }
+    for (const role of testCase.expectedRoles) {
+      if (!observation.baseRoleWindups.includes(role)) {
+        throw new Error(`${testCase.label} hid ${role} base tell: ${JSON.stringify(observation)}`);
+      }
+    }
+    if (testCase.dividend) {
+      assertEqual(reward.rottenUpgrades, "graft-dividend", "Dividend carried ownership");
+      assertEqual(reward.rottenOfferIds, "petty-grudge|hangover-hide|compound-interest", "Dividend Stage 3 offers");
+      assertEqual(reward.rottenOfferPrices, "4|4|5", "Dividend Stage 3 discount");
+      const build = JSON.parse(reward.rottenBuildSummary);
+      assertEqual(String(build.elitesAwardBonusGraft), "true", "Dividend elite bonus build");
+      assertEqual(String(build.marketDiscount), "1", "Dividend market discount build");
+      assertEqual(
+        String(Number(reward.rottenEliteBountyGraft) - Number(entered.rottenEliteBountyGraft)),
+        "4",
+        "Dividend exact two-elite Stage 3 bounty delta",
+      );
+      assertEqual(
+        String(Number(reward.rottenGraft) - Number(entered.rottenGraft)),
+        "11",
+        "Dividend Stage 3 base-plus-bounty delta",
+      );
+    }
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.label} cleanup`);
+    await page.close();
+    results.push({ ...testCase, entered, observation, reward });
+  }
+
+  return { route: "Rotten Stage 3 deterministic double elites and Dividend bounty", cases: results };
+}
+
+async function installRottenStageThreeRoleLatch(page) {
+  await page.evaluate(`(() => {
+    const observation = {
+      states: {},
+      onscreenRoles: [],
+      maxFeetY: 0,
+      maxBodyBottom: 0,
+      invalidGround: [],
+    };
+    window.__FOXMAN_ROTTEN_STAGE_THREE_ROLES__ = observation;
+    const sample = () => {
+      const data = document.body.dataset;
+      for (const entry of String(data.rottenEnemyStates ?? "").split("|").filter(Boolean)) {
+        const [role, state] = entry.split(":");
+        observation.states[role] ??= [];
+        if (!observation.states[role].includes(state)) observation.states[role].push(state);
+      }
+      for (const entry of String(data.rottenEnemyGeometry ?? "").split("|").filter(Boolean)) {
+        const [role, state, alive, feetY, bodyBottom] = entry.split(":");
+        if (alive !== "1") continue;
+        observation.maxFeetY = Math.max(observation.maxFeetY, Number(feetY));
+        observation.maxBodyBottom = Math.max(observation.maxBodyBottom, Number(bodyBottom));
+        if (Number(feetY) > 587 || Number(bodyBottom) > 583) {
+          observation.invalidGround.push([role, state, feetY, bodyBottom].join(":"));
+        }
+      }
+      for (const entry of String(data.rottenEnemyReacquisition ?? "").split("|").filter(Boolean)) {
+        const [role, , alive, onscreen] = entry.split(":");
+        if (alive === "1" && onscreen === "1" && !observation.onscreenRoles.includes(role)) {
+          observation.onscreenRoles.push(role);
+        }
+      }
+      if (data.rottenPhase === "encounter") requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+    return true;
+  })()`);
+}
+
+async function readRottenStageThreeRoleLatch(page) {
+  return page.evaluate(`(() => {
+    const observed = window.__FOXMAN_ROTTEN_STAGE_THREE_ROLES__;
+    return {
+      ...observed,
+      states: Object.fromEntries(
+        Object.entries(observed.states).map(([role, states]) => [role, [...states]]),
+      ),
+      onscreenRoles: [...observed.onscreenRoles],
+      invalidGround: [...observed.invalidGround],
+    };
+  })()`);
+}
+
+async function smokeRottenStageThreeRoles(browser) {
+  const results = [];
+
+  const garnishPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageThreeRoles",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await garnishPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(garnishPage, {
+    label: "Garnish mixed-range roles",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "1",
+    stageTwoMarketKey: "5",
+    stageThreeRouteKey: "2",
+  });
+  await installRottenStageThreeRoleLatch(garnishPage);
+  await garnishPage.waitForDataset("rottenPhase", "reward-choice", 55_000);
+  const garnishObservation = await readRottenStageThreeRoleLatch(garnishPage);
+  const garnish = await garnishPage.dataset([
+    ...rottenStageThreeTruthKeys(),
+    "rottenAttackHitCount",
+    "rottenSkillHitCount",
+  ]);
+  for (const role of ["clerk", "writ-runner", "shield-auditor"]) {
+    const states = garnishObservation.states[role] ?? [];
+    if (!states.includes("windup") || !states.some((state) => state === "active" || state === "recovery")) {
+      throw new Error(`Garnish ${role} cycle incomplete: ${JSON.stringify(garnishObservation)}`);
+    }
+    if (!garnishObservation.onscreenRoles.includes(role)) {
+      throw new Error(`Garnish ${role} never exposed onscreen truth: ${JSON.stringify(garnishObservation)}`);
+    }
+  }
+  if (!garnishObservation.onscreenRoles.includes("sump-scribe")) {
+    throw new Error(`Garnish sump-scribe never exposed onscreen truth: ${JSON.stringify(garnishObservation)}`);
+  }
+  assertEqual(garnishObservation.invalidGround.length, 0, "Garnish ground continuity");
+  assertAtMostNumber(garnishObservation.maxFeetY, 587, "Garnish maximum feet Y");
+  assertAtMostNumber(garnishObservation.maxBodyBottom, 583, "Garnish maximum body bottom");
+  assertAtLeastNumber(garnish.rottenAttackHitCount, 1, "Garnish real weapon hits");
+  assertAtLeastNumber(garnish.rottenSkillHitCount, 1, "Garnish real skill hits");
+  assertEqual(garnish.rottenCombatObjectCount, "0", "Garnish cleanup");
+  await captureEvidence(garnishPage, "rotten-stage-three-garnish-role-proof-1920x1080.png");
+  await garnishPage.close();
+  results.push({ route: "garnish-gallery", observation: garnishObservation, reward: garnish });
+
+  const appealExpiryPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageThreeRoles",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await appealExpiryPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(appealExpiryPage, {
+    label: "Appeal hazard expiry",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+    stageTwoMarketKey: "heal-or-bank",
+    stageThreeRouteKey: "1",
+  });
+  await installRottenStageTwoMechanicsLatch(appealExpiryPage);
+  await appealExpiryPage.waitForDataset("rottenPhase", "reward-choice", 60_000);
+  const expiryMechanics = await readRottenStageTwoMechanicsLatch(appealExpiryPage);
+  const expiryReward = await appealExpiryPage.dataset([
+    ...rottenStageThreeTruthKeys(),
+    ...rottenStageTwoMechanicTruthKeys(),
+  ]);
+  assertAtLeastNumber(expiryMechanics.maxHazardTelegraphCount, 1, "Appeal expiry telegraph");
+  assertAtLeastNumber(expiryMechanics.maxHazardActivationCount, 1, "Appeal expiry activation");
+  assertAtLeastNumber(expiryMechanics.maxHazardHitCount, 1, "Appeal legitimate hazard hit");
+  assertAtLeastNumber(expiryMechanics.maxHazardExpiryCount, 1, "Appeal hazard expiry");
+  assertEqual(expiryReward.rottenHazardActiveCount, "0", "Appeal expiry cleanup");
+  assertEqual(expiryReward.rottenCombatObjectCount, "0", "Appeal expiry combat cleanup");
+  await appealExpiryPage.close();
+  results.push({ route: "appeal-furnace-expiry", mechanics: expiryMechanics, reward: expiryReward });
+
+  const appealPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageThreeRoles",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await appealPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(appealPage, {
+    label: "Appeal hazard control",
+    weaponKey: "4",
+    skillKey: "7",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+    stageTwoMarketKey: "heal-or-bank",
+    stageThreeRouteKey: "1",
+  });
+  await installRottenStageThreeRoleLatch(appealPage);
+  await installRottenStageTwoMechanicsLatch(appealPage);
+  await waitFor(async () => {
+    const state = await appealPage.dataset(["rottenPhase", "rottenHazardActiveCount"]);
+    return state.rottenPhase === "encounter" && Number(state.rottenHazardActiveCount) >= 1;
+  }, 18_000, 25);
+  await captureEvidence(appealPage, "rotten-stage-three-appeal-hazard-live-1366x768.png");
+  await appealPage.waitForDataset("rottenPhase", "reward-choice", 60_000);
+  const appealObservation = await readRottenStageThreeRoleLatch(appealPage);
+  const mechanics = await readRottenStageTwoMechanicsLatch(appealPage);
+  const appeal = await appealPage.dataset([
+    ...rottenStageThreeTruthKeys(),
+    ...rottenStageTwoMechanicTruthKeys(),
+    "rottenAttackHitCount",
+    "rottenSkillHitCount",
+  ]);
+  assertAtLeastNumber(mechanics.maxHazardTelegraphCount, 1, "Appeal hazard telegraph");
+  assertAtLeastNumber(mechanics.maxHazardActivationCount, 1, "Appeal hazard activation");
+  assertAtLeastNumber(mechanics.maxHazardClearCount, 1, "Appeal Bribe Bomb clear");
+  assertAtLeastNumber(mechanics.maxSkillHitCount, 1, "Appeal Bribe Bomb hit");
+  assertEqual(appealObservation.invalidGround.length, 0, "Appeal ground continuity");
+  for (const role of ["sump-scribe", "bailiff", "clerk", "shield-auditor"]) {
+    if (!appealObservation.onscreenRoles.includes(role)) {
+      throw new Error(`Appeal ${role} never exposed onscreen truth: ${JSON.stringify(appealObservation)}`);
+    }
+  }
+  assertAtLeastNumber(appeal.rottenAttackHitCount, 1, "Appeal real weapon hits");
+  assertAtLeastNumber(appeal.rottenSkillHitCount, 1, "Appeal real skill hits");
+  assertEqual(appeal.rottenHazardActiveCount, "0", "Appeal hazard cleanup");
+  assertEqual(appeal.rottenCombatObjectCount, "0", "Appeal combat cleanup");
+  await captureEvidence(appealPage, "rotten-stage-three-appeal-role-proof-1366x768.png");
+  await appealPage.close();
+  results.push({ route: "appeal-furnace", observation: appealObservation, mechanics, reward: appeal });
+
+  return { route: "Rotten Stage 3 mixed-range and hazard-control role proof", cases: results };
+}
+
+async function smokeRottenStageThreeBuilds(browser) {
+  const cases = [
+    {
+      archetype: "Knife/Belch/Compound",
+      upgradeId: "compound-interest",
+      seed: "BUILD-PROOF-1",
+      planId: "RR1-7F26E13F",
+      weaponKey: "1",
+      skillKey: "5",
+      stageOneRouteKey: "2",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "2",
+      stageThreeRouteKey: "1",
+      stageThreeRoute: "appeal-furnace",
+      viewport: { width: 1366, height: 768 },
+    },
+    {
+      archetype: "Pike/Stamp/Hangover",
+      upgradeId: "hangover-hide",
+      seed: "BUILD-PROOF-2",
+      planId: "RR1-A1F7D62F",
+      weaponKey: "3",
+      skillKey: "6",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "2",
+      stageThreeRouteKey: "1",
+      stageThreeRoute: "garnish-gallery",
+      viewport: { width: 1920, height: 1080 },
+    },
+    {
+      archetype: "Spitter/Bomb/Dead Letter",
+      upgradeId: "dead-letter",
+      seed: "BUILD-PROOF-0",
+      planId: "RR1-BFDF8B11",
+      weaponKey: "4",
+      skillKey: "7",
+      stageOneRouteKey: "1",
+      stageOneMarketKey: "2",
+      stageTwoRouteKey: "1",
+      stageThreeRouteKey: "1",
+      stageThreeRoute: "garnish-gallery",
+      viewport: { width: 1366, height: 768 },
+    },
+  ];
+  const results = [];
+
+  for (const testCase of cases) {
+    const page = await browser.open(
+      `/?mode=rotten&seed=${testCase.seed}&smokeAuto=1&smoke=rottenStageThreeBuilds`,
+      { viewport: testCase.viewport },
+    );
+    await page.waitForDataset("rottenPhase", "loadout");
+    const transition = await enterRottenStageThree(page, {
+      label: testCase.archetype,
+      weaponKey: testCase.weaponKey,
+      skillKey: testCase.skillKey,
+      stageOneRouteKey: testCase.stageOneRouteKey,
+      stageOneMarketKey: testCase.stageOneMarketKey,
+      stageTwoRouteKey: testCase.stageTwoRouteKey,
+      stageTwoMarketKey: "heal-or-bank",
+      stageThreeRouteKey: testCase.stageThreeRouteKey,
+    });
+    const entered = await page.dataset(rottenStageThreeTruthKeys());
+    assertEqual(entered.rottenPlanId, testCase.planId, `${testCase.archetype} plan`);
+    assertEqual(entered.rottenSelectedRoute, testCase.stageThreeRoute, `${testCase.archetype} route`);
+    assertEqual(entered.rottenUpgrades, testCase.upgradeId, `${testCase.archetype} carried upgrade`);
+    await captureEvidence(
+      page,
+      `rotten-stage-three-build-${testCase.upgradeId}-live-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+    await page.waitForDataset("rottenPhase", "reward-choice", 65_000);
+    const reward = await page.dataset([
+      ...rottenStageThreeTruthKeys(),
+      "rottenAttackHitCount",
+      "rottenSkillHitCount",
+      "rottenMaxCompoundBonusDamage",
+      "rottenMaxTotalWeaponBonusDamage",
+      "rottenDeadLetterCount",
+      "rottenDeadLetterHitCount",
+    ]);
+    const [currentHp, maxHp] = parseHealth(reward.rottenHp, `${testCase.archetype} Stage 3 HP`);
+    assertAtLeastNumber(currentHp, 1, `${testCase.archetype} alive margin`);
+    assertAtLeastNumber(reward.rottenAttackHitCount, 1, `${testCase.archetype} Stage 3 weapon hits`);
+    assertAtLeastNumber(reward.rottenSkillHitCount, 1, `${testCase.archetype} Stage 3 skill hits`);
+    assertEqual(reward.rottenWavesCleared, "6", `${testCase.archetype} six-wave carry`);
+    assertEqual(reward.rottenCombatObjectCount, "0", `${testCase.archetype} reward cleanup`);
+    const build = JSON.parse(reward.rottenBuildSummary);
+
+    if (testCase.upgradeId === "compound-interest") {
+      assertEqual(reward.rottenMaxCompoundBonusDamage, "2", "Compound Stage 3 cap");
+      assertAtLeastNumber(reward.rottenMaxTotalWeaponBonusDamage, 2, "Compound Stage 3 material damage");
+      assertEqual(String(build.boundedRapidHitDamageBonus), "true", "Compound carried build flag");
+    } else if (testCase.upgradeId === "hangover-hide") {
+      assertEqual(String(maxHp), "8", "Hangover Stage 3 max HP");
+      assertEqual(String(build.maxHealthBonus), "2", "Hangover carried build bonus");
+    } else {
+      assertAtLeastNumber(reward.rottenDeadLetterCount, 1, "Dead Letter Stage 3 emissions");
+      assertAtLeastNumber(reward.rottenDeadLetterHitCount, 1, "Dead Letter Stage 3 hits");
+      assertEqual(String(build.weaponPatternRepeatOrPierce), "true", "Dead Letter carried build flag");
+    }
+    await captureEvidence(
+      page,
+      `rotten-stage-three-build-${testCase.upgradeId}-market-${testCase.viewport.width}x${testCase.viewport.height}.png`,
+    );
+    await page.close();
+    results.push({ ...testCase, transition, entered, reward });
+  }
+
+  return { route: "Rotten Stage 3 three required carried build proofs", cases: results };
+}
+
+async function waitForOpenRottenStageThreeMarket(page, label) {
+  try {
+    await page.waitForDataset("rottenPhase", "reward-choice", 65_000);
+    await page.waitForDataset("rottenStage", "3", 2_000);
+    await page.waitForDataset("rottenMarketStatus", "open", 2_000);
+  } catch (error) {
+    const stalled = await page.dataset(rottenStageThreeTruthKeys());
+    throw new Error(`${label} did not open the third market: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 340));
+  const state = await page.dataset(rottenStageThreeTruthKeys());
+  assertEqual(state.rottenRewardDecisionCount, "2", `${label} prior decision count`);
+  assertEqual(state.rottenMarketStage, "3", `${label} market stage`);
+  assertEqual(state.rottenOfferIds.split("|").filter(Boolean).length, 3, `${label} offer count`);
+  assertEqual(new Set(state.rottenOfferIds.split("|")).size, 3, `${label} unique offers`);
+  assertEqual(state.rottenOfferPrices.split("|").filter(Boolean).length, 3, `${label} price count`);
+  assertEqual(state.rottenCombatObjectCount, "0", `${label} reward cleanup`);
+  assertEqual(state.rottenBossObjectCount, "0", `${label} no boss object before decision`);
+  assertEqual(state.canvasCount, 1, `${label} canvas count`);
+  return state;
+}
+
+async function assertRottenCommissionerDossier(page, {
+  label,
+  expectedHistory,
+  expectedUpgrades,
+  expectedGraft,
+  expectedHp,
+  expectedChoice,
+  expectedTraceEvent,
+  expectedKillCount,
+  evidence,
+}) {
+  await page.waitForDataset("rottenPhase", "boss", 5_000);
+  await new Promise((resolve) => setTimeout(resolve, 220));
+  const keys = [
+    ...rottenStageThreeTruthKeys(),
+    ...rottenStageTwoMechanicTruthKeys(),
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ];
+  const state = await page.dataset(keys);
+  assertEqual(state.rottenStage, "3", `${label} Stage 3 provenance`);
+  assertEqual(state.rottenSelectedRoute, "", `${label} no selected boss route`);
+  assertEqual(state.rottenRouteHistory, expectedHistory, `${label} exact three-entry history`);
+  assertEqual(state.rottenRewardDecisionCount, "3", `${label} exact decision count`);
+  assertEqual(state.rottenUpgrades, expectedUpgrades, `${label} exact carried upgrades`);
+  assertEqual(state.rottenGraft, expectedGraft, `${label} exact carried graft`);
+  assertEqual(state.rottenHp, expectedHp, `${label} exact carried HP`);
+  assertEqual(state.rottenMarketStatus, "resolved", `${label} resolved market`);
+  assertEqual(state.rottenMarketStage, "3", `${label} market provenance`);
+  assertEqual(state.rottenMarketChoice, expectedChoice, `${label} accepted choice`);
+  assertEqual(state.rottenMarketTraceEvent, expectedTraceEvent, `${label} market trace`);
+  assertEqual(state.rottenOfferIds, "", `${label} no active offers`);
+  assertEqual(state.rottenOfferPrices, "", `${label} no active prices`);
+  assertEqual(state.rottenBossId, "commissioner-of-consequences", `${label} boss identity`);
+  assertEqual(state.rottenBossDossierReady, "true", `${label} dossier ready`);
+  assertEqual(state.rottenBossHealth, "", `${label} null boss health`);
+  assertEqual(state.rottenBossPhase, "", `${label} null boss phase`);
+  assertEqual(state.rottenBossObjectCount, "0", `${label} zero boss objects`);
+  assertEqual(state.rottenResult, "", `${label} no result claim`);
+  assertEqual(state.rottenLivingEnemies, "0", `${label} zero living enemies`);
+  assertEqual(state.rottenCombatObjectCount, "0", `${label} zero combat objects`);
+  assertEqual(state.rottenKillCount, expectedKillCount, `${label} carried kills`);
+  assertEqual(state.rottenWavesCleared, "6", `${label} six-wave carry`);
+  assertEqual(state.canvasCount, 1, `${label} one canvas`);
+  assertAtLeastNumber(state.rottenElapsedActiveMilliseconds, 1, `${label} active time`);
+  await assertNoMissingTextureGreen(page, `${label} Commissioner dossier`);
+  await captureEvidence(page, evidence);
+
+  const inertTruth = pickDataset(state, keys);
+  for (const key of ["1", "5", "Enter", "j", "k", "r"]) {
+    await page.key(key);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 220));
+  const afterLateInput = await page.dataset(keys);
+  assertDeepEqual(
+    pickDataset(afterLateInput, keys),
+    inertTruth,
+    `${label} route, market, loadout, combat, and retry keys are inert`,
+  );
+  return afterLateInput;
+}
+
+async function smokeRottenStageThreeMarket(browser) {
+  const purchasePage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageThreeMarket",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await purchasePage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(purchasePage, {
+    label: "Stage 3 purchase",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "1",
+    stageTwoRouteKey: "1",
+    stageTwoMarketKey: "1",
+    stageThreeRouteKey: "1",
+  });
+  const purchaseBefore = await waitForOpenRottenStageThreeMarket(purchasePage, "Stage 3 purchase");
+  assertEqual(purchaseBefore.rottenPlanId, "RR1-1C93B57F", "Stage 3 purchase plan");
+  assertEqual(purchaseBefore.rottenSelectedRoute, "collection-parade", "Stage 3 purchase route");
+  assertEqual(purchaseBefore.rottenHp, "3/6", "Stage 3 purchase honest HP");
+  assertEqual(purchaseBefore.rottenGraft, "10", "Stage 3 purchase purse");
+  assertEqual(
+    purchaseBefore.rottenUpgrades,
+    "dead-letter|counterfeit-soles",
+    "Stage 3 purchase prior ownership",
+  );
+  assertEqual(
+    purchaseBefore.rottenOfferIds,
+    "graft-dividend|red-tape-tourniquet|spite-reserve",
+    "Stage 3 purchase deterministic eligible offers",
+  );
+  assertEqual(purchaseBefore.rottenOfferPrices, "6|4|5", "Stage 3 purchase exact prices");
+  assertEqual(purchaseBefore.rottenEliteBountyGraft, "2", "Stage 3 purchase elite bounty");
+  assertEqual(purchaseBefore.rottenEliteDefeatedCount, "2", "Stage 3 purchase elite defeats");
+  assertEqual(
+    purchaseBefore.rottenRouteHistory,
+    "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:upgrade:counterfeit-soles|3:collection-parade:pending",
+    "Stage 3 purchase pending history",
+  );
+  const purchaseTruth = pickDataset(purchaseBefore, rottenStageThreeTruthKeys());
+  await purchasePage.key("7");
+  await purchasePage.waitForDataset("rottenRewardFeedbackReason", "invalid-input", 2_000);
+  const invalid = await purchasePage.dataset(rottenStageThreeTruthKeys());
+  assertDeepEqual(
+    pickDataset(invalid, rottenStageThreeTruthKeys()),
+    purchaseTruth,
+    "Stage 3 invalid input strict no-op",
+  );
+  await captureEvidence(purchasePage, "rotten-stage-three-market-purchase-open-1920x1080.png");
+  await purchasePage.key("1");
+  const purchase = await assertRottenCommissionerDossier(purchasePage, {
+    label: "Stage 3 purchase",
+    expectedHistory:
+      "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:upgrade:counterfeit-soles|3:collection-parade:upgrade:graft-dividend",
+    expectedUpgrades: "dead-letter|counterfeit-soles|graft-dividend",
+    expectedGraft: "4",
+    expectedHp: "3/6",
+    expectedChoice: "upgrade:graft-dividend",
+    expectedTraceEvent: "market:3:collection-parade:upgrade:graft-dividend:spent-6",
+    expectedKillCount: "15",
+    evidence: "rotten-commissioner-dossier-purchase-1920x1080.png",
+  });
+  const purchaseBuild = JSON.parse(purchase.rottenBuildSummary);
+  assertEqual(String(purchaseBuild.weaponPatternRepeatOrPierce), "true", "Dossier Dead Letter carry");
+  assertEqual(String(purchaseBuild.marketDiscount), "1", "Dossier Dividend carry");
+  assertEqual(purchase.rottenEliteDefeatedVariants, "gilded|overdue", "Dossier elite variants");
+  assertEqual(purchase.rottenEliteDefeatedRoles, "clerk|writ-runner", "Dossier elite roles");
+  await purchasePage.close();
+
+  const healPage = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageThreeMarket",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await healPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(healPage, {
+    label: "Stage 3 heal",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "1",
+    stageTwoMarketKey: "5",
+    stageThreeRouteKey: "1",
+  });
+  const healBefore = await waitForOpenRottenStageThreeMarket(healPage, "Stage 3 heal");
+  const [healCurrent, healMax] = parseHealth(healBefore.rottenHp, "Stage 3 heal actual damaged HP");
+  if (healCurrent >= healMax) {
+    throw new Error(`Stage 3 heal route did not carry honest damage: ${healBefore.rottenHp}`);
+  }
+  assertAtLeastNumber(healCurrent, 1, "Stage 3 heal alive damaged HP");
+  const expectedHealRestored = Math.min(2, healMax - healCurrent);
+  const expectedHealHp = `${healCurrent + expectedHealRestored}/${healMax}`;
+  const expectedHealGraft = String(Number(healBefore.rottenGraft) - 2);
+  assertEqual(healBefore.rottenGraft, "21", "Stage 3 heal purse");
+  assertEqual(healBefore.rottenHealAvailable, "true", "Stage 3 heal available");
+  await captureEvidence(healPage, "rotten-stage-three-market-heal-open-1366x768.png");
+  await healPage.key("4");
+  const heal = await assertRottenCommissionerDossier(healPage, {
+    label: "Stage 3 heal",
+    expectedHistory:
+      `1:bailiffs-ramp:bank|2:seized-goods-lift:bank|3:collection-parade:heal:${expectedHealRestored}`,
+    expectedUpgrades: "",
+    expectedGraft: expectedHealGraft,
+    expectedHp: expectedHealHp,
+    expectedChoice: `heal:${expectedHealRestored}`,
+    expectedTraceEvent: `market:3:collection-parade:heal:${expectedHealRestored}:spent-2`,
+    expectedKillCount: "15",
+    evidence: "rotten-commissioner-dossier-heal-1366x768.png",
+  });
+  await healPage.close();
+
+  const bankPage = await browser.open(
+    "/?mode=rotten&seed=BILE-PROOF&smokeAuto=1&smoke=rottenStageThreeMarket",
+    { viewport: { width: 1920, height: 1080 } },
+  );
+  await bankPage.waitForDataset("rottenPhase", "loadout");
+  await enterRottenStageThree(bankPage, {
+    label: "Stage 3 full-health bank",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "1",
+    stageOneMarketKey: "5",
+    stageTwoRouteKey: "2",
+    stageTwoMarketKey: "5",
+    stageThreeRouteKey: "1",
+  });
+  const bankBefore = await waitForOpenRottenStageThreeMarket(bankPage, "Stage 3 full-health bank");
+  assertEqual(bankBefore.rottenSelectedRoute, "appeal-furnace", "Stage 3 bank route");
+  assertEqual(bankBefore.rottenHp, "6/6", "Stage 3 full-health honest state");
+  assertEqual(bankBefore.rottenGraft, "18", "Stage 3 bank purse");
+  assertEqual(bankBefore.rottenHealAvailable, "false", "Stage 3 full-health unavailable heal");
+  const bankTruth = pickDataset(bankBefore, rottenStageThreeTruthKeys());
+  await bankPage.key("4");
+  await bankPage.waitForDataset("rottenRewardFeedbackReason", "full-health", 2_000);
+  const fullHealth = await bankPage.dataset(rottenStageThreeTruthKeys());
+  assertDeepEqual(
+    pickDataset(fullHealth, rottenStageThreeTruthKeys()),
+    bankTruth,
+    "Stage 3 full-health heal strict no-op",
+  );
+  await captureEvidence(bankPage, "rotten-stage-three-market-full-health-no-op-1920x1080.png");
+  await bankPage.key("5");
+  const bank = await assertRottenCommissionerDossier(bankPage, {
+    label: "Stage 3 bank",
+    expectedHistory: "1:bailiffs-ramp:bank|2:bile-registry:bank|3:appeal-furnace:bank",
+    expectedUpgrades: "",
+    expectedGraft: "18",
+    expectedHp: "6/6",
+    expectedChoice: "bank",
+    expectedTraceEvent: "market:3:appeal-furnace:bank:spent-0",
+    expectedKillCount: "14",
+    evidence: "rotten-commissioner-dossier-bank-1920x1080.png",
+  });
+  await bankPage.close();
+
+  return {
+    route: "Rotten Stage 3 purchase, heal, bank, strict no-ops, and inert Commissioner dossier",
+    purchase: { before: purchaseBefore, invalid, after: purchase },
+    heal: { before: healBefore, after: heal },
+    bank: { before: bankBefore, fullHealth, after: bank },
+  };
+}
+
+async function smokeRottenStageThreeRetry(browser) {
+  const page = await browser.open(
+    "/?mode=rotten&seed=GAUNTLET-ALPHA&smokeAuto=1&smoke=rottenStageThreeRetry",
+    { viewport: { width: 1366, height: 768 } },
+  );
+  await page.waitForDataset("rottenPhase", "loadout");
+  const retryKeys = [
+    ...rottenStageThreeTruthKeys(),
+    ...rottenStageTwoMechanicTruthKeys(),
+    "rottenAttackCount",
+    "rottenAttackHitCount",
+    "rottenSkillUseCount",
+    "rottenSkillHitCount",
+    "rottenRewardFeedback",
+    "rottenRewardFeedbackReason",
+  ];
+  const initial = await page.dataset(retryKeys);
+  await enterRottenStageThree(page, {
+    label: "Stage 3 death/retry",
+    weaponKey: "3",
+    skillKey: "6",
+    stageOneRouteKey: "2",
+    stageOneMarketKey: "1",
+    stageTwoRouteKey: "1",
+    stageTwoMarketKey: "5",
+    stageThreeRouteKey: "1",
+  });
+  const entered = await page.dataset(retryKeys);
+  assertEqual(entered.rottenStage, "3", "Stage 3 retry entered stage");
+  assertEqual(entered.rottenSelectedRoute, "collection-parade", "Stage 3 retry route");
+  assertEqual(entered.rottenUpgrades, "dead-letter", "Stage 3 retry carried upgrade");
+  assertEqual(
+    entered.rottenRouteHistory,
+    "1:bailiffs-ramp:upgrade:dead-letter|2:seized-goods-lift:bank",
+    "Stage 3 retry carried history",
+  );
+  if (Number(entered.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Stage 3 retry did not enter live combat: ${JSON.stringify(entered)}`);
+  }
+  try {
+    await page.waitForDataset("rottenPhase", "dead", 45_000);
+  } catch (error) {
+    const stalled = await page.dataset(retryKeys);
+    throw new Error(`Stage 3 retry did not reach an actual death: ${JSON.stringify(stalled)}; ${error}`);
+  }
+  const dead = await page.dataset(retryKeys);
+  assertEqual(dead.rottenStage, "3", "Stage 3 retry death stage");
+  assertEqual(dead.rottenPhase, "dead", "Stage 3 retry death phase");
+  assertEqual(dead.rottenHp, "0/6", "Stage 3 retry actual death HP");
+  assertEqual(dead.rottenStageWavesCleared, "1", "Stage 3 retry one cleared Stage 3 wave");
+  assertEqual(dead.rottenWavesCleared, "5", "Stage 3 retry five cumulative cleared waves");
+  assertEqual(dead.rottenUpgrades, "dead-letter", "Stage 3 retry death ownership");
+  assertEqual(dead.rottenRewardDecisionCount, "2", "Stage 3 retry prior market decisions");
+  assertEqual(dead.rottenEliteDefeatedVariants, "gilded", "Stage 3 retry defeated gilded carry");
+  assertEqual(dead.rottenEliteDefeatedRoles, "clerk", "Stage 3 retry defeated elite role");
+  assertEqual(dead.rottenEliteBountyGraft, "1", "Stage 3 retry earned first elite bounty");
+  assertAtLeastNumber(dead.rottenHazardTelegraphCount, 1, "Stage 3 retry live hazard state");
+  for (const roster of [
+    "3.1:clerk,writ-runner,shield-auditor",
+    "3.2:writ-runner,bailiff,sump-scribe",
+  ]) {
+    if (!String(dead.rottenSpawnHistory).includes(roster)) {
+      throw new Error(`Stage 3 retry missing live roster ${roster}: ${dead.rottenSpawnHistory}`);
+    }
+  }
+  if (Number(dead.rottenCombatObjectCount) <= 0) {
+    throw new Error(`Stage 3 death did not retain owned objects before R: ${dead.rottenCombatObjectCount}`);
+  }
+  await captureEvidence(page, "rotten-stage-three-death-before-retry-1366x768.png");
+
+  await page.key("r");
+  const retried = await waitForTwoAnimationFramesOfTruth(
+    page,
+    retryKeys,
+    (state) => state.rottenPhase === "loadout"
+      && state.rottenStage === "1"
+      && state.rottenRouteOptions === "unfiled-alley|bailiffs-ramp"
+      && state.rottenSelectedRoute === ""
+      && state.rottenWeapon === ""
+      && state.rottenSkill === ""
+      && state.rottenWave === "0"
+      && state.rottenStageWavesCleared === "0"
+      && state.rottenWavesCleared === "0"
+      && state.rottenSpawnHistory === ""
+      && state.rottenGraft === "3"
+      && state.rottenUpgrades === ""
+      && state.rottenRouteHistory === ""
+      && state.rottenMarketStatus === ""
+      && state.rottenMarketStage === ""
+      && state.rottenMarketRoute === ""
+      && state.rottenMarketChoice === ""
+      && state.rottenRewardDecisionCount === "0"
+      && state.rottenOfferIds === ""
+      && state.rottenHp === ""
+      && state.rottenEliteCount === "0"
+      && state.rottenCurrentEliteCount === "0"
+      && state.rottenEliteDefeatedCount === "0"
+      && state.rottenEliteDefeatedVariants === ""
+      && state.rottenEliteDefeatedRoles === ""
+      && state.rottenEliteBountyGraft === "0"
+      && state.rottenHazardTelegraphCount === "0"
+      && state.rottenHazardActiveCount === "0"
+      && state.rottenHazardActivationCount === "0"
+      && state.rottenHazardHitCount === "0"
+      && state.rottenHazardClearCount === "0"
+      && state.rottenHazardExpiryCount === "0"
+      && state.rottenHazardTeardownCount === "0"
+      && state.rottenBossId === ""
+      && state.rottenBossDossierReady === "false"
+      && state.rottenBossHealth === ""
+      && state.rottenBossPhase === ""
+      && state.rottenBossObjectCount === "0"
+      && state.rottenResult === ""
+      && state.rottenKillCount === "0"
+      && state.rottenLivingEnemies === "0"
+      && state.rottenCombatObjectCount === "0",
+    8_000,
+  );
+  assertEqual(retried.rottenSeed, initial.rottenSeed, "Stage 3 retry same seed");
+  assertEqual(retried.rottenPlanId, initial.rottenPlanId, "Stage 3 retry same plan");
+  assertEqual(retried.rottenTraceDigest, initial.rottenTraceDigest, "Stage 3 retry baseline trace");
+  assertEqual(retried.rottenElapsedActiveMilliseconds, "0", "Stage 3 retry active time reset");
+  const retryBuild = JSON.parse(retried.rottenBuildSummary);
+  assertEqual(String(retryBuild.weaponPatternRepeatOrPierce), "false", "Stage 3 retry build reset");
+  assertEqual(String(retryBuild.marketDiscount), "0", "Stage 3 retry discount reset");
+  assertEqual(retried.canvasCount, 1, "Stage 3 retry one canvas");
+  await assertNoMissingTextureGreen(page, "Stage 3 retry clean loadout");
+  await captureEvidence(page, "rotten-stage-three-retry-clean-1366x768.png");
+  await page.key("r");
+  await new Promise((resolve) => setTimeout(resolve, 160));
+  const afterInertR = await page.dataset(retryKeys);
+  assertDeepEqual(afterInertR, retried, "Stage 3 post-retry R is inert");
+  await page.close();
+
+  return {
+    route: "Rotten Stage 3 actual death to same-seed complete reset",
     initial,
     entered,
     dead,
@@ -4398,10 +5551,24 @@ try {
     results.push(await smokeRottenStageTwoElites(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoBuilds") {
     results.push(await smokeRottenStageTwoBuilds(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoMarketBoundary") {
+    results.push(await smokeRottenStageTwoMarketBoundary(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoMarket") {
     results.push(await smokeRottenStageTwoMarket(browser));
   } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageTwoRetry") {
     results.push(await smokeRottenStageTwoRetry(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeTopology") {
+    results.push(await smokeRottenStageThreeTopology(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeElites") {
+    results.push(await smokeRottenStageThreeElites(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeRoles") {
+    results.push(await smokeRottenStageThreeRoles(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeBuilds") {
+    results.push(await smokeRottenStageThreeBuilds(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeMarket") {
+    results.push(await smokeRottenStageThreeMarket(browser));
+  } else if (process.env.FOXMAN_SMOKE_ONLY === "rottenStageThreeRetry") {
+    results.push(await smokeRottenStageThreeRetry(browser));
   } else {
     results.push(await smokeRottenSmokeIsolation(browser));
     results.push(await smokeRottenRunRetry(browser));
@@ -4437,6 +5604,12 @@ try {
     results.push(await smokeRottenStageTwoBuilds(browser));
     results.push(await smokeRottenStageTwoMarket(browser));
     results.push(await smokeRottenStageTwoRetry(browser));
+    results.push(await smokeRottenStageThreeTopology(browser));
+    results.push(await smokeRottenStageThreeElites(browser));
+    results.push(await smokeRottenStageThreeRoles(browser));
+    results.push(await smokeRottenStageThreeBuilds(browser));
+    results.push(await smokeRottenStageThreeMarket(browser));
+    results.push(await smokeRottenStageThreeRetry(browser));
   }
 
   const finalTargetSnapshot = await browser.targetSnapshot();

@@ -47,6 +47,11 @@ export interface RottenEliteVariantDefinition {
 export const STAGE_TWO_ELITE_SCOPE =
   "encounter-v1:stage-2:late-fee-chapel:elite" as const;
 
+export const STAGE_THREE_COLLECTION_ROLE_SCOPE =
+  "encounter-v1:stage-3:collection-parade:elite-roles" as const;
+export const STAGE_THREE_COLLECTION_VARIANT_SCOPE =
+  "encounter-v1:stage-3:collection-parade:variant-order" as const;
+
 export const ROTTEN_ELITE_VARIANTS: Readonly<
   Record<RottenEliteVariant, RottenEliteVariantDefinition>
 > = {
@@ -183,6 +188,50 @@ const STAGE_TWO_STATIC_SPECS: Readonly<Record<
   },
 };
 
+const STAGE_THREE_STATIC_SPECS: Readonly<Record<
+  Extract<RottenRouteId, "garnish-gallery" | "appeal-furnace">,
+  RottenEncounterSpec
+>> = {
+  "garnish-gallery": {
+    stage: 3,
+    routeId: "garnish-gallery",
+    arenaKey: "final-filing:garnish-gallery",
+    waves: [
+      [
+        { roleId: "clerk", spawnSlot: "left" },
+        { roleId: "writ-runner", spawnSlot: "right" },
+      ],
+      [
+        { roleId: "clerk", spawnSlot: "left" },
+        { roleId: "sump-scribe", spawnSlot: "center" },
+        { roleId: "shield-auditor", spawnSlot: "right" },
+      ],
+    ],
+    baseGraftReward: 6,
+    marketBias: "weapon",
+    eliteCount: 0,
+  },
+  "appeal-furnace": {
+    stage: 3,
+    routeId: "appeal-furnace",
+    arenaKey: "final-filing:appeal-furnace",
+    waves: [
+      [
+        { roleId: "sump-scribe", spawnSlot: "left" },
+        { roleId: "bailiff", spawnSlot: "right" },
+      ],
+      [
+        { roleId: "sump-scribe", spawnSlot: "left" },
+        { roleId: "clerk", spawnSlot: "center" },
+        { roleId: "shield-auditor", spawnSlot: "right" },
+      ],
+    ],
+    baseGraftReward: 6,
+    marketBias: "skill",
+    eliteCount: 0,
+  },
+};
+
 export function deriveStageTwoEliteAssignment(seedInput: unknown): RottenEliteAssignment {
   const seed = normalizeRottenSeed(seedInput);
   const selected = scopedDeterministicOrder(
@@ -196,6 +245,28 @@ export function deriveStageTwoEliteAssignment(seedInput: unknown): RottenEliteAs
     supportRoleId: SUPPORT_ROLE_BY_ELITE[selected.roleId],
     variant: selected.variant,
   };
+}
+
+export function deriveCollectionParadeEliteAssignments(
+  seedInput: unknown,
+): readonly [RottenEliteAssignment, RottenEliteAssignment] {
+  const seed = normalizeRottenSeed(seedInput);
+  const roles = scopedDeterministicOrder<StageOneEnemyRoleId>(
+    ["bailiff", "clerk", "writ-runner"],
+    seed,
+    STAGE_THREE_COLLECTION_ROLE_SCOPE,
+  ).slice(0, 2);
+  const variants = scopedDeterministicOrder<RottenEliteVariant>(
+    ["gilded", "overdue"],
+    seed,
+    STAGE_THREE_COLLECTION_VARIANT_SCOPE,
+  );
+
+  return roles.map((roleId, index) => ({
+    roleId,
+    supportRoleId: SUPPORT_ROLE_BY_ELITE[roleId],
+    variant: variants[index],
+  })) as [RottenEliteAssignment, RottenEliteAssignment];
 }
 
 export function getRottenEncounterSpec(
@@ -231,6 +302,40 @@ export function getRottenEncounterSpec(
       baseGraftReward: 6,
       marketBias: "mutation",
       eliteCount: 1,
+    };
+  }
+  if (routeId in STAGE_THREE_STATIC_SPECS) {
+    return STAGE_THREE_STATIC_SPECS[routeId as keyof typeof STAGE_THREE_STATIC_SPECS];
+  }
+  if (routeId === "collection-parade") {
+    const assignments = deriveCollectionParadeEliteAssignments(seedInput);
+    return {
+      stage: 3,
+      routeId,
+      arenaKey: "final-filing:collection-parade",
+      waves: [
+        [
+          {
+            roleId: assignments[0].roleId,
+            spawnSlot: "left",
+            eliteVariant: assignments[0].variant,
+          },
+          { roleId: assignments[0].supportRoleId, spawnSlot: "center" },
+          { roleId: "shield-auditor", spawnSlot: "right" },
+        ],
+        [
+          {
+            roleId: assignments[1].roleId,
+            spawnSlot: "left",
+            eliteVariant: assignments[1].variant,
+          },
+          { roleId: assignments[1].supportRoleId, spawnSlot: "center" },
+          { roleId: "sump-scribe", spawnSlot: "right" },
+        ],
+      ],
+      baseGraftReward: 7,
+      marketBias: "mutation",
+      eliteCount: 2,
     };
   }
 
