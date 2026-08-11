@@ -139,3 +139,55 @@ Continue. Platform goal telemetry reports `281467` tokens, far below the first `
 `Promote the control-state checkpoint, then launch LEAF-002 for the bounded loadout and real Stage 1 two-wave combat loop.`
 
 Prerequisites: clean `main` and `origin/main`, one active descendant maximum, campaign matrix preserved.
+
+## Checkpoint 4 - Crash Recovery At LEAF-002 Final Blind Gate
+
+Updated: `2026-08-11T08:29:50Z`
+
+### Recovered Repository Truth
+
+- Codex was force-quit around `2026-08-11T08:21:00Z`; the durable state still described the pre-builder LEAF-002 gate and was stale.
+- `main`, `HEAD`, and `origin/main` all resolve to accepted control head `206a0879acb0d737b6052940f99b2fd599542fbb`; LEAF-001 remains promoted and is not being repeated.
+- Exactly one Foxman worktree exists. No Foxman-owned preview, browser harness, or descendant process survived recovery. PID `62255` was inspected and deliberately left alone because its cwd is an unrelated Carpet Front worktree.
+- The only Foxman dirt is the preserved LEAF-002 candidate: three tracked Rotten/smoke modifications and seven untracked Rotten/unit additions. `git diff --check` passes; no campaign scene, control directive, asset, or package surface is part of that candidate.
+- Candidate and review artifacts remain intact under `/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-002-*`; none was deleted, overwritten, or relabeled as accepted.
+
+### LEAF-002 Review Ledger
+
+| Review | Context and artifact | Verdict | Largest gap | Disposition |
+| --- | --- | --- | --- | --- |
+| Initial blind critic | Fresh production artifact; real in-app Browser at 1366×768 and 1920×1080 | `REVISE` | Bailiff, clerk, and writ-runner frames could sink below the visible combat floor | Preserved; builder centralized frame/body anchoring and added role-state floor assertions. |
+| Fresh blind re-critic | New production artifact; real in-app Browser at both viewports | `REVISE` | A damaged living writ-runner could remain offscreen and weapon-unhittable indefinitely | Preserved; builder added bounded inward reacquisition, offscreen attack/tell suppression, floor invariants, and a two-edge post-return hit regression. |
+| Interrupted final re-critic | Fresh external artifact and focused automated enemy-cycle run | No verdict | In-app Browser and Chrome connectors both returned `Transport closed` before manual interaction; a later focused encounter harness hung; Codex was then force-quit | Preserve as support only. It cannot satisfy the required real-browser blind gate. |
+
+### Post-Repair Candidate Evidence
+
+- Builder final checks: TypeScript, production build, dist smoke, `33/33` unit tests, focused contract, focused encounter, focused enemy-cycle/reacquisition, `git diff --check`, and the full `26/26` browser matrix all passed.
+- Final builder encounter evidence records death/retry cleanup `30 -> 0` combat objects; every role traversing approach/windup/active/recovery with maximum body bottom `580`; two writ-runner edge reacquisitions in `218 ms` and `568 ms`; and a same-weapon post-return Receipt Spitter hit `0/0 -> 1/1`.
+- The same evidence reaches the reward boundary with Tax Pike/Seized Stamp (`6/6` weapon hits, `2` skill hits) and Receipt Spitter/Bribe Bomb (`1/1` weapon hit, `2` uses and `4` skill hits), with reward cleanup at zero.
+- The interrupted fresh critic independently reproduced the focused enemy-cycle pass from a newly built artifact: body bottom `580`, two-edge reacquisition in `217 ms` and `549 ms`, and post-return Spitter hit `0 -> 1`.
+- Evidence integrity at recovery: full matrix SHA-256 `c2fc831a1925780c7905950f2523cc5972ce0033a1b855ba56413d4032c5bff7`; final encounter `b7e8bc18cd6c97d542566bb6477cbb28b7bbe071d1261d13a09fdacdd2e96e0b`; interrupted-critic enemy cycle `acd2d4052241e9c89e068a206677dcc6ec403f9a8f4bf108cbf24193e0f4ef6a`.
+
+### Recovery Decision And Boundary
+
+`resume`
+
+The implementation does not need another builder pass on present evidence, but it is not accepted. Resume only the unfinished final blind acceptance gate with one fresh-context critic and a new evidence directory. The critic must operate a fresh production browser artifact, manually exercise the repaired real-key paths, preserve the accepted campaign matrix, and issue `PASS` or `REVISE`. Do not promote on automated evidence alone.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-013` | `RR-STEP-012` | builder + two blind critics | Build Stage 1 combat; repair grounded frame anchoring; repair offscreen reacquisition | Candidate green, final verdict pending | bounded turns | descendant exact unavailable | preserved `work/leaf-002-*` artifacts and receipts |
+| `RR-STEP-014` | `RR-STEP-013` | interrupted blind critic | Build fresh artifact and replay focused enemy-cycle proof | Automated support passed; no manual verdict | interrupted | descendant exact unavailable | `work/leaf-002-recritic2/captures/` |
+| `RR-STEP-015` | `RR-STEP-014` | lead | Reconcile Git, worktrees, processes, evidence, reviews, and platform goal after force-quit | Pass | `~9m` | `781748 / 1250000000` platform goal telemetry | this checkpoint and `RECOVERY_AUDIT.md` |
+
+### Token Decision
+
+Continue. Platform telemetry reports `781748` tokens, far below the first autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### Next Safe Action
+
+`Commit and push only the recovery-control files, then launch exactly one fresh-context LEAF-002 blind critic using a new leaf-002-recritic3 evidence directory.`
+
+Prerequisites: stage only canonical recovery files; leave the candidate byte-for-byte intact; verify no other descendant exists.

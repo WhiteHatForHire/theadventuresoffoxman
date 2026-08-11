@@ -4,20 +4,40 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "leaf-002-builder",
+  "currentGate": "leaf-002-final-blind-acceptance-recovery",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 281467,
-  "usageCoverage": "Platform goal telemetry through LEAF-001 promotion; descendant-specific breakdown is unavailable.",
+  "knownTokensUsed": 781748,
+  "usageCoverage": "Platform goal telemetry at the 2026-08-11 crash-recovery checkpoint; descendant-specific breakdown remains unavailable.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
   "activeLeaf": "LEAF-002",
-  "lastAcceptedCommit": "fa94e973ee29a32de44e1797e9484a295c4de2e1",
+  "lastAcceptedCommit": "206a0879acb0d737b6052940f99b2fd599542fbb",
   "promotedLeaves": ["LEAF-001"],
   "lastCriticVerdict": {
-    "leaf": "LEAF-001",
-    "verdict": "pass",
-    "largestGap": null,
-    "evidence": "docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/leaf-001/critic-receipt.md"
+    "leaf": "LEAF-002",
+    "verdict": "revise",
+    "largestGap": "The latest completed blind critic found a living writ-runner could remain offscreen and weapon-unhittable. The preserved candidate contains a bounded reacquisition repair, but no fresh post-repair manual verdict survived the force-quit.",
+    "evidence": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-002-recritic/REVIEW_RECEIPT.md"
+  },
+  "reviewGate": {
+    "status": "pending-final-blind-verdict",
+    "completedReviews": [
+      "Initial blind review: revise enemy frame/floor anchoring",
+      "Fresh blind re-review: revise offscreen living-enemy reacquisition"
+    ],
+    "interruptedReview": "leaf-002-recritic2 produced fresh automated enemy-cycle evidence but no manual verdict; both real-browser connectors returned Transport closed before interaction, then Codex was force-quit.",
+    "nextEvidenceDirectory": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-002-recritic3"
+  },
+  "candidate": {
+    "base": "206a0879acb0d737b6052940f99b2fd599542fbb",
+    "status": "preserved-uncommitted",
+    "scope": "LEAF-002 Rotten-only implementation plus additive unit and browser smoke coverage",
+    "trackedModified": 3,
+    "untrackedAdded": 7,
+    "builderBrowserRoutesPassed": 26,
+    "unitTestsPassed": 33,
+    "latestFocusedEvidence": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-002-evidence",
+    "interruptedCriticEvidence": "/Users/marcusvale/Documents/Codex/2026-08-11/foxman-gauntlet-live/work/leaf-002-recritic2"
   },
   "baseline": {
     "branch": "main",
@@ -26,6 +46,13 @@
     "worktree": "clean",
     "campaignBrowserRoutesPassed": 23
   },
-  "updatedAt": "2026-08-11T04:47:15Z",
-  "nextSafeAction": "Commit the LEAF-001 promotion state and LEAF-002 brief, then launch the bounded Stage 1 combat builder from clean main."
+  "recovery": {
+    "event": "Codex force-quit around 2026-08-11T08:21:00Z",
+    "auditedAt": "2026-08-11T08:29:50Z",
+    "decision": "resume",
+    "repositoryTruth": "main and origin/main both at 206a087; exactly one worktree; no Foxman-owned runtime or descendant survived; preserved dirty files match the LEAF-002 candidate.",
+    "promotionBoundary": "LEAF-001 remains promoted. LEAF-002 is not promoted until a fresh-context post-repair blind critic passes the real browser artifact."
+  },
+  "updatedAt": "2026-08-11T08:29:50Z",
+  "nextSafeAction": "Commit and push only this recovery-control checkpoint, then launch exactly one fresh-context blind LEAF-002 critic into leaf-002-recritic3; do not rebuild LEAF-001 or duplicate the interrupted critic."
 }
