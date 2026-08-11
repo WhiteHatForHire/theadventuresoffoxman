@@ -4,14 +4,14 @@
   "project": "The Adventures of Foxman, a Merciless Bastard",
   "mode": "Rotten Run",
   "status": "active",
-  "currentGate": "seeded-contract-audit",
+  "currentGate": "leaf-001-builder",
   "tokenBudget": 1250000000,
-  "knownTokensUsed": 76883,
-  "usageCoverage": "Exact platform telemetry for the visible lead through launch checkpoint; no descendant launched yet.",
+  "knownTokensUsed": 178739,
+  "usageCoverage": "Exact platform telemetry for the visible lead through seeded-contract freeze; no descendant launched yet.",
   "autonomousAuditCheckpoints": [25000000, 50000000, 100000000],
   "nextAutonomousAuditAt": 25000000,
-  "activeLeaf": null,
-  "lastAcceptedCommit": "779f93571b22f4b7606328d82626719220e31ac9",
+  "activeLeaf": "LEAF-001",
+  "lastAcceptedCommit": "6d5b09170a9f9f483284e5c36bb0765cf10e9129",
   "baseline": {
     "branch": "main",
     "head": "779f93571b22f4b7606328d82626719220e31ac9",
@@ -19,6 +19,6 @@
     "worktree": "clean",
     "campaignBrowserRoutesPassed": 23
   },
-  "updatedAt": "2026-08-11T04:09:00Z",
-  "nextSafeAction": "Audit the current gameplay architecture and write the deterministic seeded-run contract before launching LEAF-001."
+  "updatedAt": "2026-08-11T04:16:09Z",
+  "nextSafeAction": "Commit and push the frozen seeded contract, then launch the bounded LEAF-001 builder from that clean accepted head."
 }

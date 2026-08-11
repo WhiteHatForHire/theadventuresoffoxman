@@ -54,5 +54,31 @@ Status: active
 
 ## Open Questions
 
-- Exact seeded state schema and mode entry: lead resolves after architecture audit, before `LEAF-001`.
-- Encounter/content reuse versus new runtime data: lead resolves using the smallest coherent extension of existing systems.
+- None blocking `LEAF-001`.
+
+### RR-DEC-006 - Additive Pure Core And Separate Scene
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Existing campaign behavior is duplicated across large scenes. Extracting it during the slice would risk accepted routes; a pure Rotten Run core plus an additive scene provides deterministic state without campaign surgery.
+**Affected surfaces:** `src/game/rotten/`, `RottenRunScene`, entry registration, Rotten Run tests.
+**Constraints:** campaign scenes remain independent and behaviorally unchanged.
+
+### RR-DEC-007 - Fixed Three-Stage Choice Topology
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Three two-wave stages plus a fixed boss can truthfully target 15-25 minutes while keeping route and reward decisions consequential and bounded.
+**Affected surfaces:** plan schema, run flow, encounter pacing, results trace.
+**Constraints:** two visible options per stage, three stages only, one fixed final boss.
+
+### RR-DEC-008 - Fixed Content Budget
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Four weapons, three skills, eight upgrades, five enemy roles, two elites, and one boss meet the promise without opening unlimited content production.
+**Affected surfaces:** all Rotten Run registries, offers, combat, proof matrix.
+**Constraints:** exact mechanics and cuts are frozen in `SEEDED_RUN_CONTRACT.md`; additions require a recorded replacement decision, not scope accumulation.

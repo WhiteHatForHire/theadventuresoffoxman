@@ -1,7 +1,7 @@
 # Foxman Rotten Run Bounded Context Packet
 
 Run ID: `foxman-rotten-run-gauntlet-2026-08-11`
-Freshness: `2026-08-11T04:09:00Z`
+Freshness: `2026-08-11T04:16:09Z`
 Context policy: each leaf receives this shared truth plus only its directly required source files.
 
 ## Goal
@@ -10,7 +10,7 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 
 ## Current Truth
 
-- `main`, `origin/main`, and prepared baseline all resolve to `779f935` at launch.
+- Launch controls were accepted and pushed as `6d5b091` from prepared baseline `779f935`.
 - Fresh `npm run smoke:all` passes all 23 existing browser routes.
 - Current stack is Vite, TypeScript, Phaser 3; no stack change is authorized.
 - Campaign scenes already provide movement, dash, melee/ranged combat, one skill, two mutations, enemies, an elite, a boss, death/restart, progress persistence, and a browser state harness.
@@ -23,11 +23,15 @@ Produce the bounded, polished, seeded Rotten Run vertical slice defined by the m
 - `RR-DEC-003`: one sequential descendant; lead-only promotion.
 - `RR-DEC-004`: local review, no public deployment.
 - `RR-DEC-005`: largest gap first.
+- `RR-DEC-006`: additive pure core and separate scene; no campaign refactor.
+- `RR-DEC-007`: fixed three-stage, two-wave, two-route-choice topology plus one boss.
+- `RR-DEC-008`: fixed content budget and mechanics in the seeded product contract.
 
 ## Required Sources
 
 - [`MASTER_DIRECTIVE.md`](MASTER_DIRECTIVE.md)
 - [`DECISION_REGISTRY.md`](DECISION_REGISTRY.md)
+- [`SEEDED_RUN_CONTRACT.md`](SEEDED_RUN_CONTRACT.md)
 - Repository `AGENTS.md`, `PROJECT.md`, and relevant source/tests for the assigned leaf.
 
 ## Constraints And Traps

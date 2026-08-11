@@ -73,3 +73,32 @@ Prerequisites: campaign smoke remains green and no unfamiliar worktree changes a
 ---
 
 Future checkpoints append below this line; prior entries are not rewritten.
+
+## Checkpoint 2 - Seeded Contract Frozen
+
+Updated: `2026-08-11T04:16:09Z`
+
+### Verified Complete
+
+- Audited entry, scene, actor, movement, combat-stat, persistence, UI, and browser-harness ownership from accepted commit `6d5b091`.
+- Found reusable lower-level systems but campaign-specific flow duplicated across large scenes; chose an additive pure core and separate scene instead of a campaign refactor.
+- Froze the exact three-stage topology, seed rules, content budget, economy, state trace, records, settings, and three-build proof in `SEEDED_RUN_CONTRACT.md`.
+- Framed `LEAF-001` with explicit authority, forbidden surfaces, real-browser acceptance, checks, and stop conditions.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-006` | `RR-STEP-005` | lead | Promote and push launch controls | Pass | `<2m` | included below | commit `6d5b091`, `origin/main` matched |
+| `RR-STEP-007` | `RR-STEP-006` | lead | Audit implementation seams | Pass | `~5m` | included below | source and browser-harness inspection |
+| `RR-STEP-008` | `RR-STEP-007` | lead | Freeze seeded product contract and leaf brief | Pass | checkpoint | `178739 / 1250000000` exact visible-lead tokens | `SEEDED_RUN_CONTRACT.md`, `LEAF-001.md`, decisions `RR-DEC-006..008` |
+
+### Token Decision
+
+Continue. Exact visible-lead usage is `178739`, far below the first `25000000` autonomous trajectory audit. No descendant usage exists yet.
+
+### Next Safe Action
+
+`Commit and push the frozen contract, verify a clean accepted head, then launch exactly one LEAF-001 builder with bounded context and no commit/push authority.`
+
+Prerequisites: staged diff passes JSON and whitespace validation; campaign implementation remains untouched.

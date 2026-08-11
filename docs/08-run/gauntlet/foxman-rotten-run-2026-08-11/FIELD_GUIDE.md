@@ -11,6 +11,7 @@ Last reviewed: 2026-08-11
 - Browser evidence is emitted through `window.__FOXMAN_SMOKE__`; preserve existing keys and routes.
 - Workers never edit Gauntlet control files; only the visible lead updates state, decisions, receipts, commits, and pushes.
 - A critic operates the live artifact and is read-only; it does not inherit builder rationale.
+- Rotten Run uses an additive pure core under `src/game/rotten/` and a separate scene; do not refactor campaign scenes during the bounded slice.
 
 ## Active Decision IDs
 
@@ -19,6 +20,9 @@ Last reviewed: 2026-08-11
 - `RR-DEC-003` - one sequential descendant and lead-only promotion.
 - `RR-DEC-004` - local-only review surface.
 - `RR-DEC-005` - repair the largest gap before adding scope.
+- `RR-DEC-006` - additive pure core and separate scene.
+- `RR-DEC-007` - fixed three-stage topology.
+- `RR-DEC-008` - fixed content budget; no accumulation beyond proof.
 
 ## Local Traps
 
