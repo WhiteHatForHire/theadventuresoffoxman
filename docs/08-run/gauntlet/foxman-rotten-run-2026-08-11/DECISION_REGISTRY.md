@@ -146,6 +146,33 @@ Status: active
 **Affected surfaces:** Rotten scene smoke-fixture initialization and browser isolation coverage.
 **Constraints:** every Rotten compatibility, encounter, heal, poor-market, and reacquisition fixture must require `smokeAutoEnabled()`; ordinary `mode=rotten&seed=...` loading remains unchanged; add a negative real-browser regression for `smoke=` without opt-in; preserve the authorized focused routes with `smokeAuto=1`; do not change combat, input timing, content, or campaign behavior.
 
+### RR-DEC-016 - LEAF-004 Ships A Complete Stage 2 Loop
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Route selection, carried combat, a second reward decision, and the next honest docket form one coherent player-visible increment; a Stage 2 sandbox or deceptive non-operative market would not.
+**Affected surfaces:** Stage 2 route choice, waves, new roles, elites, reward state, route history, Stage 3 handoff.
+**Constraints:** every planned Stage 2 option is selectable and has two real waves; Stage 2 reward purchase/heal/bank advances exactly once to the real Stage 3 pair; Stage 3 selection/combat and boss work remain out of scope; `GAUNTLET-ALPHA` plan ID and all accepted Stage 1 fixtures remain unchanged.
+
+### RR-DEC-017 - Carried Upgrades Become One Reusable Combat Build
+
+**Status:** approved
+**Owner:** lead
+**Date:** 2026-08-11
+**Rationale:** Once Stage 2 is playable, a purchased mutation cannot remain presentation-only. Runtime behavior must consume the existing pure build summary rather than scatter upgrade checks through the scene.
+**Affected surfaces:** Rotten combat configuration, optional Player movement configuration, wave healing, damage/cooldown/pattern effects, elite graft, debug trace.
+**Constraints:** implement all eight frozen effects with bounded constants in `LEAF-004.md`; defaults for campaign Player, PlayerMotor, and Health remain byte-equivalent in behavior; no campaign scene changes; no ninth upgrade or rank system.
+
+### RR-DEC-018 - Generalize Stage Ownership Instead Of Cloning Stage 1
+
+**Status:** approved
+**Owner:** lead from INTEGRATION-001 architecture finding
+**Date:** 2026-08-11
+**Rationale:** `RottenRunScene` already exceeds one thousand lines and mirrors stage fields beside pure state. Copying Stage 1 methods for Stage 2 would make later Stage 3 and boss work unsafe.
+**Affected surfaces:** pure encounter specifications, generic market transitions, scene orchestration, Phaser presentation helpers, lifecycle cleanup.
+**Constraints:** route/wave/elite specifications and market transitions remain browser-independent; Phaser helpers may live under `src/game/scenes/rotten/`; the scene orchestrates one generic stage path; keyboard handlers receive explicit shutdown ownership; do not rewrite campaign architecture.
+
 ## Promotion Notes
 
 - `LEAF-001` accepted by a fresh blind critic with no largest gap.

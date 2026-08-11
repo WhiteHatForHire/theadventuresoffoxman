@@ -363,3 +363,52 @@ Continue. Platform goal telemetry reports `1588289` tokens, far below the first 
 `Commit and push this REVISE/control checkpoint, verify clean main, then launch exactly one bounded smoke-isolation repair builder. Do not start Stage 2 combat.`
 
 Prerequisites: validate JSON, receipt terminator, evidence hashes, and whitespace; builder receives no commit, push, ops, or control-file authority.
+
+## Checkpoint 8 - INTEGRATION-001 Passed; LEAF-004 Frozen
+
+Updated: `2026-08-11T14:11:03Z`
+
+### Repair And Fresh Re-review
+
+- The bounded repair changed exactly `RottenRunScene.ts` and the browser harness. A new negative route first reproduced the accepted defect with six weapon attacks and two skill uses despite no combat keys, then passed after one existing `smokeAutoEnabled()` gate made the effective Rotten smoke scenario null without explicit opt-in.
+- Builder validation passed `42/42` units, typecheck, build, dist smoke, every authorized focused route, and one `28/28` matrix.
+- A fresh read-only recritic froze the exact two-file diff SHA-256 `7c518775453f51387f6748d512438acaf1d102c5c8a9b47930c1baa2d51f08e2` before seeing builder evidence and built a separate production artifact.
+- Direct 1366x768 play without `smokeAuto` used only real `3`, `6`, `Enter`, `2`, observed `5121 ms`, issued zero attacks/skills, and ended only through legitimate enemy damage. The contrasting authorized URL self-operated to reward. Campaign Enter, normal Rotten loadout, and exact Stage 2 carry passed at the two target viewports.
+- All five focused gates passed first attempt; the sole unfiltered matrix passed `28/28`; no serious integration gap remained. Critic receipt SHA-256: `e6bf777d294c1431f56b6b3de74c9038defa76321fd770a2ab8fd48440bbb2e9`.
+
+### Lead Promotion
+
+- Re-read the independent receipt and raw browser evidence, verified scope/hashes/cleanup, and re-ran `42/42` units, typecheck, production build, dist smoke, whitespace, and the focused isolation route (`0/0` over `4589 ms`).
+- Imported compact builder, expected-red, critic, full/focused, and direct-browser evidence under `evidence/integration-001/pass-01/`.
+- Committed and pushed accepted repair baseline `7cef4b039c401890ac24fb1a8a27800aa6bb18f7`; local `main` and `origin/main` matched and the worktree was clean.
+
+### LEAF-004 Boundary
+
+- `RR-DEC-016` requires a complete Stage 2 loop ending at an honest Stage 3 docket.
+- `RR-DEC-017` makes all eight carried upgrade effects real through one reusable combat-build configuration.
+- `RR-DEC-018` prohibits cloning Stage 1 orchestration into the 1057-line scene; pure stage/market ownership and Phaser presentation helpers must be generalized.
+- Stage 3 combat, third reward, boss, results/records, settings/accessibility, audio completion, and final viable-build proofs remain later leaves.
+
+### Trace
+
+| Step | Parent | Role | Action | Result | Elapsed | Budget | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `RR-STEP-030` | `RR-STEP-029` | bounded repair builder | Add expected-red isolation test and explicit Rotten smoke permission gate | Pass | bounded turn | descendant exact unavailable | `evidence/integration-001/pass-01/builder-receipt.md` |
+| `RR-STEP-031` | `RR-STEP-030` | fresh integration recritic | Build and directly compare manual versus authorized artifact behavior | `PASS` | bounded turn | descendant exact unavailable | `evidence/integration-001/pass-01/critic-receipt.md` |
+| `RR-STEP-032` | `RR-STEP-031` | lead | Reverify, import evidence, commit, and push integration repair | Pass | `~8m` | included below | commit `7cef4b0` |
+| `RR-STEP-033` | `RR-STEP-032` | lead | Run shipping update and freeze complete Stage 2 leaf | Pass | checkpoint | `1856992 / 1250000000` platform telemetry | `RR-DEC-016..018`, `LEAF-004.md` |
+
+### Token Decision
+
+Continue. Platform telemetry reports `1856992` tokens, far below the first autonomous trajectory audit at `25000000`; no trajectory audit is due.
+
+### External Actions
+
+- Pushed accepted repair commit `7cef4b0` to `origin/main`.
+- No public deployment, domain, paid service, credential change, destructive history action, or campaign deletion occurred.
+
+### Next Safe Action
+
+`Commit and push this integration-promotion/control checkpoint, verify clean main, then launch exactly one bounded LEAF-004 builder from the frozen contract.`
+
+Prerequisites: JSON and whitespace checks pass; builder receives no commit, push, ops, control, public-action, or product-scope authority.

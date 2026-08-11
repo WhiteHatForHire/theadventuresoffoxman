@@ -32,6 +32,34 @@ Use this format for each completed item:
 
 # Completed Work
 
+## 2026-08-11 - Rotten Run Three-Leaf Integration Gate Accepted
+
+**Type:** App / QA / Architecture / Ops
+**Source:** Codex builder + fresh integration critics
+**Related Files:**
+
+- `src/game/scenes/RottenRunScene.ts`
+- `tests/smoke/check-browser-routes.mjs`
+- `docs/08-run/gauntlet/foxman-rotten-run-2026-08-11/evidence/integration-001/`
+
+**Summary:**
+
+Audited the promoted mode shell, Stage 1 combat, reward transaction, campaign
+regression, and Stage 2 handoff as one connected product. The first integration
+review passed every deterministic gate and a 27-route matrix but reproduced one
+serious evidence-boundary defect: a known Rotten `smoke=` name could automate
+combat without explicit permission. A bounded two-file repair routed every
+fixture through `smokeAutoEnabled()`, added a real-key negative isolation route,
+and preserved authorized fixtures. A fresh recritic passed direct manual versus
+authorized browser contrast at both viewports, 42/42 units, all focused gates,
+and the sole 28/28 full matrix. Accepted baseline: `7cef4b0`.
+
+**Follow-Ups:**
+
+- [ ] Build and independently accept the complete Stage 2 loop in LEAF-004.
+- [ ] Preserve the negative smoke-isolation route permanently.
+- [ ] Address the canvas-only accessibility surface in the later settings/accessibility leaf.
+
 ## 2026-08-11 - Rotten Run Reward Market And Stage 2 Docket Accepted
 
 **Type:** App / Product / State / QA / Ops
@@ -63,7 +91,7 @@ accepted baseline is commit `23e309e`.
 
 **Follow-Ups:**
 
-- [ ] Pass the mandatory integration review across promoted LEAF-001 through LEAF-003.
+- [x] Pass the mandatory integration review across promoted LEAF-001 through LEAF-003.
 - [ ] Frame Stage 2 combat only after the integration gate passes.
 - [ ] Keep Stage 3, boss, results, settings, records, and three-build proof in later bounded leaves.
 

@@ -27,15 +27,18 @@ closed Act 2 retained as regression baselines.
 
 The deterministic Rotten Run plan, separate browser-visible mode shell, bounded
 loadout, real two-wave Stage 1 combat, pure reward transaction, carried build,
-and honest Stage 2 docket are accepted through `23e309e`. A normalized seed
+and honest Stage 2 docket are accepted through `7cef4b0`. A normalized seed
 freezes three two-option stages and the Commissioner of Consequences; the title
 preserves Campaign on Enter while exposing Rotten Run on R; four weapons, three
 skills, three Stage 1 enemy roles, death/retry, purchase/heal/bank, and exact
-Stage 2 route carry are manually operable. The complete 27-route browser matrix
-is green, including all 23 campaign routes. Three implementation leaves are now
-promoted, so the active gate is the protocol-mandated cross-leaf integration
-review. Stage 2 combat, later enemies/elites, boss completion, settings, records,
-and full-run proof remain unimplemented and cannot begin before that review.
+Stage 2 route carry are manually operable. The mandatory three-leaf integration
+review passed after one bounded repair made every Rotten smoke fixture require
+explicit `smokeAuto=1`; the complete 28-route browser matrix is green, including
+all 23 campaign routes and a negative manual-isolation route. LEAF-004 is now
+authorized for the complete Stage 2 combat/reward loop, carried build effects,
+the two remaining enemy roles, both elite variations, and an honest Stage 3
+docket. Stage 3 combat, boss completion, settings, records, and full-run proof
+remain later bounded work.
 
 The app boots in Phaser, has a title/start flow, renders optimized generated runtime assets, supports movement/dash/combat/ranged combat/active skill/mutations/pause/death/restart, splits Phaser into a production vendor chunk, and has smoke-proven room, platform-traversal, dash, Act 2 Sump Warrens, Sump death/restart, 390px viewport, ranged, skill, reward/shop, reward/shop skill, second-path, mutation, second-path death/restart, connected boss-route, full-slice, skill-to-boss, mini-boss, boss-death, and manual opening routes. Sump restart restores the player, all three enemy actors, input/motor state, completion gate, UI, and active hit VFX. Dash now has a lightweight three-image trail and audio-bus cue without changing movement tuning. Browser evidence and the remaining human gate are recorded in `docs/08-run/2026-08-08-sol-wave-run-receipt.md`.
 
